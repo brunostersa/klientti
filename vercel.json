@@ -10,11 +10,6 @@
   "env": {
     "NEXT_PUBLIC_SITE_URL": "https://klientti.com"
   },
-  "functions": {
-    "src/app/api/**/*.ts": {
-      "maxDuration": 30
-    }
-  },
   "headers": [
     {
       "source": "/(.*)",
