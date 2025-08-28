@@ -117,7 +117,7 @@ export default function LoginPage() {
         console.log('Usuário existe no Firestore, verificando perfil...');
         // Usuário existe, verificar se o perfil está completo
         const userData = userDoc.data();
-        if (userData.name && userData.company && userData.segment) {
+        if (userData.name && userData.company && userData.segment && userData.phone) {
           console.log('Perfil completo, redirecionando para dashboard');
           // Perfil completo, redirecionar para dashboard
           router.push('/dashboard');
@@ -139,6 +139,21 @@ export default function LoginPage() {
         setGoogleUser(user);
         // Preencher nome do Google se disponível
         if (user.displayName) setName(user.displayName);
+        
+        // IMPORTANTE: Criar documento básico para evitar conflitos
+        try {
+          await setDoc(doc(db, 'users', user.uid), {
+            email: user.email,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            role: 'user',
+            plan: 'free',
+            theme: 'light'
+          });
+          console.log('Documento básico criado para usuário Google');
+        } catch (error) {
+          console.error('Erro ao criar documento básico:', error);
+        }
       }
     } catch (error: any) {
       console.error('Erro detalhado no Google Sign-In:', error);

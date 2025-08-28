@@ -23,14 +23,18 @@ export default function HomePage() {
             const userDoc = await getDoc(doc(db, 'users', user.uid));
             if (userDoc.exists()) {
               const userData = userDoc.data();
-              if (userData.name && userData.company && userData.segment) {
+              // Validação mais rigorosa: todos os campos obrigatórios devem estar preenchidos
+              if (userData.name && userData.company && userData.segment && userData.phone) {
+                console.log('Perfil completo detectado, redirecionando para dashboard');
                 // Perfil completo, redirecionar para dashboard
                 router.push('/dashboard');
               } else {
+                console.log('Perfil incompleto detectado, redirecionando para login');
                 // Perfil incompleto, redirecionar para login para completar
                 router.push('/login');
               }
             } else {
+              console.log('Usuário novo detectado, redirecionando para login');
               // Usuário novo, redirecionar para login para completar perfil
               router.push('/login');
             }
@@ -41,7 +45,10 @@ export default function HomePage() {
           }
         };
         
-        checkUserProfile();
+        // Adicionar delay para garantir que o login seja processado primeiro
+        setTimeout(() => {
+          checkUserProfile();
+        }, 1000);
       }
     });
 
