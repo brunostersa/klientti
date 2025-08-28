@@ -3,12 +3,13 @@ import Stripe from 'stripe';
 import { collection, query, where, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-07-30.basil' as any,
-});
-
 export async function POST(request: NextRequest) {
   try {
+    // Inicializar Stripe apenas quando necessário
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: '2025-07-30.basil' as any,
+    });
+
     const { email } = await request.json();
 
     if (!email) {

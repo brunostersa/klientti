@@ -3,12 +3,13 @@ import Stripe from 'stripe';
 import { collection, getDocs, doc, updateDoc, query, where } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-07-30.basil' as any,
-});
-
 export async function POST(request: NextRequest) {
   try {
+    // Inicializar Stripe apenas quando necessário
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: '2025-07-30.basil' as any,
+    });
+
     console.log('🚀 Iniciando sincronização em lote de todos os usuários...');
 
     // 1. Buscar todos os usuários no Firestore

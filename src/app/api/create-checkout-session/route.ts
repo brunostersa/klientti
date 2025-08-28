@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-07-30.basil' as any,
-});
-
 export async function POST(request: NextRequest) {
   try {
+    // Inicializar Stripe apenas quando necessário
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
+      apiVersion: '2025-07-30.basil' as any,
+    });
+
     const { plan, userId, userEmail } = await request.json();
 
     // Definir preços dos planos
