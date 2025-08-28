@@ -17,10 +17,8 @@ const nextConfig: NextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   // Otimizações de performance
-  swcMinify: true,
   compress: true,
   poweredByHeader: false,
-  generateEtags: false,
   // Headers de segurança e performance
   async headers() {
     return [
@@ -43,10 +41,6 @@ const nextConfig: NextConfig = {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',
           },
-          {
-            key: 'Strict-Transport-Security',
-            value: 'max-age=31536000; includeSubDomains',
-          },
         ],
       },
       {
@@ -55,15 +49,6 @@ const nextConfig: NextConfig = {
           {
             key: 'Cache-Control',
             value: 'public, max-age=0, must-revalidate',
-          },
-        ],
-      },
-      {
-        source: '/(.*\\.(js|css|png|jpg|jpeg|gif|svg|ico|woff|woff2|ttf|eot))',
-        headers: [
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=31536000, immutable',
           },
         ],
       },
