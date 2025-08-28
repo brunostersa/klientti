@@ -15,7 +15,7 @@ import { Area } from '@/types/Area';
 import { Feedback } from '@/types/Feedback';
 import { useActiveTab } from '@/hooks/useActiveTab';
 
-export default function FeedbacksPage() {
+export default function OpinioesPage() {
   const [user, setUser] = useState<User | null>(null);
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([]);
   const [areas, setAreas] = useState<Area[]>([]);
@@ -37,8 +37,7 @@ export default function FeedbacksPage() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        loadAreas(user.uid);
-        loadAllFeedbacks(user.uid);
+        loadAreas(user.uid); // loadAllFeedbacks será chamado dentro de loadAreas
         loadUserProfile(user.uid);
       } else {
         router.push('/login');
@@ -57,6 +56,10 @@ export default function FeedbacksPage() {
         ...doc.data()
       })) as Area[];
       setAreas(areasData);
+      
+      // IMPORTANTE: Carregar feedbacks APÓS as áreas serem carregadas
+      console.log('Debug - Áreas carregadas, agora carregando feedbacks...');
+      loadAllFeedbacks(userId);
     });
 
     return unsubscribe;
@@ -71,15 +74,29 @@ export default function FeedbacksPage() {
         ...doc.data()
       })) as Feedback[];
       
+      console.log('Debug - Total feedbacks no banco:', allFeedbacks.length);
+      console.log('Debug - Áreas disponíveis:', areas.length);
+      console.log('Debug - UserId atual:', userId);
+      
       // Filtrar apenas feedbacks das áreas do usuário
       const userFeedbacks = allFeedbacks.filter(feedback => {
         const area = areas.find(a => a.id === feedback.areaId);
-        return area && area.userId === userId;
+        const isUserArea = area && area.userId === userId;
+        
+        console.log('Debug - Feedback:', {
+          feedbackId: feedback.id,
+          areaId: feedback.areaId,
+          areaFound: !!area,
+          areaUserId: area?.userId,
+          isUserArea,
+          feedbackData: feedback
+        });
+        
+        return isUserArea;
       });
       
-      console.log('Debug - Total feedbacks no banco:', allFeedbacks.length);
       console.log('Debug - Feedbacks do usuário:', userFeedbacks.length);
-      console.log('Debug - Áreas do usuário:', areas.length);
+      console.log('Debug - Feedbacks filtrados:', userFeedbacks);
       
       setFeedbacks(userFeedbacks);
     });
@@ -285,7 +302,7 @@ export default function FeedbacksPage() {
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Feedbacks este mês: {getFeedbackUsage().current}/{getFeedbackUsage().limit}
+                        Opiniões este mês: {getFeedbackUsage().current}/{getFeedbackUsage().limit}
                       </span>
                       <span className="text-sm text-gray-500 dark:text-gray-400">
                         {getFeedbackUsage().percentage}%
@@ -336,12 +353,12 @@ export default function FeedbacksPage() {
                       <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
                     <span className="text-sm text-red-700 dark:text-red-300">
-                      <strong>Limite atingido!</strong> Você atingiu o máximo de {getFeedbackLimit(userProfile.plan || 'free')} feedbacks/mês do seu plano gratuito. 
+                      <strong>Limite atingido!</strong> Você atingiu o máximo de {getFeedbackLimit(userProfile.plan || 'free')} opiniões/mês do seu plano gratuito. 
                       <button 
                         onClick={() => router.push('/planos')}
                         className="ml-2 text-blue-600 dark:text-blue-400 hover:underline font-medium"
                       >
-                        Faça upgrade para receber feedbacks ilimitados!
+                        Faça upgrade para receber opiniões ilimitadas!
                       </button>
                     </span>
                   </div>

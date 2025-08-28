@@ -33,7 +33,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
     // Menus básicos (modo usuário)
     { id: 'overview', label: 'Visão Geral', icon: '📊', path: '/dashboard' },
     { id: 'areas', label: 'Áreas', icon: '🏢', path: '/areas' },
-    { id: 'feedbacks', label: 'Feedbacks', icon: '💬', path: '/feedbacks' },
+    { id: 'feedbacks', label: 'Opiniões', icon: '💬', path: '/feedbacks' },
     { id: 'base-conhecimento', label: 'Base de Conhecimento', icon: '📚', path: '/base-conhecimento' },
     { id: 'agente-ia', label: 'Agente IA', icon: '🤖', path: '/agente-ia' },
     { id: 'assinatura', label: 'Assinatura', icon: '💳', path: '/assinatura' },
