@@ -89,19 +89,12 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
         fixed top-0 left-0 h-full w-80 bg-theme-card border-r border-theme-primary z-50 transform transition-transform duration-300 ease-in-out flex flex-col
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Header */}
-        <div className="p-6 border-b border-theme-primary">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-lg">P</span>
-            </div>
-            <div>
-              <h1 className="text-lg font-bold text-theme-primary">Pesquisou</h1>
-              <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">Beta</span>
-            </div>
+        {/* Logo */}
+        <div className="flex items-center space-x-3 px-4 py-3">
+          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-lg">K</span>
           </div>
-          
-
+          <span className="text-xl font-bold text-white">Klientti</span>
         </div>
 
         {/* Menu Items */}

@@ -176,7 +176,7 @@ export default function SubscriptionPage() {
 
 
           {/* Upgrade CTA Section */}
-          {currentPlan !== 'professional' && (
+          {subscriptionData?.plan !== 'professional' && (
             <Card className="mb-6">
               <CardHeader>
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">🚀 Desbloqueie Mais Recursos</h2>
@@ -185,13 +185,13 @@ export default function SubscriptionPage() {
                 <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6">
                   <div className="text-center mb-6">
                                          <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                       {currentPlan === 'free' 
+                       {subscriptionData?.plan === 'free' 
                          ? 'Transforme seu negócio com o Plano Starter' 
                          : 'Leve seu negócio ao próximo nível com o Plano Professional'
                        }
                      </h3>
                      <p className="text-gray-600 dark:text-gray-400 text-lg">
-                       {currentPlan === 'free' 
+                       {subscriptionData?.plan === 'free' 
                          ? 'Aproveite recursos avançados que vão revolucionar sua experiência com feedbacks'
                          : 'Tenha acesso ilimitado a todas as funcionalidades e suporte premium'
                        }
@@ -199,7 +199,7 @@ export default function SubscriptionPage() {
                   </div>
 
                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                     {currentPlan === 'free' ? (
+                     {subscriptionData?.plan === 'free' ? (
                       <>
                         <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
                           <h4 className="font-semibold text-gray-900 dark:text-white mb-3">✅ O que você ganha:</h4>
@@ -251,7 +251,7 @@ export default function SubscriptionPage() {
                        onClick={() => router.push('/planos')}
                        className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
                      >
-                       {currentPlan === 'free' 
+                       {subscriptionData?.plan === 'free' 
                          ? 'Fazer Upgrade para Starter - R$ 29/mês' 
                          : 'Fazer Upgrade para Professional - R$ 79/mês'
                        }
@@ -266,7 +266,7 @@ export default function SubscriptionPage() {
           )}
 
           {/* Usage Analytics & Upgrade Motivation */}
-          {currentPlan === 'free' && (
+          {subscriptionData?.plan === 'free' && (
             <Card className="mb-6">
               <CardHeader>
                 <h2 className="text-xl font-semibold text-gray-900 dark:text-white">📊 Seu Uso Atual</h2>

@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pesquisou - Sistema de Feedback com QR Codes",
-  description: "Sistema web para empresários gerarem QR Codes para diferentes áreas da empresa e receberem feedbacks anônimos dos clientes.",
-  keywords: "feedback, qr code, pesquisa, cliente, empresa",
-  authors: [{ name: "Pesquisou" }],
+  title: 'Klientti - Sistema de Feedback com QR Codes',
+  description: 'Sistema web para empresários gerarem QR Codes para diferentes áreas da empresa e receberem feedbacks anônimos dos clientes.',
+  authors: [{ name: 'Klientti' }],
+  keywords: 'feedback, qr code, pesquisa, cliente, empresa, klientti',
 };
 
 export const viewport: Viewport = {

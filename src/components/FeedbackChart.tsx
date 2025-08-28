@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 interface FeedbackChartProps {
   feedbacks: any[];
@@ -10,7 +9,7 @@ interface FeedbackChartProps {
 export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
   const [selectedDays, setSelectedDays] = useState(7);
 
-  const chartData = useMemo(() => {
+  const stats = useMemo(() => {
     const today = new Date();
     const data = [];
     
@@ -25,7 +24,6 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
       dayEnd.setHours(23, 59, 59, 999);
       
       const feedbacksForDay = feedbacks.filter(feedback => {
-        // Handle both Firestore Timestamp and regular Date objects
         const feedbackDate = feedback.createdAt?.toDate ? feedback.createdAt.toDate() : new Date(feedback.createdAt);
         return feedbackDate >= dayStart && feedbackDate <= dayEnd;
       });
@@ -48,15 +46,15 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
     return data;
   }, [feedbacks, selectedDays]);
 
-  const totalFeedbacks = chartData.reduce((sum, day) => sum + day.feedbacks, 0);
-  const averageRating = chartData.reduce((sum, day) => sum + day.rating, 0) / chartData.length;
+  const totalFeedbacks = stats.reduce((sum, day) => sum + day.feedbacks, 0);
+  const averageRating = stats.reduce((sum, day) => sum + day.rating, 0) / stats.length;
 
   return (
-    <div className="bg-card border border-custom rounded-lg p-6">
+    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-primary">Evolução das Opiniões</h3>
-          <p className="text-sm text-secondary">Últimos {selectedDays} dias</p>
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Estatísticas dos Últimos {selectedDays} Dias</h3>
+          <p className="text-sm text-gray-600 dark:text-gray-400">Resumo das opiniões recebidas através do Klientti</p>
         </div>
         
         {/* Seletor de período */}
@@ -67,8 +65,8 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
               onClick={() => setSelectedDays(days)}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                 selectedDays === days
-                  ? 'bg-secondary-color text-white'
-                  : 'bg-tertiary text-primary hover:bg-gray-200'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
               }`}
             >
               {days} dias
@@ -79,75 +77,61 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
 
       {/* Métricas rápidas */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-tertiary rounded-lg p-4">
-          <div className="text-2xl font-bold text-primary">{totalFeedbacks}</div>
-          <div className="text-sm text-secondary">Total de opiniões</div>
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{totalFeedbacks}</div>
+          <div className="text-sm text-blue-700 dark:text-blue-300">Total de feedbacks</div>
         </div>
-        <div className="bg-tertiary rounded-lg p-4">
-          <div className="text-2xl font-bold text-primary">
+        <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
             {averageRating > 0 ? averageRating.toFixed(1) : '0.0'}
           </div>
-          <div className="text-sm text-secondary">Avaliação média</div>
+          <div className="text-sm text-green-700 dark:text-green-300">Avaliação média</div>
         </div>
       </div>
 
-      {/* Gráfico */}
-      <div className="h-48">
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-            <XAxis 
-              dataKey="date" 
-              stroke="#6b7280"
-              fontSize={12}
-            />
-            <YAxis 
-              stroke="#6b7280"
-              fontSize={12}
-              tickFormatter={(value) => value.toString()}
-            />
-            <Tooltip 
-              contentStyle={{
-                backgroundColor: 'white',
-                border: '1px solid #e5e7eb',
-                borderRadius: '8px',
-                boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-              }}
-              labelStyle={{ color: '#374151', fontWeight: '600' }}
-              formatter={(value: any, name: string) => [
-                value, 
-                name === 'feedbacks' ? 'Opiniões' : 'Avaliação'
-              ]}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="feedbacks" 
-              stroke="#8b5cf6" 
-              strokeWidth={3}
-              dot={{ fill: '#8b5cf6', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: '#8b5cf6', strokeWidth: 2 }}
-            />
-            <Line 
-              type="monotone" 
-              dataKey="rating" 
-              stroke="#10b981" 
-              strokeWidth={3}
-              dot={{ fill: '#10b981', strokeWidth: 2, r: 4 }}
-              activeDot={{ r: 6, stroke: '#10b981', strokeWidth: 2 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+      {/* Gráfico simplificado com barras */}
+      <div className="space-y-3">
+        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Feedbacks por dia:</h4>
+        {stats.map((day, index) => (
+          <div key={index} className="flex items-center space-x-3">
+            <div className="w-16 text-sm text-gray-600 dark:text-gray-400">{day.date}</div>
+            <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+              <div 
+                className="bg-blue-500 h-3 rounded-full transition-all duration-300"
+                style={{ width: `${Math.max((day.feedbacks / Math.max(...stats.map(s => s.feedbacks), 1)) * 100, 5)}%` }}
+              />
+            </div>
+            <div className="w-12 text-right text-sm font-medium text-gray-900 dark:text-white">
+              {day.feedbacks}
+            </div>
+            <div className="w-16 text-right text-sm text-gray-600 dark:text-gray-400">
+              {day.rating > 0 ? `⭐ ${day.rating}` : '-'}
+            </div>
+          </div>
+        ))}
       </div>
 
-      {/* Legenda */}
-      <div className="flex justify-center space-x-6 mt-4">
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-purple-500 rounded-full"></div>
-          <span className="text-sm text-secondary">Quantidade de opiniões</span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-          <span className="text-sm text-secondary">Avaliação média</span>
+      {/* Resumo adicional */}
+      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+        <div className="grid grid-cols-3 gap-4 text-center">
+          <div>
+            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+              {feedbacks.filter(f => f.rating === 5).length}
+            </div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">5 estrelas</div>
+          </div>
+          <div>
+            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+              {feedbacks.filter(f => f.rating >= 4).length}
+            </div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">4+ estrelas</div>
+          </div>
+          <div>
+            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+              {feedbacks.filter(f => f.rating <= 2).length}
+            </div>
+            <div className="text-xs text-gray-600 dark:text-gray-400">≤2 estrelas</div>
+          </div>
         </div>
       </div>
     </div>

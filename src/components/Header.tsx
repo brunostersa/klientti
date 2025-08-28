@@ -20,9 +20,9 @@ export default function Header() {
           {/* Logo */}
           <div className="flex items-center">
             <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-              <span className="text-white font-bold text-sm">P</span>
+              <span className="text-white font-bold text-sm">K</span>
             </div>
-            <h1 className="text-xl font-bold text-theme-primary">Pesquisou</h1>
+            <h1 className="text-xl font-bold text-theme-primary">Klientti</h1>
           </div>
 
           {/* Right side */}

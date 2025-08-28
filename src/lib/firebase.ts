@@ -2,7 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
 
-// ⚠️ IMPORTANTE: Substitua estas configurações pelas suas credenciais reais do Firebase
+// ⚠️ IMPORTANTE: Substitua estas configurações pelas suas credenciais reais do Firebase para Klientti
 // Para obter estas credenciais:
 // 1. Acesse https://console.firebase.google.com/
 // 2. Crie um novo projeto ou selecione um existente
