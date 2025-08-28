@@ -26,9 +26,7 @@ import DeleteAllFeedbacksModal from '@/components/DeleteAllFeedbacksModal';
 import Notification from '@/components/Notification';
 import Card, { CardHeader, CardContent, CardMetric, CardAction } from '@/components/Card';
 import Sidebar from '@/components/Sidebar';
-import KnowledgeBase from '@/components/KnowledgeBase';
-import AIAgent from '@/components/AIAgent';
-import FeedbackChart from '@/components/FeedbackChart';
+import { LazyKnowledgeBase, LazyAIAgent, LazyFeedbackChart } from '@/components/LazyComponents';
 
 export default function MeuPainelPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -566,7 +564,7 @@ export default function MeuPainelPage() {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
               {/* Gráfico de Feedbacks - 60% */}
               <div className="lg:col-span-3">
-                <FeedbackChart feedbacks={userFeedbacks} />
+                <LazyFeedbackChart feedbacks={userFeedbacks} />
               </div>
 
               {/* Recent Activity - 40% */}
@@ -937,14 +935,14 @@ export default function MeuPainelPage() {
         {/* Base de Conhecimento Tab */}
         {activeTab === 'base-conhecimento' && (
           <div className="space-y-6">
-            <KnowledgeBase userSegment={userProfile?.segment} />
+            <LazyKnowledgeBase userSegment={userProfile?.segment} />
           </div>
         )}
 
         {/* Agente de IA Tab */}
         {activeTab === 'agente-ia' && (
           <div className="space-y-6">
-            <AIAgent 
+            <LazyAIAgent 
               feedbacks={userFeedbacks} 
               userSegment={userProfile?.segment} 
               areas={areas}
