@@ -66,12 +66,16 @@ export default function OpinioesPage() {
   };
 
   const loadAllFeedbacks = (userId: string) => {
-    // Carregar apenas os feedbacks das áreas do usuário
+    console.log('Debug - Iniciando loadAllFeedbacks para userId:', userId);
+    console.log('Debug - Áreas disponíveis no momento:', areas.length);
+    
+    // Carregar todos os feedbacks
     const q = query(collection(db, 'feedbacks'));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const allFeedbacks = snapshot.docs.map(doc => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
+        createdAt: doc.data().createdAt?.toDate() || new Date()
       })) as Feedback[];
       
       console.log('Debug - Total feedbacks no banco:', allFeedbacks.length);
@@ -97,6 +101,7 @@ export default function OpinioesPage() {
       
       console.log('Debug - Feedbacks do usuário:', userFeedbacks.length);
       console.log('Debug - Feedbacks filtrados:', userFeedbacks);
+      console.log('Debug - Feedbacks completos:', userFeedbacks.map(f => ({ id: f.id, areaId: f.areaId, comment: f.comment?.substring(0, 50) })));
       
       setFeedbacks(userFeedbacks);
     });
@@ -175,11 +180,10 @@ export default function OpinioesPage() {
   };
 
   const getFilteredFeedbacks = () => {
-    let filtered = feedbacks.filter(feedback => {
-      const area = areas.find(a => a.id === feedback.areaId);
-      return area && area.userId === user?.uid;
-    });
+    // IMPORTANTE: Usar feedbacks já filtrados por usuário (já vem filtrado de loadAllFeedbacks)
+    let filtered = [...feedbacks]; // Clonar array para não modificar o original
 
+    // Aplicar filtros adicionais
     if (selectedAreaFilter) {
       filtered = filtered.filter(feedback => feedback.areaId === selectedAreaFilter);
     }
@@ -189,6 +193,7 @@ export default function OpinioesPage() {
       filtered = filtered.filter(feedback => feedback.rating === rating);
     }
 
+    // Ordenar por data mais recente
     return filtered.sort((a, b) => {
       const dateA = a.createdAt instanceof Date ? a.createdAt : new Date(a.createdAt);
       const dateB = b.createdAt instanceof Date ? b.createdAt : new Date(b.createdAt);
@@ -267,6 +272,31 @@ export default function OpinioesPage() {
       />
 
       <div className="lg:ml-80">
+        {/* Debug Panel - Apenas em desenvolvimento */}
+        {process.env.NODE_ENV === 'development' && (
+          <div className="bg-yellow-100 border border-yellow-400 p-4 m-4 rounded-lg">
+            <h3 className="font-bold text-yellow-800 mb-2">🐛 Debug Panel</h3>
+            <div className="grid grid-cols-2 gap-4 text-sm">
+              <div>
+                <strong>Estado:</strong>
+                <div>Feedbacks carregados: {feedbacks.length}</div>
+                <div>Áreas disponíveis: {areas.length}</div>
+                <div>UserId: {user?.uid}</div>
+                <div>Loading: {loading ? 'Sim' : 'Não'}</div>
+              </div>
+              <div>
+                <strong>Filtros:</strong>
+                <div>Área selecionada: {selectedAreaFilter || 'Todas'}</div>
+                <div>Rating selecionado: {selectedRatingFilter || 'Todos'}</div>
+                <div>Feedbacks filtrados: {getFilteredFeedbacks().length}</div>
+              </div>
+            </div>
+            <div className="mt-2 text-xs">
+              <strong>Feedbacks IDs:</strong> {feedbacks.map(f => f.id).join(', ') || 'Nenhum'}
+            </div>
+          </div>
+        )}
+        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
           <nav className="mb-8">
