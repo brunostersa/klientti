@@ -9,7 +9,8 @@ import {
   orderBy,
   limit,
   startAfter,
-  getDocs
+  getDocs,
+  QueryConstraint
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
@@ -52,24 +53,23 @@ export function useFirestoreOptimized<T = DocumentData>(
 
   // Função para construir query
   const buildQuery = useCallback(() => {
-    let q = collection(db, collectionName);
+    const constraints: QueryConstraint[] = [];
     
     // Aplicar filtros
-    if (filters.length > 0) {
-      q = query(q, ...filters.map(({ field, operator, value }) => 
-        where(field, operator as any, value)
-      ));
-    }
+    filters.forEach(({ field, operator, value }) => {
+      constraints.push(where(field, operator as any, value));
+    });
 
     // Aplicar ordenação
     if (orderByField) {
-      q = query(q, orderBy(orderByField, orderDirection));
+      constraints.push(orderBy(orderByField, orderDirection));
     }
 
     // Aplicar limite
-    q = query(q, limit(limitCount));
+    constraints.push(limit(limitCount));
 
-    return q;
+    // Construir query com constraints
+    return query(collection(db, collectionName), ...constraints);
   }, [collectionName, filters, orderByField, orderDirection, limitCount]);
 
   // Função para carregar dados com cache
