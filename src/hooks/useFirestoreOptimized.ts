@@ -55,9 +55,11 @@ export function useFirestoreOptimized<T = DocumentData>(
     let q = collection(db, collectionName);
     
     // Aplicar filtros
-    filters.forEach(({ field, operator, value }) => {
-      q = query(q, where(field, operator as any, value));
-    });
+    if (filters.length > 0) {
+      q = query(q, ...filters.map(({ field, operator, value }) => 
+        where(field, operator as any, value)
+      ));
+    }
 
     // Aplicar ordenação
     if (orderByField) {
@@ -169,8 +171,9 @@ export function useFirestoreOptimized<T = DocumentData>(
   // Cleanup
   useEffect(() => {
     return () => {
-      if (unsubscribeRef.current) {
-        unsubscribeRef.current();
+      const unsubscribe = unsubscribeRef.current;
+      if (unsubscribe) {
+        unsubscribe();
       }
     };
   }, []);
