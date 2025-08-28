@@ -12,7 +12,34 @@ export default function HomePage() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
-        router.push('/dashboard');
+        // Verificar se o usuário tem perfil completo antes de redirecionar
+        const checkUserProfile = async () => {
+          try {
+            const { doc, getDoc } = await import('firebase/firestore');
+            const { db } = await import('@/lib/firebase');
+            
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+              const userData = userDoc.data();
+              if (userData.name && userData.company && userData.segment) {
+                // Perfil completo, redirecionar para dashboard
+                router.push('/dashboard');
+              } else {
+                // Perfil incompleto, redirecionar para login para completar
+                router.push('/login');
+              }
+            } else {
+              // Usuário novo, redirecionar para login para completar perfil
+              router.push('/login');
+            }
+          } catch (error) {
+            console.error('Erro ao verificar perfil:', error);
+            // Em caso de erro, redirecionar para login
+            router.push('/login');
+          }
+        };
+        
+        checkUserProfile();
       }
     });
 

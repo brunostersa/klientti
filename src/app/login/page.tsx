@@ -110,11 +110,18 @@ export default function LoginPage() {
           // Perfil incompleto, ir para completar perfil
           setNeedsProfileCompletion(true);
           setGoogleUser(user);
+          // Preencher campos com dados existentes se disponíveis
+          if (userData.name) setName(userData.name);
+          if (userData.company) setCompany(userData.company);
+          if (userData.segment) setSegment(userData.segment);
+          if (userData.phone) setPhone(applyPhoneMask(userData.phone || ''));
         }
       } else {
         // Usuário novo, ir para completar perfil
         setNeedsProfileCompletion(true);
         setGoogleUser(user);
+        // Preencher nome do Google se disponível
+        if (user.displayName) setName(user.displayName);
       }
     } catch (error: any) {
       console.error('Erro no Google Sign-In:', error);
@@ -205,22 +212,30 @@ export default function LoginPage() {
         return;
       }
 
+      // Validar campos obrigatórios
+      if (!name.trim() || !company.trim() || !segment) {
+        setError('Por favor, preencha todos os campos obrigatórios.');
+        return;
+      }
+
       // Atualizar documento do usuário no Firestore
       await setDoc(doc(db, 'users', user.uid), {
         email: user.email,
-        name: name,
-        company: company,
+        name: name.trim(),
+        company: company.trim(),
         segment: segment,
-        phone: removePhoneMask(phone),
+        phone: phone ? removePhoneMask(phone) : '',
         createdAt: new Date(),
+        updatedAt: new Date(),
         role: 'user',
-        plan: 'free'
+        plan: 'free',
+        theme: 'light'
       }, { merge: true });
 
       // Atualizar perfil do Firebase Auth se não for usuário Google
       if (!googleUser) {
         await updateProfile(user, {
-          displayName: name
+          displayName: name.trim()
         });
       }
 
@@ -252,12 +267,24 @@ export default function LoginPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
+            <div className="mx-auto h-12 w-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
+              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               Complete seu Perfil
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Precisamos de algumas informações para personalizar sua experiência
+              Precisamos de algumas informações para personalizar sua experiência no Klientti
             </p>
+            {googleUser && (
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md">
+                <p className="text-sm text-blue-700 text-center">
+                  ✅ Logado com Google: {googleUser.email}
+                </p>
+              </div>
+            )}
           </div>
 
           <form className="mt-8 space-y-6" onSubmit={handleProfileSubmit}>
@@ -367,7 +394,7 @@ export default function LoginPage() {
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="mx-auto h-12 w-12 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">P</span>
+            <span className="text-white font-bold text-xl">K</span>
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {isSignUp ? 'Criar conta' : 'Entrar na sua conta'}
