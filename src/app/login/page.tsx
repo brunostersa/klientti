@@ -80,16 +80,8 @@ export default function LoginPage() {
     }
   };
 
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user && !needsProfileCompletion) {
-        // Só redireciona se não estiver no modo de completar perfil
-        router.push('/dashboard');
-      }
-    });
-
-    return () => unsubscribe();
-  }, [router, needsProfileCompletion]);
+  // Removido useEffect problemático que estava interceptando o fluxo
+  // Agora o redirecionamento é controlado apenas pelo handleGoogleSignIn
 
   const handleGoogleSignIn = async () => {
     setLoading(true);
@@ -117,7 +109,20 @@ export default function LoginPage() {
         console.log('Usuário existe no Firestore, verificando perfil...');
         // Usuário existe, verificar se o perfil está completo
         const userData = userDoc.data();
-        if (userData.name && userData.company && userData.segment && userData.phone) {
+        // Log detalhado dos dados do usuário
+        console.log('Dados do usuário no Firestore:', userData);
+        console.log('Verificação de campos:', {
+          name: !!userData.name,
+          company: !!userData.company,
+          segment: !!userData.segment,
+          phone: !!userData.phone,
+          nameValue: userData.name,
+          companyValue: userData.company,
+          segmentValue: userData.segment,
+          phoneValue: userData.phone
+        });
+        
+        if (userData.name && userData.company && userData.segment) {
           console.log('Perfil completo, redirecionando para dashboard');
           // Perfil completo, redirecionar para dashboard
           router.push('/dashboard');

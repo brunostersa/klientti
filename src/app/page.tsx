@@ -23,8 +23,8 @@ export default function HomePage() {
             const userDoc = await getDoc(doc(db, 'users', user.uid));
             if (userDoc.exists()) {
               const userData = userDoc.data();
-              // Validação mais rigorosa: todos os campos obrigatórios devem estar preenchidos
-              if (userData.name && userData.company && userData.segment && userData.phone) {
+              // Validação dos campos obrigatórios principais
+              if (userData.name && userData.company && userData.segment) {
                 console.log('Perfil completo detectado, redirecionando para dashboard');
                 // Perfil completo, redirecionar para dashboard
                 router.push('/dashboard');
