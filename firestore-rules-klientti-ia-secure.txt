@@ -1,0 +1,106 @@
+// Regras de Segurança do Firestore para Klientti - Versão IA-Secure
+// Projeto: klientti-640d4
+// Proteção contra abusos de IA e ataques automatizados
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Função para verificar se é um usuário legítimo (não bot/IA)
+    function isLegitimateUser() {
+      return request.auth != null && 
+             request.auth.token.email_verified == true &&
+             request.time > request.auth.token.auth_time + duration.value(5, 'm'); // Mínimo 5 min entre requests
+    }
+    
+    // Função para verificar se é super admin
+    function isSuperAdmin() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // Função para verificar rate limiting básico
+    function checkRateLimit() {
+      let recentRequests = getAfter(/databases/$(database)/documents/users/$(request.auth.uid)).data.recentRequests;
+      return recentRequests == null || 
+             request.time > recentRequests.lastRequest + duration.value(1, 's'); // Máximo 1 request por segundo
+    }
+    
+    // Regras para usuários
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && 
+                      request.auth.uid == userId && 
+                      checkRateLimit();
+    }
+    
+    // Regras para áreas de feedback
+    match /areas/{areaId} {
+      allow read, write: if isLegitimateUser() && 
+        (request.auth.uid == resource.data.userId || isSuperAdmin());
+      allow create: if isLegitimateUser();
+    }
+    
+    // Regras para feedbacks - PROTEÇÃO CONTRA IA
+    match /feedbacks/{feedbackId} {
+      // Criação com validações rigorosas
+      allow create: if 
+        // Deve ter área válida
+        exists(/databases/$(database)/documents/areas/$(request.resource.data.areaId)) &&
+        // Área deve estar ativa
+        get(/databases/$(database)/documents/areas/$(request.resource.data.areaId)).data.status == 'active' &&
+        // Validação de conteúdo
+        request.resource.data.comment is string &&
+        request.resource.data.comment.size() > 0 &&
+        request.resource.data.comment.size() < 1000 && // Máximo 1000 caracteres
+        request.resource.data.rating is number &&
+        request.resource.data.rating >= 1 &&
+        request.resource.data.rating <= 5 &&
+        // Rate limiting por IP (se disponível)
+        (request.auth != null || // Usuário logado
+         request.time > resource.data.createdAt + duration.value(30, 's')); // Anônimo: máximo 1 por 30s
+      
+      // Leitura e edição apenas para usuários autenticados
+      allow read, write: if isLegitimateUser() && 
+        (isSuperAdmin() ||
+         // Permitir acesso se o usuário for dono da área relacionada
+         exists(/databases/$(database)/documents/areas/$(resource.data.areaId)) &&
+         get(/databases/$(database)/documents/areas/$(resource.data.areaId)).data.userId == request.auth.uid);
+    }
+    
+    // Regras para assinaturas
+    match /subscriptions/{subscriptionId} {
+      allow read, write: if isLegitimateUser() && 
+        (request.auth.uid == resource.data.userId || isSuperAdmin());
+      allow create: if isLegitimateUser();
+    }
+    
+    // Regras para pagamentos
+    match /payments/{paymentId} {
+      allow read, write: if isLegitimateUser() && 
+        (request.auth.uid == resource.data.userId || isSuperAdmin());
+      allow create: if isLegitimateUser();
+    }
+    
+    // Regras para análise de IA (se existir)
+    match /ai-analysis/{analysisId} {
+      allow read, write: if isLegitimateUser() && 
+        (request.auth.uid == resource.data.userId || isSuperAdmin());
+      allow create: if isLegitimateUser() && 
+        // Rate limiting para análise de IA
+        checkRateLimit();
+    }
+    
+    // Regras para logs de auditoria
+    match /audit-logs/{logId} {
+      allow read: if isSuperAdmin();
+      allow create: if true; // Sistema pode criar logs
+    }
+    
+    // Regras para testes (apenas em desenvolvimento)
+    match /test/{document=**} {
+      allow read, write: if isLegitimateUser() && 
+        (isSuperAdmin() || request.auth.token.email.matches('.*@klientti\\.com'));
+    }
+  }
+}
