@@ -1,0 +1,51 @@
+// Regras de Segurança do Firestore para Klientti
+// Projeto: klientti-640d4
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Regras para usuários
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Regras para áreas de feedback
+    match /areas/{areaId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para feedbacks
+    match /feedbacks/{feedbackId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para assinaturas
+    match /subscriptions/{subscriptionId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para pagamentos
+    match /payments/{paymentId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para testes (apenas em desenvolvimento)
+    match /test/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

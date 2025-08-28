@@ -94,19 +94,33 @@ export default function LoginPage() {
     setError('');
 
     try {
+      console.log('Iniciando login com Google...');
+      
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
+      
+      console.log('Usuário autenticado com Google:', user.email);
 
+      // Verificar se o Firestore está funcionando
+      if (!db) {
+        throw new Error('Firestore não está inicializado');
+      }
+
+      console.log('Verificando se usuário existe no Firestore...');
+      
       // Verificar se o usuário já existe no Firestore
       const userDoc = await getDoc(doc(db, 'users', user.uid));
 
       if (userDoc.exists()) {
+        console.log('Usuário existe no Firestore, verificando perfil...');
         // Usuário existe, verificar se o perfil está completo
         const userData = userDoc.data();
         if (userData.name && userData.company && userData.segment) {
+          console.log('Perfil completo, redirecionando para dashboard');
           // Perfil completo, redirecionar para dashboard
           router.push('/dashboard');
         } else {
+          console.log('Perfil incompleto, mostrando formulário...');
           // Perfil incompleto, ir para completar perfil
           setNeedsProfileCompletion(true);
           setGoogleUser(user);
@@ -117,6 +131,7 @@ export default function LoginPage() {
           if (userData.phone) setPhone(applyPhoneMask(userData.phone || ''));
         }
       } else {
+        console.log('Usuário novo, mostrando formulário para completar perfil...');
         // Usuário novo, ir para completar perfil
         setNeedsProfileCompletion(true);
         setGoogleUser(user);
@@ -124,8 +139,18 @@ export default function LoginPage() {
         if (user.displayName) setName(user.displayName);
       }
     } catch (error: any) {
-      console.error('Erro no Google Sign-In:', error);
-      setError(getErrorMessage(error.code));
+      console.error('Erro detalhado no Google Sign-In:', error);
+      
+      // Tratamento específico de erros
+      if (error.code === 'auth/popup-closed-by-user') {
+        setError('Login cancelado pelo usuário. Tente novamente.');
+      } else if (error.code === 'auth/popup-blocked') {
+        setError('Popup bloqueado pelo navegador. Permita popups para este site.');
+      } else if (error.code === 'auth/network-request-failed') {
+        setError('Erro de conexão. Verifique sua internet e tente novamente.');
+      } else {
+        setError(getErrorMessage(error.code) || 'Erro inesperado no login com Google.');
+      }
     } finally {
       setLoading(false);
     }
@@ -218,8 +243,23 @@ export default function LoginPage() {
         return;
       }
 
+      console.log('Tentando salvar perfil para usuário:', user.uid);
+      console.log('Dados a serem salvos:', {
+        email: user.email,
+        name: name.trim(),
+        company: company.trim(),
+        segment: segment,
+        phone: phone ? removePhoneMask(phone) : '',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        role: 'user',
+        plan: 'free',
+        theme: 'light'
+      });
+
       // Atualizar documento do usuário no Firestore
-      await setDoc(doc(db, 'users', user.uid), {
+      const userRef = doc(db, 'users', user.uid);
+      await setDoc(userRef, {
         email: user.email,
         name: name.trim(),
         company: company.trim(),
@@ -232,18 +272,31 @@ export default function LoginPage() {
         theme: 'light'
       }, { merge: true });
 
+      console.log('Perfil salvo com sucesso no Firestore');
+
       // Atualizar perfil do Firebase Auth se não for usuário Google
       if (!googleUser) {
         await updateProfile(user, {
           displayName: name.trim()
         });
+        console.log('Perfil do Auth atualizado');
       }
 
       // Redirecionar para dashboard
       router.push('/dashboard');
     } catch (error: any) {
-      console.error('Erro ao salvar perfil:', error);
-      setError('Erro ao salvar perfil. Tente novamente.');
+      console.error('Erro detalhado ao salvar perfil:', error);
+      
+      // Tratamento específico de erros
+      if (error.code === 'permission-denied') {
+        setError('Erro de permissão. Verifique se você está logado corretamente.');
+      } else if (error.code === 'unavailable') {
+        setError('Serviço temporariamente indisponível. Tente novamente em alguns minutos.');
+      } else if (error.code === 'unauthenticated') {
+        setError('Usuário não autenticado. Faça login novamente.');
+      } else {
+        setError(`Erro ao salvar perfil: ${error.message || 'Tente novamente.'}`);
+      }
     } finally {
       setLoading(false);
     }
