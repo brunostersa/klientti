@@ -10,6 +10,7 @@ import Sidebar from '@/components/Sidebar';
 
 import { useActiveTab } from '@/hooks/useActiveTab';
 
+
 interface PricingPlan {
   id: string;
   name: string;

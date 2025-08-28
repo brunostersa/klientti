@@ -15,10 +15,77 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Klientti - Sistema de Feedback com QR Codes',
-  description: 'Sistema web para empresários gerarem QR Codes para diferentes áreas da empresa e receberem feedbacks anônimos dos clientes.',
-  authors: [{ name: 'Klientti' }],
-  keywords: 'feedback, qr code, pesquisa, cliente, empresa, klientti',
+  title: {
+    default: 'Klientti - Transforme Feedback em Crescimento Real',
+    template: '%s | Klientti'
+  },
+  description: 'Sistema inteligente de feedback com QR codes e links de pesquisa. Entenda seus clientes em tempo real, melhore seus produtos e crie experiências que fidelizam. Comece grátis por 14 dias.',
+  keywords: [
+    'feedback cliente',
+    'qr code pesquisa',
+    'satisfação cliente',
+    'pesquisa de mercado',
+    'gestão de qualidade',
+    'melhoria contínua',
+    'experiência do cliente',
+    'análise de feedback',
+    'sistema de pesquisa',
+    'klientti',
+    'gestão empresarial',
+    'inovação empresarial'
+  ],
+  authors: [{ name: 'Klientti', url: 'https://klientti.com' }],
+  creator: 'Klientti',
+  publisher: 'Klientti',
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL('https://klientti.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'pt_BR',
+    url: 'https://klientti.com',
+    title: 'Klientti - Transforme Feedback em Crescimento Real',
+    description: 'Sistema inteligente de feedback com QR codes e links de pesquisa. Entenda seus clientes em tempo real.',
+    siteName: 'Klientti',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Klientti - Sistema de Feedback Inteligente',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Klientti - Transforme Feedback em Crescimento Real',
+    description: 'Sistema inteligente de feedback com QR codes e links de pesquisa.',
+    images: ['/og-image.png'],
+    creator: '@klientti',
+    site: '@klientti',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'seu-google-verification-code',
+    yandex: 'seu-yandex-verification-code',
+    yahoo: 'seu-yahoo-verification-code',
+  },
 };
 
 export const viewport: Viewport = {
