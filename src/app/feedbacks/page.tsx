@@ -49,25 +49,38 @@ export default function OpinioesPage() {
   }, [router]);
 
   const loadAreas = (userId: string) => {
+    console.log('Debug - Iniciando loadAreas para userId:', userId);
     const q = query(collection(db, 'areas'), where('userId', '==', userId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const areasData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Area[];
+      
+      console.log('Debug - Áreas carregadas:', areasData);
       setAreas(areasData);
       
       // IMPORTANTE: Carregar feedbacks APÓS as áreas serem carregadas
       console.log('Debug - Áreas carregadas, agora carregando feedbacks...');
-      loadAllFeedbacks(userId);
+      loadAllFeedbacks(userId, areasData); // Passar áreas como parâmetro
+      
+      // Fallback: se não houver áreas, ainda assim carregar feedbacks
+      if (areasData.length === 0) {
+        console.log('Debug - Nenhuma área encontrada, carregando feedbacks sem filtro...');
+        loadAllFeedbacks(userId, []);
+      }
     });
 
     return unsubscribe;
   };
 
-  const loadAllFeedbacks = (userId: string) => {
+  const loadAllFeedbacks = (userId: string, currentAreas: Area[] = []) => {
     console.log('Debug - Iniciando loadAllFeedbacks para userId:', userId);
-    console.log('Debug - Áreas disponíveis no momento:', areas.length);
+    console.log('Debug - Áreas recebidas como parâmetro:', currentAreas.length);
+    
+    // Usar áreas passadas como parâmetro OU estado atual
+    const areasToUse = currentAreas.length > 0 ? currentAreas : areas;
+    console.log('Debug - Áreas que serão usadas:', areasToUse.length);
     
     // Carregar todos os feedbacks
     const q = query(collection(db, 'feedbacks'));
@@ -79,12 +92,12 @@ export default function OpinioesPage() {
       })) as Feedback[];
       
       console.log('Debug - Total feedbacks no banco:', allFeedbacks.length);
-      console.log('Debug - Áreas disponíveis:', areas.length);
+      console.log('Debug - Áreas disponíveis para filtro:', areasToUse.length);
       console.log('Debug - UserId atual:', userId);
       
       // Filtrar apenas feedbacks das áreas do usuário
       const userFeedbacks = allFeedbacks.filter(feedback => {
-        const area = areas.find(a => a.id === feedback.areaId);
+        const area = areasToUse.find(a => a.id === feedback.areaId);
         const isUserArea = area && area.userId === userId;
         
         console.log('Debug - Feedback:', {
