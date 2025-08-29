@@ -63,6 +63,58 @@ export default function SubscriptionPage() {
     }
   };
 
+  // Função para fazer upgrade via Stripe
+  const handleUpgrade = async (plan: 'starter' | 'professional') => {
+    if (!user) {
+      console.error('Usuário não autenticado');
+      return;
+    }
+
+    try {
+      console.log(`Iniciando upgrade para plano: ${plan}`);
+      
+      // Chamar API do Stripe
+      const response = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          plan: plan,
+          userId: user.uid,
+          userEmail: user.email,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erro ao criar sessão de checkout');
+      }
+
+      const { sessionId } = await response.json();
+      console.log('Sessão de checkout criada:', sessionId);
+
+      // Redirecionar para Stripe Checkout
+      if (typeof window !== 'undefined' && (window as any).Stripe) {
+        const stripe = (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+        const { error } = await stripe.redirectToCheckout({ sessionId });
+        
+        if (error) {
+          console.error('Erro ao redirecionar para checkout:', error);
+          alert('Erro ao redirecionar para checkout. Tente novamente.');
+        }
+      } else {
+        // Fallback: redirecionar diretamente
+        window.location.href = `/api/redirect-to-stripe?sessionId=${sessionId}`;
+      }
+
+    } catch (error) {
+      console.error('Erro ao fazer upgrade:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      alert(`Erro ao fazer upgrade: ${errorMessage}. Tente novamente.`);
+    }
+  };
+
   const getPlanInfo = (plan: string) => {
     switch (plan) {
       case 'free':
@@ -247,15 +299,21 @@ export default function SubscriptionPage() {
                   </div>
 
                   <div className="text-center">
-                                         <button
-                       onClick={() => router.push('/planos')}
-                       className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
-                     >
-                       {subscriptionData?.plan === 'free' 
-                         ? 'Fazer Upgrade para Starter - R$ 29/mês' 
-                         : 'Fazer Upgrade para Professional - R$ 79/mês'
-                       }
-                     </button>
+                    <button
+                      onClick={() => {
+                        if (subscriptionData?.plan === 'free') {
+                          handleUpgrade('starter');
+                        } else if (subscriptionData?.plan === 'starter') {
+                          handleUpgrade('professional');
+                        }
+                      }}
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
+                    >
+                      {subscriptionData?.plan === 'free' 
+                        ? 'Fazer Upgrade para Starter - R$ 29/mês' 
+                        : 'Fazer Upgrade para Professional - R$ 79/mês'
+                      }
+                    </button>
                     <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
                       Teste gratuito de 30 dias • Sem compromisso • Cancele a qualquer momento
                     </p>
