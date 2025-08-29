@@ -1,0 +1,62 @@
+// Regras de Segurança do Firestore para Klientti - VERSÃO CORRIGIDA
+// Projeto: klientti-640d4
+// Regras funcionais que permitem criar áreas e gerenciar feedbacks
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Regras para usuários
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Regras para áreas - CORRIGIDAS
+    match /areas/{areaId} {
+      // Permitir criação para usuários autenticados
+      allow create: if request.auth != null;
+      
+      // Permitir leitura e edição para dono da área ou super admin
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+    }
+    
+    // Regras para feedbacks - CORRIGIDAS
+    match /feedbacks/{feedbackId} {
+      // Permitir criação de feedbacks (podem ser anônimos)
+      allow create: if true;
+      
+      // Permitir leitura para usuários autenticados
+      allow read: if request.auth != null;
+      
+      // Permitir edição para dono da área ou super admin
+      allow write: if request.auth != null && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin' ||
+         (exists(/databases/$(database)/documents/areas/$(resource.data.areaId)) &&
+          get(/databases/$(database)/documents/areas/$(resource.data.areaId)).data.userId == request.auth.uid));
+    }
+    
+    // Regras para assinaturas
+    match /subscriptions/{subscriptionId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para pagamentos
+    match /payments/{paymentId} {
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      allow create: if request.auth != null;
+    }
+    
+    // Regras para testes (apenas em desenvolvimento)
+    match /test/{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
