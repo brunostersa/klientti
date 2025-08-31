@@ -1,4 +1,42 @@
+import dynamic from 'next/dynamic';
 import React from 'react';
+
+// ===== COMPONENTES LAZY LOADING =====
+
+// Lazy loading para componentes pesados
+export const LazyFeedbackChart = dynamic(
+  () => import('./FeedbackChart'),
+  { 
+    loading: () => <ChartSkeleton />,
+    ssr: false
+  }
+);
+
+export const LazyAIAgent = dynamic(
+  () => import('./AIAgent'),
+  { 
+    loading: () => <CardSkeleton />,
+    ssr: false
+  }
+);
+
+export const LazyKnowledgeBase = dynamic(
+  () => import('./KnowledgeBase'),
+  { 
+    loading: () => <CardSkeleton />,
+    ssr: false
+  }
+);
+
+export const LazyQRCodeGenerator = dynamic(
+  () => import('./QRCodeGenerator'),
+  { 
+    loading: () => <CardSkeleton />,
+    ssr: false
+  }
+);
+
+// ===== COMPONENTES SKELETON =====
 
 // Componente de loading para cards
 export const CardSkeleton = () => (

@@ -179,13 +179,13 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
 
           {/* Seletor de Área */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-blue-600 dark:text-blue-400 mb-2">
+            <label className="block text-sm font-medium text-brand-primary mb-2">
               Selecione uma área para análise:
             </label>
             <select
               value={selectedArea}
               onChange={(e) => setSelectedArea(e.target.value)}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+              className="w-full px-3 py-2 border border-theme-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary input-theme"
             >
               <option value="">Escolha uma área...</option>
               {areas.map((area) => (
@@ -199,8 +199,8 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
           {/* Loading */}
           {loading && (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-400">Analisando dados da área...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto mb-4"></div>
+              <p className="text-theme-secondary">Analisando dados da área...</p>
             </div>
           )}
 
@@ -211,11 +211,11 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               <Card variant="elevated">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-semibold text-blue-600 dark:text-blue-400">{analysis.areaName}</h3>
+                    <h3 className="text-xl font-semibold text-brand-primary">{analysis.areaName}</h3>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      analysis.priority === 'high' ? 'bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400' :
-                      analysis.priority === 'medium' ? 'bg-yellow-100 dark:bg-yellow-900/20 text-yellow-800 dark:text-yellow-400' :
-                      'bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400'
+                      analysis.priority === 'high' ? 'bg-theme-error-light text-theme-error' :
+                      analysis.priority === 'medium' ? 'bg-theme-warning-light text-theme-warning' :
+                      'bg-theme-success-light text-theme-success'
                     }`}>
                       Prioridade {analysis.priority === 'high' ? 'Alta' : 
                                  analysis.priority === 'medium' ? 'Média' : 'Baixa'}
@@ -225,18 +225,18 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{analysis.totalFeedbacks}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Total de Feedbacks</div>
+                      <div className="text-2xl font-bold text-brand-primary">{analysis.totalFeedbacks}</div>
+                      <div className="text-sm text-theme-secondary">Total de Feedbacks</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">
+                      <div className="text-2xl font-bold text-brand-primary">
                         {analysis.averageRating.toFixed(1)}
                       </div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Avaliação Média</div>
+                      <div className="text-sm text-theme-secondary">Avaliação Média</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{analysis.topIssues.length}</div>
-                      <div className="text-sm text-gray-600 dark:text-gray-400">Problemas Identificados</div>
+                      <div className="text-2xl font-bold text-brand-primary">{analysis.topIssues.length}</div>
+                      <div className="text-sm text-theme-secondary">Problemas Identificados</div>
                     </div>
                   </div>
                 </CardContent>
@@ -245,14 +245,14 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               {/* Problemas Identificados */}
               <Card variant="elevated">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400">🚨 Problemas Identificados</h3>
+                  <h3 className="text-lg font-semibold text-brand-primary">🚨 Problemas Identificados</h3>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {analysis.topIssues.map((issue, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
-                        <span className="text-red-500 dark:text-red-400 mt-1">•</span>
-                        <span className="text-gray-900 dark:text-white">{issue}</span>
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-theme-error-light rounded-lg">
+                        <span className="text-theme-error mt-1">•</span>
+                        <span className="text-theme-primary">{issue}</span>
                       </div>
                     ))}
                   </div>
@@ -262,14 +262,14 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               {/* Recomendações */}
               <Card variant="elevated">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400">💡 Recomendações de Melhoria</h3>
+                  <h3 className="text-lg font-semibold text-brand-primary">💡 Recomendações de Melhoria</h3>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {analysis.recommendations.map((recommendation, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
-                        <span className="text-green-500 dark:text-green-400 mt-1">•</span>
-                        <span className="text-gray-900 dark:text-white">{recommendation}</span>
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-theme-success-light rounded-lg">
+                        <span className="text-theme-success mt-1">•</span>
+                        <span className="text-theme-primary">{recommendation}</span>
                       </div>
                     ))}
                   </div>

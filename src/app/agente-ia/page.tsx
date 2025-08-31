@@ -388,7 +388,7 @@ export default function AIAgentPage() {
 
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">🤖 Agente de IA Inteligente</h1>
+            <h1 className="text-3xl font-bold text-theme-primary mb-2">🤖 Agente de IA Inteligente</h1>
             <p className="text-gray-600 dark:text-gray-400">Dashboard avançado com análises preditivas e insights inteligentes</p>
           </div>
 
@@ -425,11 +425,11 @@ export default function AIAgentPage() {
                 <Card variant="elevated">
                   <CardContent>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                      <div className="text-3xl font-bold text-theme-primary mb-2">
                         {aiInsights ? aiInsights.overallScore.toFixed(1) : '0.0'}
                       </div>
-                      <div className="text-gray-600 dark:text-gray-400">Score Geral de IA</div>
-                      <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">Baseado em múltiplos fatores</div>
+                      <div className="text-theme-secondary">Score Geral de IA</div>
+                      <div className="text-xs text-theme-secondary mt-1">Baseado em múltiplos fatores</div>
                     </div>
                   </CardContent>
                 </Card>
@@ -437,11 +437,11 @@ export default function AIAgentPage() {
                 <Card variant="elevated">
                   <CardContent>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                      <div className="text-3xl font-bold text-theme-primary mb-2">
                         {aiInsights ? getTrendIcon(aiInsights.trendDirection) : '➡️'}
                       </div>
-                      <div className="text-secondary">Tendência</div>
-                      <div className={`text-xs mt-1 ${aiInsights ? getTrendColor(aiInsights.trendDirection) : 'text-secondary'}`}>
+                      <div className="text-theme-secondary">Tendência</div>
+                      <div className={`text-xs mt-1 ${aiInsights ? getTrendColor(aiInsights.trendDirection) : 'text-theme-secondary'}`}>
                         {aiInsights ? 
                           (aiInsights.trendDirection === 'up' ? 'Crescendo' : 
                            aiInsights.trendDirection === 'down' ? 'Decrescendo' : 'Estável') : 'Analisando...'}
@@ -453,11 +453,11 @@ export default function AIAgentPage() {
                 <Card variant="elevated">
                   <CardContent>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                      <div className="text-3xl font-bold text-theme-primary mb-2">
                         {aiInsights ? aiInsights.responseRate.toFixed(0) : '0'}%
                       </div>
-                      <div className="text-secondary">Taxa de Resposta</div>
-                      <div className="text-xs text-secondary mt-1">Engajamento dos clientes</div>
+                      <div className="text-theme-secondary">Taxa de Resposta</div>
+                      <div className="text-xs text-theme-secondary mt-1">Engajamento dos clientes</div>
                     </div>
                   </CardContent>
                 </Card>
@@ -465,11 +465,11 @@ export default function AIAgentPage() {
                 <Card variant="elevated">
                   <CardContent>
                     <div className="text-center">
-                      <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                      <div className="text-3xl font-bold text-theme-primary mb-2">
                         {userFeedbacks.length}
                       </div>
-                      <div className="text-secondary">Feedbacks Analisados</div>
-                      <div className="text-xs text-secondary mt-1">Base de dados para IA</div>
+                      <div className="text-theme-secondary">Feedbacks Analisados</div>
+                      <div className="text-xs text-theme-secondary mt-1">Base de dados para IA</div>
                     </div>
                   </CardContent>
                 </Card>

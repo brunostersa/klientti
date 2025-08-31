@@ -23,8 +23,8 @@
   --color-accent-dark: #047857;
   
   /* Fundos */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8fafc;
+  --bg-primary: #f8fafc;
+  --bg-secondary: #ffffff;
   --bg-tertiary: #f1f5f9;
   --bg-card: #ffffff;
   --bg-overlay: rgba(0, 0, 0, 0.5);
@@ -73,9 +73,9 @@
   /* Cores específicas para elementos */
   --color-logo-bg: #3b82f6;
   --color-logo-text: #ffffff;
-  --color-sidebar-bg: #1f2937;
-  --color-sidebar-text: #ffffff;
-  --color-sidebar-hover: #374151;
+  --color-sidebar-bg: #ffffff;
+  --color-sidebar-text: #374151;
+  --color-sidebar-hover: #f3f4f6;
   --color-sidebar-active: #3b82f6;
 }
 
@@ -615,6 +615,17 @@ body, html, #__next {
   .desktop-hidden {
     display: none;
   }
+}
+
+/* ===== UTILITÁRIOS PARA LAYOUT ===== */
+.layout-main {
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+}
+
+.layout-content {
+  background-color: var(--bg-primary);
+  min-height: calc(100vh - 64px); /* 64px é a altura do header */
 }
 
 /* ===== UTILITÁRIOS PARA ACESSIBILIDADE ===== */

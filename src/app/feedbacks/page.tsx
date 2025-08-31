@@ -282,7 +282,7 @@ export default function OpinioesPage() {
 
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">💬 Todas as Opiniões</h1>
+            <h1 className="text-3xl font-bold text-theme-primary mb-2">💬 Todas as Opiniões</h1>
             <p className="text-gray-600 dark:text-gray-400">Visualize e gerencie todas as opiniões recebidas</p>
           </div>
 
@@ -364,25 +364,25 @@ export default function OpinioesPage() {
             <Card variant="elevated">
               <CardContent>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{totalFeedbacks}</div>
-                  <div className="text-gray-600 dark:text-gray-400">Total de Opiniões</div>
+                  <div className="text-3xl font-bold text-theme-primary mb-2">{totalFeedbacks}</div>
+                  <div className="text-sm text-theme-secondary">Total de Feedbacks</div>
                 </div>
               </CardContent>
             </Card>
             <Card variant="elevated">
               <CardContent>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                    {averageRating > 0 ? averageRating.toFixed(1) : '0.0'}
+                <div className="text-center p-4">
+                  <div className="text-3xl font-bold text-theme-primary mb-2">
+                    {averageRating.toFixed(1)}
                   </div>
-                  <div className="text-gray-600 dark:text-gray-400">Avaliação Média</div>
+                  <div className="text-sm text-theme-secondary">Avaliação Média</div>
                 </div>
               </CardContent>
             </Card>
             <Card variant="elevated">
               <CardContent>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-gray-900 dark:text-white mb-2">{areas.length}</div>
+                <div className="text-center p-4">
+                  <div className="text-3xl font-bold text-theme-primary mb-2">{areas.length}</div>
                   <div className="text-gray-600 dark:text-gray-400">Áreas Ativas</div>
                 </div>
               </CardContent>

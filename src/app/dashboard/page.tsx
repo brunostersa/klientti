@@ -460,7 +460,7 @@ export default function MeuPainelPage() {
   }
 
     return (
-    <div className="min-h-screen bg-theme-primary">
+    <div className="min-h-screen layout-content">
       {/* Sidebar */}
       <Sidebar
         activeTab={activeTab}

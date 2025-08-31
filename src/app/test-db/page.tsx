@@ -44,7 +44,7 @@ export default function TestDBPage() {
       const areas = areasSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      }));
+      })) as any[];
       console.log('🏢 Total de áreas no banco:', areas.length);
       console.log('🏢 Áreas do usuário:', areas.filter(a => a.userId === userId));
       console.log('🏢 Todas as áreas:', areas);
@@ -56,7 +56,7 @@ export default function TestDBPage() {
       const feedbacks = feedbacksSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      }));
+      })) as any[];
       console.log('💬 Total de feedbacks no banco:', feedbacks.length);
       console.log('💬 Todos os feedbacks:', feedbacks);
 
@@ -125,8 +125,8 @@ export default function TestDBPage() {
       });
 
     } catch (error) {
-      console.error('❌ Erro ao carregar dados:', error);
-      setError(error.message);
+      console.error('❌ Erro ao carregar dados:', (error as Error).message);
+      setError((error as Error).message);
     }
   };
 

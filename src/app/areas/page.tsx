@@ -209,7 +209,7 @@ export default function AreasPage() {
 
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">📍 Gerenciar Áreas</h1>
+            <h1 className="text-3xl font-bold text-theme-primary mb-2">📍 Gerenciar Áreas</h1>
             <p className="text-gray-600 dark:text-gray-400">Crie e gerencie as áreas da sua empresa para coletar opiniões</p>
           </div>
 

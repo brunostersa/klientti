@@ -273,8 +273,8 @@ export default function UpgradePage() {
               Plano Atual: {currentPlanInfo.name}
             </div>
             
-            <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              {upgradeMessage.title}
+            <h1 className="text-4xl font-bold text-theme-primary mb-4">
+              Escolha o Plano Ideal para Sua Empresa
             </h1>
             
             <p className="text-xl text-gray-600 dark:text-gray-400 mb-6 max-w-3xl mx-auto">

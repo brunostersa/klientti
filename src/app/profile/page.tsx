@@ -320,24 +320,15 @@ export default function ProfilePage() {
 
           {/* Page Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Meu Perfil</h1>
-            <p className="mt-2 text-gray-600 dark:text-gray-400">Gerencie suas informações pessoais e preferências</p>
+            <h1 className="text-3xl font-bold text-theme-primary">Meu Perfil</h1>
+            <p className="text-theme-secondary">Gerencie suas informações pessoais e preferências</p>
           </div>
 
           {/* Profile Form */}
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-            <div className="p-6 sm:p-8">
-              <div className="flex items-center justify-between mb-8">
-                <div>
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Informações do Perfil</h2>
-                  <p className="text-gray-600 dark:text-gray-400 mt-1">Atualize seus dados pessoais e empresariais</p>
-                </div>
-                <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-white font-bold text-xl">
-                    {(userProfile?.name || user?.displayName || 'U').charAt(0).toUpperCase()}
-                  </span>
-                </div>
-              </div>
+          <div className="bg-theme-card rounded-lg shadow-theme-sm border border-theme-primary">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-theme-primary">Informações do Perfil</h2>
+              <p className="text-theme-secondary mb-6">Atualize suas informações pessoais e da empresa</p>
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Informações Pessoais */}

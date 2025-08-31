@@ -1,31 +1,27 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
+import { Feedback } from '@/types/Feedback';
 
 interface FeedbackChartProps {
-  feedbacks: any[];
+  feedbacks: Feedback[];
 }
 
 export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
   const [selectedDays, setSelectedDays] = useState(7);
 
   const stats = useMemo(() => {
-    const today = new Date();
     const data = [];
+    const today = new Date();
     
     for (let i = selectedDays - 1; i >= 0; i--) {
       const date = new Date(today);
       date.setDate(date.getDate() - i);
       
-      const dayStart = new Date(date);
-      dayStart.setHours(0, 0, 0, 0);
-      
-      const dayEnd = new Date(date);
-      dayEnd.setHours(23, 59, 59, 999);
-      
+      const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
       const feedbacksForDay = feedbacks.filter(feedback => {
-        const feedbackDate = feedback.createdAt?.toDate ? feedback.createdAt.toDate() : new Date(feedback.createdAt);
-        return feedbackDate >= dayStart && feedbackDate <= dayEnd;
+        const feedbackDate = new Date(feedback.createdAt);
+        return feedbackDate.toDateString() === date.toDateString();
       });
       
       const averageRating = feedbacksForDay.length > 0 
@@ -33,10 +29,7 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
         : 0;
       
       data.push({
-        date: date.toLocaleDateString('pt-BR', { 
-          day: '2-digit', 
-          month: '2-digit' 
-        }),
+        date: dateStr,
         feedbacks: feedbacksForDay.length,
         rating: Math.round(averageRating * 10) / 10,
         fullDate: date
@@ -50,11 +43,11 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
   const averageRating = stats.reduce((sum, day) => sum + day.rating, 0) / stats.length;
 
   return (
-    <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 shadow-sm">
+    <div className="card-theme p-6 shadow-theme-sm">
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white">Estatísticas dos Últimos {selectedDays} Dias</h3>
-          <p className="text-sm text-gray-600 dark:text-gray-400">Resumo das opiniões recebidas através do Klientti</p>
+          <h3 className="text-lg font-semibold text-theme-primary">Estatísticas dos Últimos {selectedDays} Dias</h3>
+          <p className="text-sm text-theme-secondary">Resumo das opiniões recebidas através do Klientti</p>
         </div>
         
         {/* Seletor de período */}
@@ -65,8 +58,8 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
               onClick={() => setSelectedDays(days)}
               className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
                 selectedDays === days
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600'
+                  ? 'bg-brand-primary text-theme-inverse'
+                  : 'bg-theme-button text-theme-button hover:bg-theme-button-hover'
               }`}
             >
               {days} dias
@@ -77,34 +70,34 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
 
       {/* Métricas rápidas */}
       <div className="grid grid-cols-2 gap-4 mb-6">
-        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
-          <div className="text-2xl font-bold text-blue-600 dark:text-blue-400">{totalFeedbacks}</div>
-          <div className="text-sm text-blue-700 dark:text-blue-300">Total de feedbacks</div>
+        <div className="bg-brand-primary-light dark:bg-brand-primary-light/20 rounded-lg p-4 border border-brand-primary/30">
+          <div className="text-2xl font-bold text-brand-primary">{totalFeedbacks}</div>
+          <div className="text-sm text-brand-primary-dark dark:text-brand-primary">Total de feedbacks</div>
         </div>
-        <div className="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
-          <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+        <div className="bg-brand-accent-light dark:bg-brand-accent-light/20 rounded-lg p-4 border border-brand-accent/30">
+          <div className="text-2xl font-bold text-brand-accent">
             {averageRating > 0 ? averageRating.toFixed(1) : '0.0'}
           </div>
-          <div className="text-sm text-green-700 dark:text-green-300">Avaliação média</div>
+          <div className="text-sm text-brand-accent-dark dark:text-brand-accent">Avaliação média</div>
         </div>
       </div>
 
       {/* Gráfico simplificado com barras */}
       <div className="space-y-3">
-        <h4 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">Feedbacks por dia:</h4>
+        <h4 className="text-sm font-medium text-theme-secondary mb-3">Feedbacks por dia:</h4>
         {stats.map((day, index) => (
           <div key={index} className="flex items-center space-x-3">
-            <div className="w-16 text-sm text-gray-600 dark:text-gray-400">{day.date}</div>
-            <div className="flex-1 bg-gray-200 dark:bg-gray-700 rounded-full h-3">
+            <div className="w-16 text-sm text-theme-secondary">{day.date}</div>
+            <div className="flex-1 bg-theme-button rounded-full h-3">
               <div 
-                className="bg-blue-500 h-3 rounded-full transition-all duration-300"
+                className="bg-brand-primary h-3 rounded-full transition-all duration-300"
                 style={{ width: `${Math.max((day.feedbacks / Math.max(...stats.map(s => s.feedbacks), 1)) * 100, 5)}%` }}
               />
             </div>
-            <div className="w-12 text-right text-sm font-medium text-gray-900 dark:text-white">
+            <div className="w-12 text-right text-sm font-medium text-theme-primary">
               {day.feedbacks}
             </div>
-            <div className="w-16 text-right text-sm text-gray-600 dark:text-gray-400">
+            <div className="w-16 text-right text-sm text-theme-secondary">
               {day.rating > 0 ? `⭐ ${day.rating}` : '-'}
             </div>
           </div>
@@ -112,25 +105,25 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
       </div>
 
       {/* Resumo adicional */}
-      <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-6 pt-4 border-t border-theme-primary">
         <div className="grid grid-cols-3 gap-4 text-center">
           <div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="text-lg font-semibold text-theme-primary">
               {feedbacks.filter(f => f.rating === 5).length}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">5 estrelas</div>
+            <div className="text-xs text-theme-secondary">5 estrelas</div>
           </div>
           <div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="text-lg font-semibold text-theme-primary">
               {feedbacks.filter(f => f.rating >= 4).length}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">4+ estrelas</div>
+            <div className="text-xs text-theme-secondary">4+ estrelas</div>
           </div>
           <div>
-            <div className="text-lg font-semibold text-gray-900 dark:text-white">
+            <div className="text-lg font-semibold text-theme-primary">
               {feedbacks.filter(f => f.rating <= 2).length}
             </div>
-            <div className="text-xs text-gray-600 dark:text-gray-400">≤2 estrelas</div>
+            <div className="text-xs text-theme-secondary">≤2 estrelas</div>
           </div>
         </div>
       </div>
