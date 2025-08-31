@@ -14,13 +14,13 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-theme-card border-b border-theme-primary shadow-theme-sm">
+    <header className="header-theme border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center mr-3">
-              <span className="text-white font-bold text-sm">K</span>
+            <div className="w-8 h-8 bg-logo rounded-lg flex items-center justify-center mr-3">
+              <span className="text-logo font-bold text-sm">K</span>
             </div>
             <h1 className="text-xl font-bold text-theme-primary">Klientti</h1>
           </div>
@@ -37,8 +37,8 @@ export default function Header() {
                   onClick={toggleDropdown}
                   className="flex items-center space-x-2 p-2 rounded-lg hover:bg-theme-secondary transition-colors"
                 >
-                  <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
-                    <span className="text-white font-medium text-sm">
+                  <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center">
+                    <span className="text-theme-inverse font-medium text-sm">
                       {user.displayName ? user.displayName.charAt(0).toUpperCase() : 'U'}
                     </span>
                   </div>
@@ -59,7 +59,7 @@ export default function Header() {
 
                 {/* Dropdown Menu */}
                 {isDropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-48 bg-theme-card border border-theme-primary rounded-lg shadow-theme-lg z-50">
+                  <div className="absolute right-0 mt-2 w-48 dropdown-theme rounded-lg z-50">
                     <div className="py-2">
                       <div className="px-4 py-2 border-b border-theme-primary">
                         <p className="text-sm font-medium text-theme-primary">
@@ -72,7 +72,7 @@ export default function Header() {
                       
                       <button
                         onClick={() => auth.signOut()}
-                        className="w-full text-left px-4 py-2 text-sm text-theme-secondary hover:bg-theme-secondary transition-colors"
+                        className="w-full text-left px-4 py-2 text-sm dropdown-item-theme hover:bg-theme-secondary transition-colors"
                       >
                         Sair
                       </button>

@@ -23,10 +23,10 @@ const Card: React.FC<CardProps> = ({
   const baseClasses = 'rounded-lg transition-all duration-200';
   
   const variantClasses = {
-    default: 'bg-theme-card border border-theme-primary shadow-theme-sm',
-    elevated: 'bg-theme-card border border-theme-primary shadow-theme-lg',
+    default: 'card-theme border shadow-theme-sm',
+    elevated: 'card-theme-elevated border shadow-theme-lg',
     outlined: 'bg-transparent border-2 border-theme-secondary shadow-none',
-    gradient: 'bg-gradient-to-br from-blue-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 border border-theme-primary shadow-theme-sm',
+    gradient: 'gradient-primary border border-theme-primary shadow-theme-sm text-theme-inverse',
   };
 
   const sizeClasses = {
@@ -153,8 +153,8 @@ export const CardMetric: React.FC<CardMetricProps> = ({
   className 
 }) => {
   const trendColors = {
-    up: 'text-green-600 dark:text-green-400',
-    down: 'text-red-600 dark:text-red-400',
+    up: 'text-theme-success',
+    down: 'text-theme-error',
     neutral: 'text-theme-secondary'
   };
 
@@ -196,10 +196,10 @@ export const CardAction: React.FC<CardActionProps> = ({
   const baseClasses = 'inline-flex items-center justify-center font-medium rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-theme-focus';
   
   const variantClasses = {
-    primary: 'bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500',
-    secondary: 'bg-purple-600 text-white hover:bg-purple-700 focus:ring-purple-500',
-    outline: 'bg-transparent border border-theme-secondary text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-blue-500',
-    ghost: 'bg-transparent text-blue-600 dark:text-blue-400 hover:bg-gray-50 dark:hover:bg-gray-700 focus:ring-blue-500',
+    primary: 'btn-theme-primary',
+    secondary: 'btn-theme-secondary',
+    outline: 'btn-theme-outline',
+    ghost: 'bg-transparent text-brand-primary hover:bg-theme-secondary hover:text-theme-primary focus:ring-brand-primary',
   };
 
   const sizeClasses = {

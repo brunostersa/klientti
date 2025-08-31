@@ -69,7 +69,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
       {/* Botão para abrir sidebar em mobile */}
       <button
         onClick={() => setIsOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-200"
+        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-brand-primary text-theme-inverse rounded-lg hover:bg-brand-primary-hover transition-colors duration-200"
       >
         <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -79,26 +79,26 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
       {/* Overlay para mobile */}
       {isOpen && (
         <div 
-          className="lg:hidden fixed inset-0 bg-theme-overlay z-40"
+          className="lg:hidden fixed inset-0 overlay-theme z-40"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar */}
       <div className={`
-        fixed top-0 left-0 h-full w-80 bg-theme-card border-r border-theme-primary z-50 transform transition-transform duration-300 ease-in-out flex flex-col
+        fixed top-0 left-0 h-full w-80 sidebar-theme border-r border-theme-primary z-50 transform transition-transform duration-300 ease-in-out flex flex-col
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Logo */}
         <div className="flex items-center space-x-3 px-4 py-3">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-lg">K</span>
+          <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
+            <span className="text-theme-inverse font-bold text-lg">K</span>
           </div>
-          <span className="text-xl font-bold text-white">Klientti</span>
+          <span className="text-xl font-bold text-sidebar">Klientti</span>
         </div>
 
         {/* Menu Items */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-theme">
           {filteredMenuItems.map((item) => (
             <button
               key={item.id}
@@ -114,8 +114,8 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
               className={`
                 w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200
                 ${activeTab === item.id
-                  ? 'bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-r-2 border-blue-500'
-                  : 'text-theme-secondary hover:bg-theme-secondary hover:text-theme-primary'
+                  ? 'bg-sidebar-active text-theme-inverse border-r-2 border-brand-primary'
+                  : 'sidebar-item hover:bg-sidebar-hover'
                 }
               `}
             >
@@ -135,8 +135,8 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
               title="Clique para gerenciar perfil"
             >
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center">
-                  <span className="text-white font-medium">
+                <div className="w-10 h-10 bg-brand-primary rounded-full flex items-center justify-center">
+                  <span className="text-theme-inverse font-medium">
                     {userProfile?.name?.charAt(0) || user?.displayName?.charAt(0) || 'U'}
                   </span>
                 </div>
@@ -160,7 +160,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
           
           <button
             onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left text-theme-secondary hover:bg-theme-secondary hover:text-theme-primary transition-colors"
+            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left sidebar-item hover:bg-sidebar-hover transition-colors"
           >
             <span className="text-lg">🚪</span>
             <span className="font-medium">Sair</span>
