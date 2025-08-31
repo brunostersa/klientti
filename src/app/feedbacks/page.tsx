@@ -37,7 +37,8 @@ export default function OpinioesPage() {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        loadAreas(user.uid); // loadAllFeedbacks será chamado dentro de loadAreas
+        // Carregar dados em paralelo
+        loadUserData(user.uid);
         loadUserProfile(user.uid);
       } else {
         router.push('/login');
@@ -48,78 +49,59 @@ export default function OpinioesPage() {
     return () => unsubscribe();
   }, [router]);
 
-  const loadAreas = (userId: string) => {
-    console.log('Debug - Iniciando loadAreas para userId:', userId);
-    const q = query(collection(db, 'areas'), where('userId', '==', userId));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const areasData = snapshot.docs.map(doc => ({
+  const loadUserData = (userId: string) => {
+    let areasLoaded = false;
+    let feedbacksLoaded = false;
+    let allFeedbacks: Feedback[] = [];
+    let userAreas: Area[] = [];
+    
+    // Função para processar dados quando ambos estiverem carregados
+    const processData = () => {
+      if (areasLoaded && feedbacksLoaded) {
+        // Filtrar feedbacks do usuário baseado nas áreas carregadas
+        const userFeedbacks = allFeedbacks.filter(feedback => {
+          // Verificar se existe uma área com este ID que pertence ao usuário
+          const hasUserArea = userAreas.some(area => area.id === feedback.areaId && area.userId === userId);
+          return hasUserArea;
+        });
+        
+        setFeedbacks(userFeedbacks);
+      }
+    };
+    
+    // Carregar áreas do usuário
+    const areasQuery = query(collection(db, 'areas'), where('userId', '==', userId));
+    const unsubscribeAreas = onSnapshot(areasQuery, (areasSnapshot) => {
+      userAreas = areasSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Area[];
       
-      console.log('Debug - Áreas carregadas:', areasData);
-      setAreas(areasData);
-      
-      // IMPORTANTE: Carregar feedbacks APÓS as áreas serem carregadas
-      console.log('Debug - Áreas carregadas, agora carregando feedbacks...');
-      loadAllFeedbacks(userId, areasData); // Passar áreas como parâmetro
-      
-      // Fallback: se não houver áreas, ainda assim carregar feedbacks
-      if (areasData.length === 0) {
-        console.log('Debug - Nenhuma área encontrada, carregando feedbacks sem filtro...');
-        loadAllFeedbacks(userId, []);
-      }
+      setAreas(userAreas);
+      areasLoaded = true;
+      processData();
     });
 
-    return unsubscribe;
-  };
-
-  const loadAllFeedbacks = (userId: string, currentAreas: Area[] = []) => {
-    console.log('Debug - Iniciando loadAllFeedbacks para userId:', userId);
-    console.log('Debug - Áreas recebidas como parâmetro:', currentAreas.length);
-    
-    // Usar áreas passadas como parâmetro OU estado atual
-    const areasToUse = currentAreas.length > 0 ? currentAreas : areas;
-    console.log('Debug - Áreas que serão usadas:', areasToUse.length);
-    
     // Carregar todos os feedbacks
-    const q = query(collection(db, 'feedbacks'));
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const allFeedbacks = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-        createdAt: doc.data().createdAt?.toDate() || new Date()
-      })) as Feedback[];
+    const feedbacksQuery = query(collection(db, 'feedbacks'));
+    const unsubscribeFeedbacks = onSnapshot(feedbacksQuery, (feedbacksSnapshot) => {
+      allFeedbacks = feedbacksSnapshot.docs.map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          ...data,
+          createdAt: data.createdAt?.toDate() || new Date()
+        };
+      }) as Feedback[];
       
-      console.log('Debug - Total feedbacks no banco:', allFeedbacks.length);
-      console.log('Debug - Áreas disponíveis para filtro:', areasToUse.length);
-      console.log('Debug - UserId atual:', userId);
-      
-      // Filtrar apenas feedbacks das áreas do usuário
-      const userFeedbacks = allFeedbacks.filter(feedback => {
-        const area = areasToUse.find(a => a.id === feedback.areaId);
-        const isUserArea = area && area.userId === userId;
-        
-        console.log('Debug - Feedback:', {
-          feedbackId: feedback.id,
-          areaId: feedback.areaId,
-          areaFound: !!area,
-          areaUserId: area?.userId,
-          isUserArea,
-          feedbackData: feedback
-        });
-        
-        return isUserArea;
-      });
-      
-      console.log('Debug - Feedbacks do usuário:', userFeedbacks.length);
-      console.log('Debug - Feedbacks filtrados:', userFeedbacks);
-      console.log('Debug - Feedbacks completos:', userFeedbacks.map(f => ({ id: f.id, areaId: f.areaId, comment: f.comment?.substring(0, 50) })));
-      
-      setFeedbacks(userFeedbacks);
+      feedbacksLoaded = true;
+      processData();
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribeAreas();
+      unsubscribeFeedbacks();
+    };
   };
 
   const loadUserProfile = async (userId: string) => {
@@ -162,14 +144,6 @@ export default function OpinioesPage() {
       const feedbackDate = new Date(feedback.createdAt);
       return feedbackDate.getMonth() === currentMonth && feedbackDate.getFullYear() === currentYear;
     }).length;
-    
-    console.log('Debug - getFeedbackUsage:', {
-      totalFeedbacks: feedbacks.length,
-      monthlyFeedbacks,
-      currentMonth,
-      currentYear,
-      limit
-    });
     
     const percentage = Math.round((monthlyFeedbacks / limit) * 100);
     
@@ -285,31 +259,6 @@ export default function OpinioesPage() {
       />
 
       <div className="lg:ml-80">
-        {/* Debug Panel - Apenas em desenvolvimento */}
-        {process.env.NODE_ENV === 'development' && (
-          <div className="bg-yellow-100 border border-yellow-400 p-4 m-4 rounded-lg">
-            <h3 className="font-bold text-yellow-800 mb-2">🐛 Debug Panel</h3>
-            <div className="grid grid-cols-2 gap-4 text-sm">
-              <div>
-                <strong>Estado:</strong>
-                <div>Feedbacks carregados: {feedbacks.length}</div>
-                <div>Áreas disponíveis: {areas.length}</div>
-                <div>UserId: {user?.uid}</div>
-                <div>Loading: {loading ? 'Sim' : 'Não'}</div>
-              </div>
-              <div>
-                <strong>Filtros:</strong>
-                <div>Área selecionada: {selectedAreaFilter || 'Todas'}</div>
-                <div>Rating selecionado: {selectedRatingFilter || 'Todos'}</div>
-                <div>Feedbacks filtrados: {getFilteredFeedbacks().length}</div>
-              </div>
-            </div>
-            <div className="mt-2 text-xs">
-              <strong>Feedbacks IDs:</strong> {feedbacks.map(f => f.id).join(', ') || 'Nenhum'}
-            </div>
-          </div>
-        )}
-        
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
           <nav className="mb-8">

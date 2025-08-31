@@ -5,43 +5,145 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Teste Firestore</title>
     <script type="module">
+        // Import Firebase
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getFirestore, collection, addDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+        import { getAuth, signInWithPopup, GoogleAuthProvider } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
+        import { getFirestore, collection, query, where, onSnapshot, getDocs } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
+        // Firebase config
         const firebaseConfig = {
-            apiKey: "AIzaSyAf379_pl2lo2sf--IytpxGerpdQD_9IgE",
-            authDomain: "pesquisou-ee03b.firebaseapp.com",
-            projectId: "pesquisou-ee03b",
-            storageBucket: "pesquisou-ee03b.firebasestorage.app",
-            messagingSenderId: "1061458021431",
-            appId: "1:1061458021431:web:ee5acd4d1572a8d53c83b2"
+            apiKey: "AIzaSyDVyqJFUICzq3o7dltH6mp5hX8XyqjReVM",
+            authDomain: "klientti-640d4.firebaseapp.com",
+            projectId: "klientti-640d4",
+            storageBucket: "klientti-640d4.firebasestorage.app",
+            messagingSenderId: "312229310073",
+            appId: "1:312229310073:web:853fd246d899fd73002ea8",
+            measurementId: "G-426PNT15KF"
         };
 
+        // Initialize Firebase
         const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
         const db = getFirestore(app);
+        const provider = new GoogleAuthProvider();
 
-        window.testFirestore = async () => {
+        // DOM elements
+        const loginBtn = document.getElementById('loginBtn');
+        const dataDiv = document.getElementById('dataDiv');
+        const userInfo = document.getElementById('userInfo');
+        const areasDiv = document.getElementById('areasDiv');
+        const feedbacksDiv = document.getElementById('feedbacksDiv');
+        const usersDiv = document.getElementById('usersDiv');
+
+        // Login function
+        loginBtn.addEventListener('click', async () => {
             try {
-                console.log('Testando envio de feedback...');
-                const docRef = await addDoc(collection(db, 'feedbacks'), {
-                    areaId: 'test-area-id',
-                    rating: 5,
-                    comment: 'Teste de feedback',
-                    isAnonymous: true,
-                    createdAt: new Date(),
-                });
-                console.log('✅ Feedback enviado com sucesso! ID:', docRef.id);
-                document.getElementById('result').innerHTML = '✅ Feedback enviado com sucesso! ID: ' + docRef.id;
+                const result = await signInWithPopup(auth, provider);
+                console.log('Usuário logado:', result.user);
+                loadData();
             } catch (error) {
-                console.error('❌ Erro ao enviar feedback:', error);
-                document.getElementById('result').innerHTML = '❌ Erro: ' + error.message;
+                console.error('Erro no login:', error);
             }
-        };
+        });
+
+        // Load all data
+        async function loadData() {
+            try {
+                // Load areas
+                const areasQuery = query(collection(db, 'areas'));
+                const areasSnapshot = await getDocs(areasQuery);
+                const areas = areasSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                areasDiv.innerHTML = `
+                    <h3>Áreas (${areas.length})</h3>
+                    <pre>${JSON.stringify(areas, null, 2)}</pre>
+                `;
+
+                // Load feedbacks
+                const feedbacksQuery = query(collection(db, 'feedbacks'));
+                const feedbacksSnapshot = await getDocs(feedbacksQuery);
+                const feedbacks = feedbacksSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                feedbacksDiv.innerHTML = `
+                    <h3>Feedbacks (${feedbacks.length})</h3>
+                    <pre>${JSON.stringify(feedbacks, null, 2)}</pre>
+                `;
+
+                // Load users
+                const usersQuery = query(collection(db, 'users'));
+                const usersSnapshot = await getDocs(usersQuery);
+                const users = usersSnapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                
+                usersDiv.innerHTML = `
+                    <h3>Usuários (${users.length})</h3>
+                    <pre>${JSON.stringify(users, null, 2)}</pre>
+                `;
+
+                // Show user info
+                const user = auth.currentUser;
+                if (user) {
+                    userInfo.innerHTML = `
+                        <h3>Usuário Logado</h3>
+                        <p><strong>Email:</strong> ${user.email}</p>
+                        <p><strong>UID:</strong> ${user.uid}</p>
+                        
+                        <h4>Áreas do Usuário</h4>
+                        <ul>
+                            ${areas.filter(area => area.userId === user.uid).map(area => 
+                                `<li>${area.name} (ID: ${area.id})</li>`
+                            ).join('')}
+                        </ul>
+                        
+                        <h4>Feedbacks Relacionados</h4>
+                        <ul>
+                            ${feedbacks.filter(feedback => {
+                                const area = areas.find(a => a.id === feedback.areaId);
+                                return area && area.userId === user.uid;
+                            }).map(feedback => 
+                                `<li>Rating: ${feedback.rating}/5 - ${feedback.comment?.substring(0, 50)}...</li>`
+                            ).join('')}
+                        </ul>
+                    `;
+                }
+
+            } catch (error) {
+                console.error('Erro ao carregar dados:', error);
+            }
+        }
+
+        // Auth state listener
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                loginBtn.style.display = 'none';
+                dataDiv.style.display = 'block';
+                loadData();
+            } else {
+                loginBtn.style.display = 'block';
+                dataDiv.style.display = 'none';
+            }
+        });
     </script>
 </head>
 <body>
-    <h1>Teste Firestore</h1>
-    <button onclick="testFirestore()">Testar Envio de Feedback</button>
-    <div id="result"></div>
+    <h1>🧪 Teste do Firestore</h1>
+    
+    <button id="loginBtn">🔐 Login com Google</button>
+    
+    <div id="dataDiv" style="display: none;">
+        <div id="userInfo"></div>
+        
+        <div id="areasDiv"></div>
+        <div id="feedbacksDiv"></div>
+        <div id="usersDiv"></div>
+    </div>
 </body>
 </html> 

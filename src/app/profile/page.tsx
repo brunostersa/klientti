@@ -44,6 +44,7 @@ export default function ProfilePage() {
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string>('');
+  const [errors, setErrors] = useState<{[key: string]: string}>({});
   const { isAdminMode, toggleAdminMode } = useAdminMode();
 
   useEffect(() => {
@@ -100,8 +101,44 @@ export default function ProfilePage() {
     }
   };
 
+  const validateForm = () => {
+    const newErrors: {[key: string]: string} = {};
+    
+    // Nome é obrigatório
+    if (!formData.name.trim()) {
+      newErrors.name = 'Nome completo é obrigatório';
+    }
+    
+    // Empresa é obrigatória
+    if (!formData.company.trim()) {
+      newErrors.company = 'Nome da empresa é obrigatório';
+    }
+    
+    // Segmento é obrigatório
+    if (!formData.segment) {
+      newErrors.segment = 'Segmento de atuação é obrigatório';
+    }
+    
+    // Telefone é obrigatório
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Telefone é obrigatório';
+    } else if (removePhoneMask(formData.phone).length < 10) {
+      newErrors.phone = 'Telefone deve ter pelo menos 10 dígitos';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Validar formulário antes de enviar
+    if (!validateForm()) {
+      showNotification('Por favor, preencha todos os campos obrigatórios', 'error');
+      return;
+    }
+    
     setSaving(true);
 
     try {
@@ -121,6 +158,9 @@ export default function ProfilePage() {
       // Atualizar estado local
       setUserProfile(prev => prev ? { ...prev, ...updateData } : null);
       
+      // Limpar erros após sucesso
+      setErrors({});
+      
       showNotification('Perfil atualizado com sucesso!', 'success');
     } catch (error) {
       console.error('Erro ao atualizar perfil:', error);
@@ -136,6 +176,11 @@ export default function ProfilePage() {
       ...prev,
       [name]: value
     }));
+    
+    // Limpar erro do campo quando usuário começar a digitar
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -296,12 +341,20 @@ export default function ProfilePage() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Informações Pessoais */}
-                <div>
+                <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informações Pessoais</h3>
+                  
+                  {/* Nota sobre campos obrigatórios */}
+                  <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                    <p className="text-sm text-blue-700 dark:text-blue-300">
+                      <span className="text-red-500 font-semibold">*</span> Campos obrigatórios para completar seu perfil
+                    </p>
+                  </div>
+                  
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Nome Completo *
+                        Nome Completo <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -310,9 +363,14 @@ export default function ProfilePage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+                          errors.name 
+                            ? 'border-red-500 focus:ring-red-500' 
+                            : 'border-gray-300 dark:border-gray-600'
+                        }`}
                         placeholder="Seu nome completo"
                       />
+                      {errors.name && <p className="text-red-500 text-xs mt-1">{errors.name}</p>}
                     </div>
 
                     <div>
@@ -335,7 +393,7 @@ export default function ProfilePage() {
 
                     <div>
                       <label htmlFor="company" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Empresa
+                        Nome da Empresa <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="text"
@@ -343,21 +401,32 @@ export default function ProfilePage() {
                         name="company"
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        required
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+                          errors.company 
+                            ? 'border-red-500 focus:ring-red-500' 
+                            : 'border-gray-300 dark:border-gray-600'
+                        }`}
                         placeholder="Nome da sua empresa"
                       />
+                      {errors.company && <p className="text-red-500 text-xs mt-1">{errors.company}</p>}
                     </div>
 
                     <div>
                       <label htmlFor="segment" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Segmento
+                        Segmento de Atuação <span className="text-red-500">*</span>
                       </label>
                       <select
                         id="segment"
                         name="segment"
                         value={formData.segment}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        required
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+                          errors.segment 
+                            ? 'border-red-500 focus:ring-red-500' 
+                            : 'border-gray-300 dark:border-gray-600'
+                        }`}
                       >
                         <option value="">Selecione um segmento</option>
                         <option value="Varejo">Varejo</option>
@@ -368,11 +437,12 @@ export default function ProfilePage() {
                         <option value="Tecnologia">Tecnologia</option>
                         <option value="Outro">Outro</option>
                       </select>
+                      {errors.segment && <p className="text-red-500 text-xs mt-1">{errors.segment}</p>}
                     </div>
 
                     <div>
                       <label htmlFor="phone" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Telefone
+                        Telefone <span className="text-red-500">*</span>
                       </label>
                       <input
                         type="tel"
@@ -385,11 +455,21 @@ export default function ProfilePage() {
                             ...prev,
                             phone: maskedValue
                           }));
+                          // Limpar erro quando usuário começar a digitar
+                          if (errors.phone) {
+                            setErrors(prev => ({ ...prev, phone: '' }));
+                          }
                         }}
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                        required
+                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
+                          errors.phone 
+                            ? 'border-red-500 focus:ring-red-500' 
+                            : 'border-gray-300 dark:border-gray-600'
+                        }`}
                         placeholder="(11) 99999-9999"
                         maxLength={15}
                       />
+                      {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
                     </div>
                   </div>
                 </div>
