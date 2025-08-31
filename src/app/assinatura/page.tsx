@@ -213,13 +213,21 @@ export default function SubscriptionPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Plano ativo desde</p>
-                  <p className="font-medium text-gray-900 dark:text-white">{formatDate(subscriptionData?.planUpdatedAt)}</p>
+                <div className="card-theme p-4 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium text-theme-primary">{formatDate(subscriptionData?.planUpdatedAt)}</p>
+                      <p className="text-sm text-theme-secondary">Data de Atualização</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Tipo de plano</p>
-                  <p className="font-medium capitalize text-gray-900 dark:text-white">{subscriptionData?.plan || 'free'}</p>
+                <div className="card-theme p-4 rounded-lg">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="font-medium capitalize text-theme-primary">{subscriptionData?.plan || 'free'}</p>
+                      <p className="text-sm text-theme-secondary">Plano Atual</p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </CardContent>

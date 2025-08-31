@@ -354,10 +354,8 @@ export default function ProfilePage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                          errors.name 
-                            ? 'border-red-500 focus:ring-red-500' 
-                            : 'border-gray-300 dark:border-gray-600'
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-theme ${
+                          errors.name ? 'border-red-500' : ''
                         }`}
                         placeholder="Seu nome completo"
                       />
@@ -393,10 +391,8 @@ export default function ProfilePage() {
                         value={formData.company}
                         onChange={handleInputChange}
                         required
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                          errors.company 
-                            ? 'border-red-500 focus:ring-red-500' 
-                            : 'border-gray-300 dark:border-gray-600'
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-theme ${
+                          errors.company ? 'border-red-500' : ''
                         }`}
                         placeholder="Nome da sua empresa"
                       />
@@ -413,10 +409,8 @@ export default function ProfilePage() {
                         value={formData.segment}
                         onChange={handleInputChange}
                         required
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                          errors.segment 
-                            ? 'border-red-500 focus:ring-red-500' 
-                            : 'border-gray-300 dark:border-gray-600'
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-theme ${
+                          errors.segment ? 'border-red-500' : ''
                         }`}
                       >
                         <option value="">Selecione um segmento</option>
@@ -452,10 +446,8 @@ export default function ProfilePage() {
                           }
                         }}
                         required
-                        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white ${
-                          errors.phone 
-                            ? 'border-red-500 focus:ring-red-500' 
-                            : 'border-gray-300 dark:border-gray-600'
+                        className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-theme ${
+                          errors.phone ? 'border-red-500' : ''
                         }`}
                         placeholder="(11) 99999-9999"
                         maxLength={15}

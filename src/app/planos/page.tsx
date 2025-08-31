@@ -426,47 +426,47 @@ export default function UpgradePage() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <div className="card-theme p-6 rounded-lg shadow-theme-sm">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
                     M
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">Maria Silva</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Restaurante Sabor & Arte</p>
+                    <p className="font-semibold text-theme-primary">Maria Silva</p>
+                    <p className="text-sm text-theme-secondary">Restaurante Sabor & Arte</p>
                   </div>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 text-sm">
+                <p className="text-theme-secondary text-sm">
                   "O upgrade para Professional transformou nosso atendimento. Agora temos insights valiosos sobre nossos clientes."
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <div className="card-theme p-6 rounded-lg shadow-theme-sm">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 bg-green-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
                     J
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">João Santos</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Farmácia Popular</p>
+                    <p className="font-semibold text-theme-primary">João Santos</p>
+                    <p className="text-sm text-theme-secondary">Farmácia Popular</p>
                   </div>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 text-sm">
+                <p className="text-theme-secondary text-sm">
                   "Com o plano Starter, conseguimos expandir para 5 áreas e melhorar significativamente nosso serviço."
                 </p>
               </div>
 
-              <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-sm">
+              <div className="card-theme p-6 rounded-lg shadow-theme-sm">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold mr-3">
                     A
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900 dark:text-white">Ana Costa</p>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">Clínica Saúde Total</p>
+                    <p className="font-semibold text-theme-primary">Ana Costa</p>
+                    <p className="text-sm text-theme-secondary">Clínica Saúde Total</p>
                   </div>
                 </div>
-                <p className="text-gray-700 dark:text-gray-300 text-sm">
+                <p className="text-theme-secondary text-sm">
                   "O Agente IA nos ajuda a analisar feedbacks em tempo real. É como ter um consultor 24/7."
                 </p>
               </div>
@@ -480,37 +480,37 @@ export default function UpgradePage() {
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-4">
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <div className="card-theme p-4 rounded-lg">
+                  <h4 className="font-semibold text-theme-primary mb-2">
                     Posso mudar de plano a qualquer momento?
                   </h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  <p className="text-theme-secondary text-sm">
                     Sim! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento. As mudanças são aplicadas imediatamente.
                   </p>
                 </div>
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <div className="card-theme p-4 rounded-lg">
+                  <h4 className="font-semibold text-theme-primary mb-2">
                     Há limite de usuários?
                   </h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  <p className="text-theme-secondary text-sm">
                     O plano gratuito permite 1 usuário. Os planos pagos incluem múltiplos usuários e permissões avançadas.
                   </p>
                 </div>
               </div>
               <div className="space-y-4">
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <div className="card-theme p-4 rounded-lg">
+                  <h4 className="font-semibold text-theme-primary mb-2">
                     Os dados são seguros?
                   </h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  <p className="text-theme-secondary text-sm">
                     Sim! Utilizamos criptografia de ponta a ponta, backups automáticos e seguimos todas as normas de segurança.
                   </p>
                 </div>
-                <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                <div className="card-theme p-4 rounded-lg">
+                  <h4 className="font-semibold text-theme-primary mb-2">
                     Oferecem reembolso?
                   </h4>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">
+                  <p className="text-theme-secondary text-sm">
                     Oferecemos 30 dias de garantia incondicional. Se não gostar, devolvemos 100% do seu dinheiro.
                   </p>
                 </div>

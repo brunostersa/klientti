@@ -283,7 +283,7 @@ export default function OpinioesPage() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-theme-primary mb-2">💬 Todas as Opiniões</h1>
-            <p className="text-gray-600 dark:text-gray-400">Visualize e gerencie todas as opiniões recebidas</p>
+            <p className="text-theme-secondary">Visualize e gerencie todas as opiniões recebidas</p>
           </div>
 
           {/* Feedback Usage Warning */}
@@ -383,7 +383,7 @@ export default function OpinioesPage() {
               <CardContent>
                 <div className="text-center p-4">
                   <div className="text-3xl font-bold text-theme-primary mb-2">{areas.length}</div>
-                  <div className="text-gray-600 dark:text-gray-400">Áreas Ativas</div>
+                  <div className="text-sm text-theme-secondary">Áreas Ativas</div>
                 </div>
               </CardContent>
             </Card>
@@ -420,7 +420,7 @@ export default function OpinioesPage() {
                   <select
                     value={selectedRatingFilter}
                     onChange={(e) => setSelectedRatingFilter(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-theme"
                   >
                     <option value="">Todas as avaliações</option>
                     <option value="5">⭐⭐⭐⭐⭐ (5)</option>
@@ -436,7 +436,7 @@ export default function OpinioesPage() {
 
           {/* Actions */}
           <div className="flex justify-between items-center mb-6">
-            <div className="text-gray-600 dark:text-gray-400">
+            <div className="text-theme-secondary">
               {userFeedbacks.length} feedback{userFeedbacks.length !== 1 ? 's' : ''} encontrado{userFeedbacks.length !== 1 ? 's' : ''}
             </div>
             <div className="flex space-x-3">
@@ -472,8 +472,8 @@ export default function OpinioesPage() {
             <Card variant="elevated">
               <CardContent className="text-center py-12">
                 <div className="text-6xl mb-4">💬</div>
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Nenhum feedback encontrado</h3>
-                <p className="text-gray-600 dark:text-gray-400 mb-6">
+                <h3 className="text-xl font-semibold text-theme-primary mb-2">Nenhum feedback encontrado</h3>
+                <p className="text-theme-secondary mb-6">
                   {feedbacks.length === 0 
                     ? 'Ainda não há feedbacks. Compartilhe seus QR Codes para começar a receber avaliações!'
                     : 'Nenhum feedback corresponde aos filtros selecionados.'
