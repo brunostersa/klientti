@@ -1,0 +1,197 @@
+// ========================================
+// REGRAS DE SEGURANÇA DO FIRESTORE
+// PROJETO: Klientti - Sistema de Feedback
+// VERSÃO: 2.0.0 - PRODUÇÃO
+// PROJETO: klientti-640d4
+// ========================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // ========================================
+    // REGRAS PARA USUÁRIOS
+    // ========================================
+    match /users/{userId} {
+      // Usuário só pode ler/escrever seu próprio documento
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Usuário pode criar seu próprio documento
+      allow create: if request.auth != null && request.auth.uid == userId;
+      
+      // Super admin pode acessar todos os usuários
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA ÁREAS
+    // ========================================
+    match /areas/{areaId} {
+      // Usuário pode ler/escrever suas próprias áreas
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      
+      // Usuário autenticado pode criar áreas
+      allow create: if request.auth != null;
+      
+      // Super admin pode acessar todas as áreas
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA FEEDBACKS
+    // ========================================
+    match /feedbacks/{feedbackId} {
+      // Qualquer pessoa pode criar feedbacks (podem ser anônimos)
+      allow create: if true;
+      
+      // Usuários autenticados podem ler/editar feedbacks de suas áreas
+      allow read, write: if request.auth != null && 
+        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin' ||
+         // Permitir acesso se o usuário for dono da área relacionada
+         (exists(/databases/$(database)/documents/areas/$(resource.data.areaId)) &&
+          get(/databases/$(database)/documents/areas/$(resource.data.areaId)).data.userId == request.auth.uid));
+      
+      // Super admin pode acessar todos os feedbacks
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA ASSINATURAS
+    // ========================================
+    match /subscriptions/{subscriptionId} {
+      // Usuário só pode acessar suas próprias assinaturas
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      
+      // Usuário autenticado pode criar assinaturas
+      allow create: if request.auth != null;
+      
+      // Super admin pode acessar todas as assinaturas
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA PAGAMENTOS
+    // ========================================
+    match /payments/{paymentId} {
+      // Usuário só pode acessar seus próprios pagamentos
+      allow read, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      
+      // Usuário autenticado pode criar pagamentos
+      allow create: if request.auth != null;
+      
+      // Super admin pode acessar todos os pagamentos
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA CONHECIMENTO
+    // ========================================
+    match /knowledge/{knowledgeId} {
+      // Usuários autenticados podem ler conhecimento público
+      allow read: if request.auth != null;
+      
+      // Usuário pode criar/editar seu próprio conhecimento
+      allow create, write: if request.auth != null && 
+        (request.auth.uid == resource.data.userId || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+      
+      // Super admin pode acessar todo conhecimento
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA TESTES (APENAS EM DESENVOLVIMENTO)
+    // ========================================
+    match /test/{document=**} {
+      // Apenas usuários autenticados em desenvolvimento
+      allow read, write: if request.auth != null && 
+        (request.auth.token.environment == 'development' || 
+         get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin');
+    }
+    
+    // ========================================
+    // REGRAS PARA LOGS E AUDITORIA
+    // ========================================
+    match /logs/{logId} {
+      // Apenas super admin pode acessar logs
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA CONFIGURAÇÕES DO SISTEMA
+    // ========================================
+    match /system/{configId} {
+      // Apenas super admin pode acessar configurações do sistema
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+    
+    // ========================================
+    // REGRAS PARA WEBHOOKS E INTEGRAÇÕES
+    // ========================================
+    match /webhooks/{webhookId} {
+      // Apenas super admin pode gerenciar webhooks
+      allow read, write: if request.auth != null && 
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'super_admin';
+    }
+  }
+}
+
+// ========================================
+// COMENTÁRIOS E EXPLICAÇÕES
+// ========================================
+
+/*
+REGRAS DE SEGURANÇA IMPLEMENTADAS:
+
+1. AUTENTICAÇÃO OBRIGATÓRIA:
+   - Todas as operações requerem usuário autenticado
+   - Exceto criação de feedbacks (podem ser anônimos)
+
+2. ISOLAMENTO DE DADOS:
+   - Usuários só acessam seus próprios dados
+   - Feedbacks filtrados por área do usuário
+   - Áreas isoladas por proprietário
+
+3. HIERARQUIA DE PERMISSÕES:
+   - user: acesso básico aos próprios dados
+   - admin: acesso administrativo limitado
+   - super_admin: acesso completo ao sistema
+
+4. VALIDAÇÕES DE SEGURANÇA:
+   - Verificação de propriedade de recursos
+   - Validação de roles de usuário
+   - Proteção contra acesso não autorizado
+
+5. FLEXIBILIDADE PARA FEEDBACKS:
+   - Criação pública para feedbacks anônimos
+   - Leitura restrita aos proprietários das áreas
+   - Super admin pode acessar todos os feedbacks
+
+COMO APLICAR ESTAS REGRAS:
+
+1. Copie este conteúdo para o Firebase Console
+2. Vá para Firestore > Rules
+3. Cole as regras e clique em "Publish"
+4. Teste as regras com o Firebase Emulator
+
+MONITORAMENTO:
+
+- Verifique os logs de acesso no Firebase Console
+- Monitore tentativas de acesso negado
+- Revise regularmente as permissões de usuários
+- Mantenha as regras atualizadas com novas funcionalidades
+*/
