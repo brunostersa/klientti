@@ -232,10 +232,10 @@ export default function OpinioesPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-theme-primary flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"></div>
-          <p className="text-gray-700">Carregando...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-border-primary mx-auto mb-4"></div>
+          <p className="text-theme-primary">Carregando...</p>
         </div>
       </div>
     );
@@ -289,25 +289,25 @@ export default function OpinioesPage() {
           {/* Feedback Usage Warning */}
           {userProfile && (
             <div className="mb-6">
-              <div className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+              <div className="flex items-center justify-between p-4 bg-theme-secondary rounded-lg border border-theme-primary shadow-theme-sm">
                 <div className="flex items-center space-x-4">
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      <span className="text-sm font-medium text-theme-primary">
                         Opiniões este mês: {getFeedbackUsage().current}/{getFeedbackUsage().limit}
                       </span>
-                      <span className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="text-sm text-theme-secondary">
                         {getFeedbackUsage().percentage}%
                       </span>
                     </div>
-                    <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                    <div className="w-full bg-theme-button rounded-full h-2">
                       <div 
                         className={`h-2 rounded-full transition-all ${
                           hasReachedFeedbackLimit() 
-                            ? 'bg-red-500' 
+                            ? 'bg-theme-error' 
                             : isNearFeedbackLimit() 
-                              ? 'bg-yellow-500' 
-                              : 'bg-blue-500'
+                              ? 'bg-theme-warning' 
+                              : 'bg-brand-primary'
                         }`}
                         style={{ width: `${getFeedbackUsage().percentage}%` }}
                       />
@@ -319,7 +319,7 @@ export default function OpinioesPage() {
                   <div className="ml-4">
                     <button
                       onClick={() => router.push('/planos')}
-                      className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm"
+                      className="px-4 py-2 bg-theme-error text-theme-inverse rounded-lg hover:bg-theme-error-dark transition-colors text-sm font-medium"
                     >
                       Limite Atingido - Fazer Upgrade
                     </button>
@@ -330,7 +330,7 @@ export default function OpinioesPage() {
                   <div className="ml-4">
                     <button
                       onClick={() => router.push('/planos')}
-                      className="px-4 py-2 bg-yellow-600 text-white rounded-lg hover:bg-yellow-700 transition-colors text-sm"
+                      className="px-4 py-2 bg-theme-warning text-theme-inverse rounded-lg hover:bg-theme-warning-dark transition-colors text-sm font-medium"
                     >
                       Próximo do Limite - Fazer Upgrade
                     </button>
@@ -339,16 +339,16 @@ export default function OpinioesPage() {
               </div>
               
               {hasReachedFeedbackLimit() && (
-                <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="mt-3 p-3 bg-theme-error-light border border-theme-error rounded-lg">
                   <div className="flex items-center">
-                    <svg className="w-5 h-5 text-red-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <svg className="w-5 h-5 text-theme-error mr-2" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-sm text-red-700 dark:text-red-300">
+                    <span className="text-sm text-theme-error-dark">
                       <strong>Limite atingido!</strong> Você atingiu o máximo de {getFeedbackLimit(userProfile.plan || 'free')} opiniões/mês do seu plano gratuito. 
                       <button 
                         onClick={() => router.push('/planos')}
-                        className="ml-2 text-blue-600 dark:text-blue-400 hover:underline font-medium"
+                        className="ml-2 text-brand-primary hover:underline font-medium"
                       >
                         Faça upgrade para receber opiniões ilimitadas!
                       </button>
@@ -397,13 +397,13 @@ export default function OpinioesPage() {
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-theme-primary mb-2">
                     Filtrar por Área
                   </label>
                   <select
                     value={selectedAreaFilter}
                     onChange={(e) => setSelectedAreaFilter(e.target.value)}
-                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                    className="w-full px-3 py-2 border border-theme-input rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary bg-theme-input text-theme-primary input-theme"
                   >
                     <option value="">Todas as áreas</option>
                     {areas.map((area) => (
@@ -414,13 +414,13 @@ export default function OpinioesPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-theme-primary mb-2">
                     Filtrar por Avaliação
                   </label>
                   <select
                     value={selectedRatingFilter}
                     onChange={(e) => setSelectedRatingFilter(e.target.value)}
-                    className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 input-theme"
+                    className="w-full px-3 py-2 border border-theme-input rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary bg-theme-input text-theme-primary input-theme"
                   >
                     <option value="">Todas as avaliações</option>
                     <option value="5">⭐⭐⭐⭐⭐ (5)</option>

@@ -203,14 +203,14 @@ export default function AreasPage() {
                   <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
                 </svg>
               </li>
-              <li className="text-gray-900 dark:text-white font-medium">Áreas</li>
+              <li className="text-gray-900 dark:text-white font-medium">Áreas de Pesquisa</li>
             </ol>
           </nav>
 
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-theme-primary mb-2">📍 Gerenciar Áreas</h1>
-            <p className="text-gray-600 dark:text-gray-400">Crie e gerencie as áreas da sua empresa para coletar opiniões</p>
+            <h1 className="text-3xl font-bold text-theme-primary mb-2">📍 Áreas de Pesquisa</h1>
+            <p className="text-gray-600 dark:text-gray-400">Crie e gerencie as áreas de pesquisa da sua empresa para coletar opiniões</p>
           </div>
 
           {/* Create New Area Button */}
@@ -226,7 +226,7 @@ export default function AreasPage() {
                   <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                   </svg>
-                  {canCreateMoreAreas() ? 'Criar Nova Área' : 'Limite Atingido'}
+                  {canCreateMoreAreas() ? 'Criar Nova Área de Pesquisa' : 'Limite Atingido'}
                 </CardAction>
                 
                 {!canCreateMoreAreas() && (
@@ -273,7 +273,7 @@ export default function AreasPage() {
           {showCreateForm && (
             <Card variant="elevated" className="mb-6">
               <CardHeader>
-                <h3 className="text-lg font-semibold text-primary">Criar Nova Área</h3>
+                <h3 className="text-lg font-semibold text-primary">Criar Nova Área de Pesquisa</h3>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
@@ -307,7 +307,7 @@ export default function AreasPage() {
                       variant="primary"
                       disabled={!newAreaName.trim()}
                     >
-                      Criar Área
+                      Criar Área de Pesquisa
                     </CardAction>
                     <CardAction
                       onClick={() => setShowCreateForm(false)}
@@ -326,16 +326,16 @@ export default function AreasPage() {
             <Card variant="elevated">
               <CardContent className="text-center py-12">
                 <div className="text-6xl mb-4">📍</div>
-                <h3 className="text-xl font-semibold text-primary mb-2">Nenhuma área criada</h3>
+                <h3 className="text-xl font-semibold text-primary mb-2">Nenhuma área de pesquisa criada</h3>
                 <p className="text-secondary mb-6">
-                  Crie sua primeira área para começar a coletar opiniões dos clientes
+                  Crie sua primeira área de pesquisa para começar a coletar opiniões dos clientes
                 </p>
                 <CardAction
                   onClick={() => setShowCreateForm(true)}
                   variant="primary"
                   disabled={!canCreateMoreAreas()}
                 >
-                  {canCreateMoreAreas() ? 'Criar Primeira Área' : 'Limite Atingido'}
+                  {canCreateMoreAreas() ? 'Criar Primeira Área de Pesquisa' : 'Limite Atingido'}
                 </CardAction>
                 
                 {!canCreateMoreAreas() && (
@@ -344,7 +344,7 @@ export default function AreasPage() {
                       onClick={() => router.push('/planos')}
                       className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors text-sm"
                     >
-                      Fazer Upgrade para Criar Mais Áreas
+                      Fazer Upgrade para Criar Mais Áreas de Pesquisa
                     </button>
                   </div>
                 )}
@@ -391,7 +391,7 @@ export default function AreasPage() {
                     <div className="mt-auto">
                       <CardAction
                         onClick={() => router.push(`/areas/${area.id}`)}
-                        variant="secondary"
+                        variant="primary"
                         className="w-full"
                       >
                         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

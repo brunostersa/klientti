@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { jsPDF } from 'jspdf';
-import Card, { CardContent, CardAction } from '@/components/Card';
+import { CardAction } from '@/components/Card';
 
 interface QRCodeGeneratorProps {
   areaId: string;
@@ -17,11 +17,12 @@ interface QRCodeGeneratorProps {
   } | null;
 }
 
-export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfile }: QRCodeGeneratorProps) {
+export default function QRCodeGenerator({ areaId, areaName, size = 120, userProfile }: QRCodeGeneratorProps) {
   const [feedbackUrl, setFeedbackUrl] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isCopied, setIsCopied] = useState(false);
   const [error, setError] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false);
   const qrRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -33,7 +34,9 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
     if (!qrRef.current) return;
     
     setIsLoading(true);
-    setError(''); // Limpar erro anterior
+    setError('');
+    setShowSuccess(false);
+    
     try {
       const canvas = document.createElement('canvas');
       const svg = qrRef.current.querySelector('svg');
@@ -48,9 +51,14 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        // Fundo branco
+        // Fundo branco com borda sutil
         ctx.fillStyle = 'white';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Borda sutil
+        ctx.strokeStyle = '#e5e7eb';
+        ctx.lineWidth = 2;
+        ctx.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
 
         // Desenhar QR Code
         ctx.drawImage(img, 20, 20, size, size);
@@ -60,11 +68,15 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
         link.download = `qrcode-${areaName}.png`;
         link.href = canvas.toDataURL();
         link.click();
+        
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 3000);
       };
 
       img.src = 'data:image/svg+xml;base64,' + btoa(svgData);
     } catch (error) {
       console.error('Erro ao baixar QR Code:', error);
+      setError('Erro ao baixar QR Code. Tente novamente.');
     } finally {
       setIsLoading(false);
     }
@@ -73,9 +85,9 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
   const downloadPersonalizedPDF = async () => {
     setIsLoading(true);
     setError('');
+    setShowSuccess(false);
     
     try {
-      // Verificar se o QR code está disponível
       if (!qrRef.current || !feedbackUrl) {
         setError('QR Code não está disponível. Aguarde um momento e tente novamente.');
         return;
@@ -92,7 +104,7 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
       const pageHeight = doc.internal.pageSize.getHeight();
       const margin = 20;
 
-      // ===== CABEÇALHO SIMPLES =====
+      // ===== CABEÇALHO MODERNO =====
       doc.setFillColor(59, 130, 246);
       doc.rect(0, 0, pageWidth, 40, 'F');
       
@@ -123,7 +135,7 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
       const qrX = (pageWidth - qrSize) / 2;
       const qrY = infoY + (userProfile?.company ? 30 : 20);
 
-      // Borda simples do QR Code
+      // Borda moderna do QR Code
       doc.setDrawColor(59, 130, 246);
       doc.setLineWidth(2);
       doc.rect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
@@ -134,7 +146,6 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
         const canvas = document.createElement('canvas');
         const img = new Image();
         
-        // Carregar imagem
         const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
         const url = URL.createObjectURL(svgBlob);
         img.src = url;
@@ -153,7 +164,6 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
           };
         });
 
-        // Desenhar QR Code no canvas
         const scale = 4;
         canvas.width = qrSize * scale;
         canvas.height = qrSize * scale;
@@ -169,7 +179,6 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
         }
       } catch (imageError) {
         console.warn('Erro ao gerar QR code:', imageError);
-        // Fallback simples
         doc.setFillColor(240, 240, 240);
         doc.rect(qrX, qrY, qrSize, qrSize, 'F');
         doc.setTextColor(100, 100, 100);
@@ -177,7 +186,7 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
         doc.text('QR Code', qrX + qrSize/2, qrY + qrSize/2, { align: 'center' });
       }
 
-      // ===== INSTRUÇÕES SIMPLES =====
+      // ===== INSTRUÇÕES MODERNAS =====
       const instructionsY = qrY + qrSize + 20;
       doc.setTextColor(30, 30, 30);
       doc.setFontSize(14);
@@ -200,7 +209,7 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
         doc.text(step, pageWidth / 2, stepY, { align: 'center' });
       });
 
-      // ===== RODAPÉ SIMPLES =====
+      // ===== RODAPÉ MODERNO =====
       const footerY = pageHeight - 20;
       doc.setTextColor(100, 100, 100);
       doc.setFontSize(8);
@@ -208,8 +217,10 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
       doc.text('Gerado pelo Pesquisou', pageWidth / 2, footerY, { align: 'center' });
       doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, pageWidth / 2, footerY + 5, { align: 'center' });
       
-      // Download
       doc.save(`feedback-${areaName}-${new Date().toISOString().split('T')[0]}.pdf`);
+      
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
       
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
@@ -223,55 +234,73 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
     try {
       await navigator.clipboard.writeText(feedbackUrl);
       setIsCopied(true);
+      setShowSuccess(true);
       setTimeout(() => {
         setIsCopied(false);
-      }, 2000);
+        setShowSuccess(false);
+      }, 3000);
     } catch (error) {
       console.error('Erro ao copiar link:', error);
-      alert('Erro ao copiar link. Tente novamente.');
+      setError('Erro ao copiar link. Tente novamente.');
     }
   };
 
-
-
   return (
-    <div className="text-center">
-      {/* Error Message */}
-      {error && (
-        <div className="mb-3 p-2 bg-red-50 border border-red-200 rounded text-xs">
-          <p className="text-red-600 text-xs">{error}</p>
+    <div className="relative overflow-hidden group">
+      {/* Success Message */}
+      {showSuccess && (
+        <div className="absolute top-2 right-2 z-10">
+          <div className="bg-theme-success text-theme-inverse px-2 py-1 rounded-full text-xs font-medium animate-fade-in">
+            ✅ Sucesso!
+          </div>
         </div>
       )}
 
-      {/* QR Code centralizado */}
-      <div ref={qrRef} className="inline-block p-3 bg-white border border-custom rounded-lg shadow-sm mb-3">
-        {feedbackUrl ? (
-          <QRCodeSVG
-            value={feedbackUrl}
-            size={size}
-            level="M"
-            includeMargin={true}
-          />
-        ) : (
-          <div className="flex items-center justify-center" style={{ width: size, height: size }}>
-            <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-secondary-color"></div>
-          </div>
-        )}
+      {/* Error Message */}
+      {error && (
+        <div className="mb-3 p-2 bg-theme-error-light border border-theme-error rounded-lg animate-fade-in">
+          <p className="text-theme-error text-xs">{error}</p>
+        </div>
+      )}
+
+      {/* QR Code com design moderno */}
+      <div className="flex justify-center mb-4">
+        <div 
+          ref={qrRef} 
+          className="relative p-3 bg-white rounded-xl shadow-theme-sm border border-theme-primary group-hover:shadow-theme-md transition-all duration-300"
+        >
+          {feedbackUrl ? (
+            <QRCodeSVG
+              value={feedbackUrl}
+              size={size}
+              level="M"
+              includeMargin={true}
+              className="transition-transform duration-300 group-hover:scale-105"
+            />
+          ) : (
+            <div className="flex items-center justify-center" style={{ width: size, height: size }}>
+              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-primary"></div>
+            </div>
+          )}
+          
+          {/* Overlay sutil no hover */}
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent to-brand-primary-light opacity-0 group-hover:opacity-10 rounded-xl transition-opacity duration-300"></div>
+        </div>
       </div>
 
-      {/* Botões em linha horizontal */}
-      <div className="flex flex-wrap justify-center gap-2 mb-3">
+      {/* Botões de ação modernos */}
+      <div className="grid grid-cols-2 gap-2 mb-4">
         <CardAction
           onClick={downloadQRCode}
           disabled={isLoading}
-          variant="secondary"
+          variant="outline"
           size="sm"
-          className="text-xs px-3 py-1"
+          className="flex items-center justify-center space-x-2 py-2 transition-all duration-200 hover:scale-105"
         >
-          <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          PNG
+          <span className="font-medium text-sm">PNG</span>
         </CardAction>
 
         <CardAction
@@ -279,53 +308,61 @@ export default function QRCodeGenerator({ areaId, areaName, size = 80, userProfi
           disabled={isLoading}
           variant="primary"
           size="sm"
-          className="text-xs px-3 py-1"
+          className="flex items-center justify-center space-x-2 py-2 transition-all duration-200 hover:scale-105"
         >
-          <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          PDF
+          <span className="font-medium text-sm">PDF</span>
         </CardAction>
+      </div>
 
+      {/* Botões secundários */}
+      <div className="flex space-x-2 mb-4">
         <CardAction
           onClick={copyLink}
           disabled={isCopied}
-          variant="ghost"
+          variant="outline"
           size="sm"
-          className="text-xs px-3 py-1"
+          className="flex-1 flex items-center justify-center space-x-2 py-2 transition-all duration-200 hover:scale-105"
         >
           {isCopied ? (
-            <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4 text-theme-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
             </svg>
           ) : (
-            <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
             </svg>
           )}
-          {isCopied ? 'Copiado!' : 'Link'}
+          <span className="font-medium text-xs">
+            {isCopied ? 'Copiado!' : 'Copiar Link'}
+          </span>
         </CardAction>
 
         <CardAction
           onClick={() => window.open(feedbackUrl, '_blank')}
           disabled={!feedbackUrl}
-          variant="ghost"
+          variant="outline"
           size="sm"
-          className="text-xs px-3 py-1"
+          className="flex items-center justify-center space-x-2 py-2 px-3 transition-all duration-200 hover:scale-105"
         >
-          <svg className="w-3 h-3 mr-1 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
           </svg>
-          Abrir
+          <span className="font-medium text-xs">Abrir</span>
         </CardAction>
       </div>
 
-      {/* URL compacta */}
-      <div className="p-2 bg-tertiary rounded border border-custom">
-        <p className="text-xs text-secondary text-center break-all">
-          {feedbackUrl || 'Carregando...'}
-        </p>
-      </div>
+      {/* Loading indicator */}
+      {isLoading && (
+        <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center rounded-lg">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand-primary mx-auto mb-2"></div>
+            <p className="text-theme-secondary text-xs">Processando...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

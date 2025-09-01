@@ -32,7 +32,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
   const menuItems = [
     // Menus básicos (modo usuário)
     { id: 'overview', label: 'Visão Geral', icon: '📊', path: '/dashboard' },
-    { id: 'areas', label: 'Áreas', icon: '🏢', path: '/areas' },
+    { id: 'areas', label: 'Áreas de pesquisa', icon: '🏢', path: '/areas' },
     { id: 'feedbacks', label: 'Opiniões', icon: '💬', path: '/feedbacks' },
     { id: 'base-conhecimento', label: 'Base de Conhecimento', icon: '📚', path: '/base-conhecimento' },
     { id: 'agente-ia', label: 'Agente IA', icon: '🤖', path: '/agente-ia' },
@@ -86,7 +86,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
 
       {/* Sidebar */}
       <div className={`
-        fixed top-0 left-0 h-full w-80 sidebar-theme border-r border-theme-primary shadow-theme-lg z-50 transform transition-transform duration-300 ease-in-out flex flex-col
+        fixed top-0 left-0 h-full w-80 sidebar-theme border-r border-theme-secondary shadow-theme-lg z-50 transform transition-transform duration-300 ease-in-out flex flex-col
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Logo */}
@@ -114,8 +114,8 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
               className={`
                 w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left transition-all duration-200
                 ${activeTab === item.id
-                  ? 'bg-sidebar-active text-theme-inverse border-r-2 border-brand-primary'
-                  : 'sidebar-item hover:bg-sidebar-hover'
+                  ? 'sidebar-item active'
+                  : 'sidebar-item'
                 }
               `}
             >
@@ -126,7 +126,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
         </nav>
 
         {/* Seção de Perfil */}
-        <div className="p-4 border-t border-theme-primary">
+        <div className="p-4 border-t border-theme-secondary">
           {/* User Profile Card */}
           {user && (
             <div 
@@ -160,7 +160,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
           
           <button
             onClick={handleLogout}
-            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left sidebar-item hover:bg-sidebar-hover transition-colors"
+            className="w-full flex items-center space-x-3 px-4 py-3 rounded-lg text-left sidebar-item transition-all duration-200"
           >
             <span className="text-lg">🚪</span>
             <span className="font-medium">Sair</span>

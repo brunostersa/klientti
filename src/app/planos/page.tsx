@@ -237,10 +237,10 @@ export default function UpgradePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center">
+      <div className="min-h-screen bg-theme-primary flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"></div>
-          <p className="text-gray-700">Carregando...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-border-primary mx-auto mb-4"></div>
+          <p className="text-theme-primary">Carregando...</p>
         </div>
       </div>
     );
@@ -268,7 +268,7 @@ export default function UpgradePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Hero Section */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 text-sm font-medium mb-6">
+            <div className="inline-flex items-center px-4 py-2 rounded-full bg-brand-primary-light text-brand-primary text-sm font-medium mb-6">
               <span className="mr-2">🎯</span>
               Plano Atual: {currentPlanInfo.name}
             </div>
@@ -277,11 +277,11 @@ export default function UpgradePage() {
               Escolha o Plano Ideal para Sua Empresa
             </h1>
             
-            <p className="text-xl text-gray-600 dark:text-gray-400 mb-6 max-w-3xl mx-auto">
+            <p className="text-xl text-theme-secondary mb-6 max-w-3xl mx-auto">
               {upgradeMessage.subtitle}
             </p>
             
-            <p className="text-lg text-blue-600 dark:text-blue-400 font-medium">
+            <p className="text-lg text-brand-primary font-medium">
               {upgradeMessage.cta}
             </p>
           </div>
@@ -289,23 +289,23 @@ export default function UpgradePage() {
           {/* Current Plan vs Upgrade Comparison */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
             {/* Current Plan */}
-            <div className="relative p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-700">
+            <div className="relative p-6 bg-theme-secondary rounded-lg border-2 border-theme-primary shadow-theme-sm">
               <div className="text-center mb-6">
-                <div className="inline-flex items-center px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 text-sm font-medium mb-4">
+                <div className="inline-flex items-center px-3 py-1 rounded-full bg-theme-button text-theme-button-hover text-sm font-medium mb-4">
                   Seu Plano Atual
                 </div>
-                <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{currentPlanInfo.name}</h3>
-                <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                <h3 className="text-2xl font-bold text-theme-primary mb-2">{currentPlanInfo.name}</h3>
+                <div className="text-4xl font-bold text-theme-primary mb-2">
                   {currentPlanInfo.price > 0 ? `R$ ${currentPlanInfo.price}` : 'R$ 0'}
-                  <span className="text-lg font-normal text-gray-600 dark:text-gray-400">/mês</span>
+                  <span className="text-lg font-normal text-theme-secondary">/mês</span>
                 </div>
               </div>
 
               <div className="space-y-3 mb-6">
-                <h4 className="font-semibold text-gray-900 dark:text-white mb-3">✅ O que você tem:</h4>
+                <h4 className="font-semibold text-theme-primary mb-3">✅ O que você tem:</h4>
                 {currentPlanInfo.features.map((feature, index) => (
-                  <li key={index} className="flex items-center text-sm text-gray-700 dark:text-gray-300">
-                    <svg className="w-4 h-4 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                  <li key={index} className="flex items-center text-sm text-theme-primary">
+                    <svg className="w-4 h-4 text-theme-success mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
                     {feature}
@@ -315,10 +315,10 @@ export default function UpgradePage() {
 
               {currentPlanInfo.limitations.length > 0 && (
                 <div className="space-y-3 mb-6">
-                  <h4 className="font-semibold text-gray-900 dark:text-white mb-3">❌ Limitações:</h4>
+                  <h4 className="font-semibold text-theme-primary mb-3">❌ Limitações:</h4>
                   {currentPlanInfo.limitations.map((limitation, index) => (
-                    <li key={index} className="flex items-center text-sm text-gray-600 dark:text-gray-400">
-                      <svg className="w-4 h-4 text-red-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <li key={index} className="flex items-center text-sm text-theme-muted">
+                      <svg className="w-4 h-4 text-theme-error mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
                       </svg>
                       {limitation}
@@ -330,38 +330,38 @@ export default function UpgradePage() {
 
             {/* Upgrade Plans */}
             {plans.map((plan) => (
-              <div key={plan.id} className={`relative p-6 rounded-lg shadow-lg border-2 ${
+              <div key={plan.id} className={`relative p-6 rounded-lg shadow-theme-lg border-2 ${
                 plan.popular 
-                  ? 'bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border-blue-200 dark:border-blue-700' 
-                  : 'bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700'
+                  ? 'bg-gradient-to-br from-brand-primary-light to-brand-secondary-light border-brand-primary' 
+                  : 'bg-theme-card border-theme-primary'
               }`}>
                 {plan.popular && (
                   <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                    <span className="bg-gradient-to-r from-brand-primary to-brand-secondary text-theme-inverse px-4 py-1 rounded-full text-sm font-medium">
                       ⭐ Mais Popular
                     </span>
                   </div>
                 )}
 
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">{plan.name}</h3>
-                  <div className="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                  <h3 className="text-2xl font-bold text-theme-primary mb-2">{plan.name}</h3>
+                  <div className="text-4xl font-bold text-theme-primary mb-2">
                     R$ {plan.price}
-                    <span className="text-lg font-normal text-gray-600 dark:text-gray-400">
+                    <span className="text-lg font-normal text-theme-secondary">
                       /{billingPeriod === 'monthly' ? 'mês' : 'ano'}
                     </span>
                   </div>
                   {billingPeriod === 'yearly' && (
-                    <div className="text-sm text-green-600 dark:text-green-400 font-medium">
+                    <div className="text-sm text-theme-success font-medium">
                       💰 Economia de R$ 58/ano
                     </div>
                   )}
-                  <p className="text-gray-600 dark:text-gray-400">{plan.description}</p>
+                  <p className="text-theme-secondary">{plan.description}</p>
                 </div>
 
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, index) => (
-                    <li key={index} className="flex items-start text-sm text-gray-700 dark:text-gray-300">
+                    <li key={index} className="flex items-start text-sm text-theme-primary">
                       <span className="mr-2 mt-0.5">{feature.startsWith('✅') ? '✅' : '🚀'}</span>
                       <span>{feature.replace('✅ ', '').replace('🚀 ', '')}</span>
                     </li>
@@ -371,14 +371,14 @@ export default function UpgradePage() {
                 {plan.id === currentPlan ? (
                   <button
                     disabled
-                    className="w-full py-3 px-6 rounded-lg font-medium bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                    className="w-full py-3 px-6 rounded-lg font-medium bg-theme-button text-theme-muted cursor-not-allowed"
                   >
                     {plan.buttonText}
                   </button>
                 ) : (
                   <button
                     onClick={() => handleUpgrade(plan.id as 'starter' | 'professional')}
-                    className="w-full py-3 px-6 rounded-lg font-medium bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+                    className="w-full py-3 px-6 rounded-lg font-medium bg-brand-primary hover:bg-brand-primary-hover text-theme-inverse transition-colors"
                   >
                     {plan.buttonText}
                   </button>
@@ -389,25 +389,25 @@ export default function UpgradePage() {
 
           {/* Billing Toggle */}
           <div className="text-center mb-12">
-            <div className="inline-flex items-center space-x-4 p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
-              <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}>
+            <div className="inline-flex items-center space-x-4 p-2 bg-theme-button rounded-lg">
+              <span className={`text-sm font-medium ${billingPeriod === 'monthly' ? 'text-brand-primary' : 'text-theme-secondary'}`}>
                 Mensal
               </span>
               <button
                 onClick={() => setBillingPeriod(billingPeriod === 'monthly' ? 'yearly' : 'monthly')}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                  billingPeriod === 'yearly' ? 'bg-blue-600' : 'bg-gray-300'
+                  billingPeriod === 'yearly' ? 'bg-brand-primary' : 'bg-theme-border-primary'
                 }`}
               >
                 <span
-                  className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                  className={`inline-block h-4 w-4 transform rounded-full bg-theme-inverse transition-transform ${
                     billingPeriod === 'yearly' ? 'translate-x-6' : 'translate-x-1'
                   }`}
                 />
               </button>
-              <span className={`text-sm font-medium ${billingPeriod === 'yearly' ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-400'}`}>
+              <span className={`text-sm font-medium ${billingPeriod === 'yearly' ? 'text-brand-primary' : 'text-theme-secondary'}`}>
                 Anual
-                <span className="ml-1 bg-green-100 text-green-800 text-xs px-2 py-1 rounded-full">
+                <span className="ml-1 bg-theme-success-light text-theme-success-dark text-xs px-2 py-1 rounded-full">
                   -17%
                 </span>
               </span>
@@ -415,12 +415,12 @@ export default function UpgradePage() {
           </div>
 
           {/* Social Proof */}
-          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-2xl p-8 mb-12">
+          <div className="bg-gradient-to-r from-brand-primary-light to-brand-secondary-light rounded-2xl p-8 mb-12">
             <div className="text-center mb-8">
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+              <h3 className="text-2xl font-bold text-theme-primary mb-4">
                 💬 O que nossos clientes dizem
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-theme-secondary">
                 Junte-se a centenas de empresas que já transformaram seus negócios
               </p>
             </div>
@@ -475,7 +475,7 @@ export default function UpgradePage() {
 
           {/* FAQ Section */}
           <div className="mb-12">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white text-center mb-8">
+            <h3 className="text-2xl font-bold text-theme-primary text-center mb-8">
               ❓ Perguntas Frequentes
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

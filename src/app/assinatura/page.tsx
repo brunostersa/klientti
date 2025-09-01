@@ -169,35 +169,35 @@ export default function SubscriptionPage() {
           {/* Header */}
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-theme-primary mb-2">💳 Minha Assinatura</h1>
-            <p className="text-gray-700 dark:text-gray-300">Visualize seu plano atual e informações da assinatura</p>
+            <p className="text-theme-secondary">Visualize seu plano atual e informações da assinatura</p>
           </div>
 
           {/* Current Plan */}
           <Card className="mb-6">
             <CardHeader>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Plano Atual</h2>
+              <h2 className="text-xl font-semibold text-theme-primary">Plano Atual</h2>
             </CardHeader>
             <CardContent>
               <div className="flex items-center justify-between">
                 <div>
-                  <h3 className="text-2xl font-bold text-gray-900 dark:text-white">{currentPlan.name}</h3>
-                  <p className="text-gray-600 dark:text-gray-400">
+                  <h3 className="text-2xl font-bold text-theme-primary">{currentPlan.name}</h3>
+                  <p className="text-theme-secondary">
                     {currentPlan.price > 0 ? `R$ ${currentPlan.price},00/mês` : 'Gratuito'}
                   </p>
                   <div className="mt-2">
                     {currentPlan.features.map((feature, index) => (
-                      <span key={index} className="inline-block bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-sm px-2 py-1 rounded mr-2 mb-1">
+                      <span key={index} className="inline-block bg-brand-primary-light text-brand-primary text-sm px-2 py-1 rounded mr-2 mb-1">
                         {feature}
                       </span>
                     ))}
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-sm text-gray-600 dark:text-gray-400">Status</p>
+                  <p className="text-sm text-theme-secondary">Status</p>
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                     subscriptionData?.subscriptionStatus === 'active' 
-                      ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
-                      : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200'
+                      ? 'bg-theme-success-light text-theme-success-dark' 
+                      : 'bg-theme-button text-theme-muted'
                   }`}>
                     {subscriptionData?.subscriptionStatus === 'active' ? 'Ativo' : 'Inativo'}
                   </span>
@@ -209,11 +209,11 @@ export default function SubscriptionPage() {
           {/* Subscription Info */}
           <Card className="mb-6">
             <CardHeader>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Informações da Assinatura</h2>
+              <h2 className="text-xl font-semibold text-theme-primary">Informações da Assinatura</h2>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="card-theme p-4 rounded-lg">
+                <div className="bg-theme-secondary p-4 rounded-lg border border-theme-primary shadow-theme-sm">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium text-theme-primary">{formatDate(subscriptionData?.planUpdatedAt)}</p>
@@ -221,7 +221,7 @@ export default function SubscriptionPage() {
                     </div>
                   </div>
                 </div>
-                <div className="card-theme p-4 rounded-lg">
+                <div className="bg-theme-secondary p-4 rounded-lg border border-theme-primary shadow-theme-sm">
                   <div className="flex items-center justify-between">
                     <div>
                       <p className="font-medium capitalize text-theme-primary">{subscriptionData?.plan || 'free'}</p>
@@ -239,18 +239,18 @@ export default function SubscriptionPage() {
           {subscriptionData?.plan !== 'professional' && (
             <Card className="mb-6">
               <CardHeader>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">🚀 Desbloqueie Mais Recursos</h2>
+                <h2 className="text-xl font-semibold text-theme-primary">🚀 Desbloqueie Mais Recursos</h2>
               </CardHeader>
               <CardContent>
-                <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6">
+                <div className="bg-gradient-to-r from-brand-primary-light to-brand-secondary-light rounded-lg p-6">
                   <div className="text-center mb-6">
-                                         <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                                         <h3 className="text-2xl font-bold text-theme-primary mb-2">
                        {subscriptionData?.plan === 'free' 
                          ? 'Transforme seu negócio com o Plano Starter' 
                          : 'Leve seu negócio ao próximo nível com o Plano Professional'
                        }
                      </h3>
-                     <p className="text-gray-600 dark:text-gray-400 text-lg">
+                     <p className="text-theme-secondary text-lg">
                        {subscriptionData?.plan === 'free' 
                          ? 'Aproveite recursos avançados que vão revolucionar sua experiência com feedbacks'
                          : 'Tenha acesso ilimitado a todas as funcionalidades e suporte premium'
@@ -261,9 +261,9 @@ export default function SubscriptionPage() {
                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
                      {subscriptionData?.plan === 'free' ? (
                       <>
-                        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                          <h4 className="font-semibold text-gray-900 dark:text-white mb-3">✅ O que você ganha:</h4>
-                          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="bg-theme-card p-4 rounded-lg border border-theme-primary shadow-theme-sm">
+                          <h4 className="font-semibold text-theme-primary mb-3">✅ O que você ganha:</h4>
+                          <ul className="space-y-2 text-sm text-theme-secondary">
                             <li>• 5 áreas de opiniões (vs. 2 atuais)</li>
                             <li>• 200 feedbacks/mês (vs. 50 atuais)</li>
                             <li>• QR Codes personalizados</li>
@@ -271,9 +271,9 @@ export default function SubscriptionPage() {
                             <li>• Suporte prioritário</li>
                           </ul>
                         </div>
-                        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                          <h4 className="font-semibold text-gray-900 dark:text-white mb-3">💡 Benefícios:</h4>
-                          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="bg-theme-card p-4 rounded-lg border border-theme-primary shadow-theme-sm">
+                          <h4 className="font-semibold text-theme-primary mb-3">💡 Benefícios:</h4>
+                          <ul className="space-y-2 text-sm text-theme-secondary">
                             <li>• Crescimento 3x mais rápido</li>
                             <li>• Insights valiosos sobre clientes</li>
                             <li>• Melhor tomada de decisão</li>
@@ -283,9 +283,9 @@ export default function SubscriptionPage() {
                       </>
                     ) : (
                       <>
-                        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                          <h4 className="font-semibold text-gray-900 dark:text-white mb-3">✅ O que você ganha:</h4>
-                          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="bg-theme-card p-4 rounded-lg border border-theme-primary shadow-theme-sm">
+                          <h4 className="font-semibold text-theme-primary mb-3">✅ O que você ganha:</h4>
+                          <ul className="space-y-2 text-sm text-theme-secondary">
                             <li>• Áreas ilimitadas</li>
                             <li>• Feedback ilimitado</li>
                             <li>• Agente IA completo</li>
@@ -293,9 +293,9 @@ export default function SubscriptionPage() {
                             <li>• Integração com APIs</li>
                           </ul>
                         </div>
-                        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg">
-                          <h4 className="font-semibold text-gray-900 dark:text-white mb-3">💡 Benefícios:</h4>
-                          <ul className="space-y-2 text-sm text-gray-600 dark:text-gray-400">
+                        <div className="bg-theme-card p-4 rounded-lg border border-theme-primary shadow-theme-sm">
+                          <h4 className="font-semibold text-theme-primary mb-3">💡 Benefícios:</h4>
+                          <ul className="space-y-2 text-sm text-theme-secondary">
                             <li>• Escalabilidade total</li>
                             <li>• Automação avançada</li>
                             <li>• Relatórios personalizados</li>
@@ -315,14 +315,14 @@ export default function SubscriptionPage() {
                           handleUpgrade('professional');
                         }
                       }}
-                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-3 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105"
+                      className="bg-gradient-to-r from-brand-primary to-brand-secondary text-theme-inverse px-8 py-3 rounded-lg font-semibold hover:from-brand-primary-hover hover:to-brand-secondary-hover transition-all transform hover:scale-105"
                     >
                       {subscriptionData?.plan === 'free' 
                         ? 'Fazer Upgrade para Starter - R$ 29/mês' 
                         : 'Fazer Upgrade para Professional - R$ 79/mês'
                       }
                     </button>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    <p className="text-xs text-theme-muted mt-2">
                       Teste gratuito de 30 dias • Sem compromisso • Cancele a qualquer momento
                     </p>
                   </div>
@@ -335,34 +335,34 @@ export default function SubscriptionPage() {
           {subscriptionData?.plan === 'free' && (
             <Card className="mb-6">
               <CardHeader>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">📊 Seu Uso Atual</h2>
+                <h2 className="text-xl font-semibold text-theme-primary">📊 Seu Uso Atual</h2>
               </CardHeader>
               <CardContent>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Áreas de opiniões</span>
+                    <span className="text-theme-secondary">Áreas de opiniões</span>
                     <div className="flex items-center space-x-2">
-                      <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div className="bg-blue-600 h-2 rounded-full" style={{ width: '40%' }}></div>
+                      <div className="w-32 bg-theme-button rounded-full h-2">
+                        <div className="bg-brand-primary h-2 rounded-full" style={{ width: '40%' }}></div>
                       </div>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">2/5</span>
+                      <span className="text-sm text-theme-secondary">2/5</span>
                     </div>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-gray-600 dark:text-gray-400">Feedbacks este mês</span>
+                    <span className="text-theme-secondary">Feedbacks este mês</span>
                     <div className="flex items-center space-x-2">
-                      <div className="w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-2">
-                        <div className="bg-orange-500 h-2 rounded-full" style={{ width: '60%' }}></div>
+                      <div className="w-32 bg-theme-button rounded-full h-2">
+                        <div className="bg-theme-warning h-2 rounded-full" style={{ width: '60%' }}></div>
                       </div>
-                      <span className="text-sm text-gray-600 dark:text-gray-400">30/50</span>
+                      <span className="text-sm text-theme-secondary">30/50</span>
                     </div>
                   </div>
-                  <div className="mt-4 p-3 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg">
+                  <div className="mt-4 p-3 bg-theme-warning-light border border-theme-warning rounded-lg">
                     <div className="flex items-center">
-                      <svg className="w-5 h-5 text-orange-500 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                      <svg className="w-5 h-5 text-theme-warning mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                       </svg>
-                      <span className="text-sm text-orange-700 dark:text-orange-300">
+                      <span className="text-sm text-theme-warning-dark">
                         <strong>Dica:</strong> Você está usando 60% da sua cota de feedbacks. Faça upgrade para não perder insights valiosos!
                       </span>
                     </div>
@@ -375,7 +375,7 @@ export default function SubscriptionPage() {
           {/* Social Proof for Upgrade */}
           <Card className="mb-6">
             <CardHeader>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">💬 O que nossos clientes dizem</h2>
+              <h2 className="text-xl font-semibold text-theme-primary">💬 O que nossos clientes dizem</h2>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

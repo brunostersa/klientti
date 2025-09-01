@@ -393,9 +393,6 @@ export default function AreaDetailsPage() {
               <h2 className="text-xl font-semibold text-primary mb-4">QR Code</h2>
               <div className="text-center">
                 <QRCodeGenerator areaId={area.id} areaName={area.name} />
-                <p className="text-sm text-secondary mt-4">
-                  Escaneie este QR Code para acessar o formulário de feedback
-                </p>
               </div>
             </div>
 

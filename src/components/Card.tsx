@@ -199,7 +199,7 @@ export const CardAction: React.FC<CardActionProps> = ({
     primary: 'btn-theme-primary',
     secondary: 'btn-theme-secondary',
     outline: 'btn-theme-outline',
-    ghost: 'bg-transparent text-brand-primary hover:bg-theme-secondary hover:text-theme-primary focus:ring-brand-primary',
+    ghost: 'bg-transparent text-brand-primary hover:bg-brand-primary-light hover:text-brand-primary focus:ring-brand-primary',
   };
 
   const sizeClasses = {
