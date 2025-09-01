@@ -316,7 +316,8 @@ export default function SubscriptionPage() {
                           handleUpgrade('professional');
                         }
                       }}
-                      className="bg-gradient-to-r from-brand-primary to-brand-secondary text-theme-inverse px-8 py-3 rounded-lg font-semibold hover:from-brand-primary-hover hover:to-brand-secondary-hover transition-all transform hover:scale-105"
+                      className="bg-gradient-to-r from-brand-primary to-brand-secondary text-white px-8 py-3 rounded-lg font-semibold hover:from-brand-primary-hover hover:to-brand-secondary-hover transition-all transform hover:scale-105"
+                      style={{ color: 'white !important' }}
                     >
                       {subscriptionData?.plan === 'free' 
                         ? 'Fazer Upgrade para Starter - R$ 29/mês' 
