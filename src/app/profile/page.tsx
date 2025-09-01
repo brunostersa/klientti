@@ -297,7 +297,7 @@ export default function ProfilePage() {
 
       {/* Main Content */}
       <div className="lg:ml-80">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumbs */}
           <nav className="flex mb-6" aria-label="Breadcrumb">
             <ol className="inline-flex items-center space-x-1 md:space-x-3">
@@ -329,11 +329,14 @@ export default function ProfilePage() {
             <p className="text-theme-secondary">Gerencie suas informações pessoais e preferências</p>
           </div>
 
-          {/* Profile Form */}
-          <div className="bg-theme-card rounded-lg shadow-theme-sm border border-theme-primary">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-theme-primary">Informações do Perfil</h2>
-              <p className="text-theme-secondary mb-6">Atualize suas informações pessoais e da empresa</p>
+          {/* Layout de 2 colunas */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            {/* Coluna principal - Informações do Perfil */}
+            <div className="lg:col-span-2">
+              <div className="bg-theme-card rounded-lg shadow-theme-sm border border-theme-primary">
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold text-theme-primary">Informações do Perfil</h2>
+                  <p className="text-theme-secondary mb-6">Atualize suas informações pessoais e da empresa</p>
 
               <form onSubmit={handleSubmit} className="space-y-0">
                 {/* Informações Pessoais */}
@@ -528,14 +531,16 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </form>
+                </div>
+              </div>
             </div>
-          </div>
 
-          {/* Card de Preferências */}
-          <div className="mt-6 bg-theme-card rounded-lg shadow-theme-sm border border-theme-primary">
-            <div className="p-6">
-              <h2 className="text-2xl font-bold text-theme-primary mb-2">Preferências</h2>
-              <p className="text-theme-secondary mb-6">Configure suas preferências de interface</p>
+            {/* Coluna direita - Preferências */}
+            <div className="lg:col-span-1">
+              <div className="bg-theme-card rounded-lg shadow-theme-sm border border-theme-primary">
+                <div className="p-6">
+                  <h2 className="text-2xl font-bold text-theme-primary mb-2">Preferências</h2>
+                  <p className="text-theme-secondary mb-6">Configure suas preferências de interface</p>
 
               <div className="space-y-6">
                 {/* Tema da Interface */}
@@ -637,6 +642,8 @@ export default function ProfilePage() {
                     </p>
                   </div>
                 )}
+              </div>
+                </div>
               </div>
             </div>
           </div>
