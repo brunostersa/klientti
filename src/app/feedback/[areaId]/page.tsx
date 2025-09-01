@@ -68,7 +68,7 @@ export default function FeedbackPage() {
         createdAt: new Date(),
       };
 
-              await addDoc(collection(db, 'feedbacks'), feedbackData);
+      await addDoc(collection(db, 'feedbacks'), feedbackData);
       
       setSubmitted(true);
     } catch (error) {
@@ -81,7 +81,7 @@ export default function FeedbackPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-primary">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-600">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
           <p className="text-white text-lg">Carregando...</p>
@@ -92,28 +92,52 @@ export default function FeedbackPage() {
 
   if (submitted) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-primary">
-        <div className="text-center max-w-md mx-auto p-8">
-          <div className="mb-8">
-            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-accent-color bg-opacity-20 mb-6">
-              <svg className="h-10 w-10 text-accent-color" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-              </svg>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-2xl mx-auto">
+          {/* Card Principal */}
+          <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+            {/* Header do Card */}
+            <div className="bg-gradient-to-r from-green-500 via-emerald-500 to-teal-500 px-8 py-12 text-center">
+              {/* Ícone de Sucesso */}
+              <div className="mb-6">
+                <div className="mx-auto w-20 h-20 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mb-4">
+                  <svg className="h-12 w-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="3" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                </div>
+              </div>
+              
+              {/* Título */}
+              <h1 className="text-3xl font-bold text-white mb-3">
+                Obrigado! 🎉
+              </h1>
+              
+              {/* Mensagens */}
+              <p className="text-white text-lg mb-2">
+                Seu feedback foi enviado com sucesso!
+              </p>
+              <p className="text-white/90">
+                Sua opinião é muito importante para melhorarmos nossos serviços.
+              </p>
             </div>
-            <h1 className="text-3xl font-bold text-white mb-4">
-              Obrigado! 🎉
-            </h1>
-            <p className="text-white text-lg mb-6">
-              Seu feedback foi enviado com sucesso!
-            </p>
-            <p className="text-white/90">
-              Sua opinião é muito importante para melhorarmos nossos serviços.
-            </p>
+
+            {/* Conteúdo do Card */}
+            <div className="p-8 text-center">
+              <div className="bg-green-50 rounded-xl p-6 border border-green-100">
+                <p className="text-green-800 font-medium">
+                  ✅ Você pode fechar esta página agora.
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="bg-card rounded-lg p-6 shadow-sm">
-            <p className="text-sm text-secondary">
-              Você pode fechar esta página agora.
-            </p>
+
+          {/* Tag flutuante "Criado com Klientti" */}
+          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+            <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl rounded-b-lg px-6 py-3 shadow-xl border-2 border-blue-200/50 hover:border-blue-300/70 transition-all duration-300">
+              <p className="text-sm text-gray-700 font-medium">
+                Criado com <a href="https://klientti.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Klientti</a>
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -121,49 +145,56 @@ export default function FeedbackPage() {
   }
 
   return (
-    <div className="min-h-screen bg-primary py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-lg mx-auto">
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
-            <span className="text-white font-bold text-3xl">K</span>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-2xl mx-auto">
+        {/* Card Principal */}
+        <div className="bg-white rounded-3xl shadow-2xl border border-gray-100 overflow-hidden">
+          {/* Header do Card */}
+          <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-8 py-8 text-center">
+            {/* Logo da Empresa */}
+            <div className="mb-4">
+              <div className="mx-auto w-12 h-12 bg-white/20 backdrop-blur-sm rounded-xl flex items-center justify-center mb-3">
+                <span className="text-white font-bold text-xl" style={{ color: 'white' }}>
+                  {userProfile?.company?.charAt(0) || 'K'}
+                </span>
+              </div>
+            </div>
+            
+            {/* Nome da Empresa */}
+            <h1 className="text-2xl font-bold text-white mb-2" style={{ color: 'white' }}>
+              {userProfile?.company || 'Klientti'}
+            </h1>
+            
+            {/* Nome da Área */}
+            {areaData?.name && (
+              <div className="bg-white/20 backdrop-blur-sm rounded-lg px-3 py-1.5 inline-block">
+                <h2 className="text-sm font-semibold text-white" style={{ color: 'white' }}>
+                  📍 {areaData.name}
+                </h2>
+              </div>
+            )}
           </div>
-          
-          {/* Nome da Empresa */}
-          {userProfile?.company && (
-            <div className="mb-4">
-              <h2 className="text-2xl font-bold text-white mb-1">
-                {userProfile.company}
-              </h2>
-              <div className="w-16 h-0.5 bg-white/30 mx-auto"></div>
-            </div>
-          )}
-          
-          {/* Nome da Área */}
-          {areaData?.name && (
-            <div className="mb-4">
-              <h3 className="text-xl font-semibold text-white/90 mb-2">
-                Área: {areaData.name}
+
+          {/* Conteúdo do Card */}
+          <div className="p-8">
+            <div className="text-center mb-8">
+              <h3 className="text-2xl font-bold text-gray-800 mb-2">
+                Avalie sua experiência
               </h3>
-              {areaData.description && (
-                <p className="text-white/70 text-sm max-w-md mx-auto">
-                  {areaData.description}
-                </p>
-              )}
+              <p className="text-gray-600">
+                Sua opinião é muito importante para melhorarmos nossos serviços
+              </p>
             </div>
-          )}
-          
 
-        </div>
-
-        {/* Form */}
-        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20">
-          <form onSubmit={handleSubmit} className="space-y-8">
-            {/* Rating */}
-            <div>
+            <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Rating Card */}
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-100 shadow-sm">
               <label className="block text-lg font-semibold text-gray-800 mb-6 text-center">
-                ⭐ Como você avalia sua experiência? *
+                ⭐ Como você avalia sua experiência geral? *
               </label>
+              <p className="text-sm text-gray-600 text-center mb-6">
+                Considere o atendimento recebido, qualidade do serviço e sua experiência geral
+              </p>
               <div className="flex justify-center space-x-4">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
@@ -183,7 +214,7 @@ export default function FeedbackPage() {
               <div className="text-center mt-4">
                 <p className="text-lg font-medium text-gray-700">
                   {rating > 0 ? (
-                    <span className="text-yellow-600">
+                    <span className="text-yellow-600 font-semibold">
                       {rating} estrela{rating > 1 ? 's' : ''} - {
                         rating === 1 ? 'Péssimo' :
                         rating === 2 ? 'Ruim' :
@@ -198,8 +229,8 @@ export default function FeedbackPage() {
               </div>
             </div>
 
-            {/* Comment */}
-            <div>
+            {/* Comment Card */}
+            <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-xl p-6 border border-purple-100 shadow-sm">
               <label htmlFor="comment" className="block text-lg font-semibold text-gray-800 mb-4">
                 💭 Comentário (opcional)
               </label>
@@ -208,7 +239,7 @@ export default function FeedbackPage() {
                 rows={4}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none text-gray-900 placeholder-gray-500 text-lg shadow-sm hover:shadow-md"
+                className="w-full px-6 py-4 bg-white/80 border-2 border-purple-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition-all duration-200 resize-none text-gray-900 placeholder-gray-500 text-lg shadow-sm hover:shadow-md"
                 placeholder="Conte-nos mais sobre sua experiência... O que podemos melhorar?"
               />
             </div>
@@ -233,28 +264,28 @@ export default function FeedbackPage() {
             <button
               type="submit"
               disabled={submitting || rating === 0}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 py-5 px-8 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
-              style={{ color: 'white' }}
+              className="w-full bg-gradient-to-r from-green-500 to-emerald-600 py-5 px-8 rounded-xl hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none feedback-submit-btn"
             >
               {submitting ? (
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center text-white">
                   <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
-                  Enviando...
+                  <span className="text-white">Enviando...</span>
                 </div>
               ) : (
-                <div className="flex items-center justify-center">
+                <div className="flex items-center justify-center text-white">
                   <span>🚀</span>
-                  <span className="ml-2">Enviar Feedback</span>
+                  <span className="ml-2 text-white">Enviar Feedback</span>
                 </div>
               )}
             </button>
-          </form>
+            </form>
+          </div>
         </div>
 
         {/* Tag flutuante "Criado com Klientti" */}
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-          <div className="bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg border border-white/20">
-            <p className="text-sm text-gray-600 font-medium">
+          <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl rounded-b-lg px-6 py-3 shadow-xl border-2 border-blue-200/50 hover:border-blue-300/70 transition-all duration-300">
+            <p className="text-sm text-gray-700 font-medium">
               Criado com <a href="https://klientti.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Klientti</a>
             </p>
           </div>

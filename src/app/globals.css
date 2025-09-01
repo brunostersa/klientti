@@ -416,6 +416,15 @@ a:hover {
   box-shadow: 0 0 0 2px var(--border-focus);
 }
 
+/* Forçar cor branca no botão de feedback */
+.feedback-submit-btn {
+  color: white !important;
+}
+
+.feedback-submit-btn * {
+  color: white !important;
+}
+
 .sidebar-item:active {
   transform: translateX(4px) scale(0.98);
 }
