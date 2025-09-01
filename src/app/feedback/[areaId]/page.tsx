@@ -16,7 +16,6 @@ export default function FeedbackPage() {
   
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
-  const [isAnonymous, setIsAnonymous] = useState(true);
 
   useEffect(() => {
     // Teste de conectividade com Firestore
@@ -44,7 +43,7 @@ export default function FeedbackPage() {
         areaId: areaId,
         rating,
         comment: comment.trim(),
-        isAnonymous,
+        isAnonymous: true,
         createdAt: new Date(),
       };
 
@@ -147,19 +146,7 @@ export default function FeedbackPage() {
               />
             </div>
 
-            {/* Anonymous */}
-            <div className="flex items-center">
-              <input
-                id="anonymous"
-                type="checkbox"
-                checked={isAnonymous}
-                onChange={(e) => setIsAnonymous(e.target.checked)}
-                className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-              />
-              <label htmlFor="anonymous" className="ml-3 block text-sm text-gray-700">
-                Enviar feedback anonimamente
-              </label>
-            </div>
+
 
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
@@ -193,31 +180,7 @@ export default function FeedbackPage() {
           </form>
         </div>
 
-        {/* Footer */}
-        <div className="text-center mt-8">
-          <div className="bg-white rounded-lg p-6 shadow-sm">
-            <div className="grid grid-cols-1 gap-4 text-sm text-gray-600">
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>Feedback 100% anônimo</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>Processo rápido e seguro</span>
-              </div>
-              <div className="flex items-center justify-center space-x-2">
-                <svg className="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>Sua opinião é importante</span>
-              </div>
-            </div>
-          </div>
-        </div>
+
       </div>
     </div>
   );
