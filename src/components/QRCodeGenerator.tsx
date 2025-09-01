@@ -214,7 +214,7 @@ export default function QRCodeGenerator({ areaId, areaName, size = 120, userProf
       doc.setTextColor(100, 100, 100);
       doc.setFontSize(8);
       doc.setFont('helvetica', 'normal');
-      doc.text('Gerado pelo Pesquisou', pageWidth / 2, footerY, { align: 'center' });
+      doc.text('Gerado pelo Klientti', pageWidth / 2, footerY, { align: 'center' });
       doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, pageWidth / 2, footerY + 5, { align: 'center' });
       
       doc.save(`feedback-${areaName}-${new Date().toISOString().split('T')[0]}.pdf`);

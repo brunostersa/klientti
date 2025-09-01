@@ -160,7 +160,7 @@ export default function UpgradePage() {
     switch (currentPlan) {
       case 'free':
         return {
-          title: '🚀 Desbloqueie todo o potencial do Pesquisou',
+          title: '🚀 Desbloqueie todo o potencial do Klientti',
           subtitle: 'Você está usando apenas 20% das funcionalidades disponíveis',
           cta: 'Faça upgrade agora e transforme seu negócio'
         };
@@ -178,7 +178,7 @@ export default function UpgradePage() {
         };
       default:
         return {
-          title: '🚀 Desbloqueie todo o potencial do Pesquisou',
+          title: '🚀 Desbloqueie todo o potencial do Klientti',
           subtitle: 'Você está usando apenas 20% das funcionalidades disponíveis',
           cta: 'Faça upgrade agora e transforme seu negócio'
         };

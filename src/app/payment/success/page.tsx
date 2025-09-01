@@ -109,7 +109,7 @@ function PaymentSuccessContent() {
             </h1>
 
             <p className="text-xl text-theme-inverse mb-8">
-              Seu plano foi ativado com sucesso. Bem-vindo ao Pesquisou!
+              Seu plano foi ativado com sucesso. Bem-vindo ao Klientti!
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">

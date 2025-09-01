@@ -95,10 +95,10 @@ export default function FeedbackPage() {
         {/* Header */}
         <div className="text-center mb-8">
           <div className="mx-auto w-16 h-16 bg-secondary-color rounded-xl flex items-center justify-center mb-4">
-            <span className="text-inverse font-bold text-2xl">P</span>
+            <span className="text-inverse font-bold text-2xl">K</span>
           </div>
           <h1 className="text-3xl font-bold text-white mb-2">
-            Pesquisou
+            Klientti
           </h1>
           <p className="text-white/90 text-lg">
             Deixe seu feedback sobre esta área

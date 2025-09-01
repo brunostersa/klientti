@@ -164,9 +164,9 @@ export default function AreaDetailsPage() {
             <div className="flex justify-between items-center py-4">
               <div className="flex items-center">
                 <div className="w-8 h-8 bg-secondary-color rounded-lg flex items-center justify-center mr-4">
-                  <span className="text-inverse font-bold text-sm">P</span>
+                  <span className="text-inverse font-bold text-sm">K</span>
                 </div>
-                <h1 className="text-2xl font-bold text-primary">Pesquisou</h1>
+                <h1 className="text-2xl font-bold text-primary">Klientti</h1>
               </div>
             </div>
           </div>

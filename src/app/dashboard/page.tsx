@@ -959,7 +959,7 @@ export default function MeuPainelPage() {
       {showTutorial && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-6 max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Bem-vindo ao Pesquisou! 🎉</h3>
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Bem-vindo ao Klientti! 🎉</h3>
             <div className="space-y-4 text-sm text-gray-600">
               <p>1. <strong>Crie áreas</strong> da sua empresa (ex: Recepção, Caixa)</p>
               <p>2. <strong>Gere QR Codes</strong> para cada área automaticamente</p>
