@@ -130,11 +130,7 @@ export default function FeedbackPage() {
 
             {/* Conteúdo do Card */}
             <div className="p-8 text-center">
-              <div className="bg-green-50 rounded-xl p-6 border border-green-100">
-                <p className="text-green-800 font-medium">
-                  ✅ Você pode fechar esta página agora.
-                </p>
-              </div>
+
 
               {/* Debug info - remover depois */}
               <div className="mt-4 p-2 bg-gray-100 text-xs text-gray-600">
