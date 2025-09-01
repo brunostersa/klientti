@@ -425,6 +425,23 @@ a:hover {
   color: white !important;
 }
 
+/* Forçar cor branca no botão do Google Maps */
+.google-maps-btn {
+  color: white !important;
+}
+
+.google-maps-btn * {
+  color: white !important;
+}
+
+.google-maps-btn:hover {
+  color: white !important;
+}
+
+.google-maps-btn:hover * {
+  color: white !important;
+}
+
 .sidebar-item:active {
   transform: translateX(4px) scale(0.98);
 }
