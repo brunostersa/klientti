@@ -104,41 +104,55 @@ export default function QRCodeGenerator({ areaId, areaName, size = 120, userProf
       const pageHeight = doc.internal.pageSize.getHeight();
       const margin = 20;
 
-      // ===== CABEÇALHO MODERNO =====
-      doc.setFillColor(59, 130, 246);
-      doc.rect(0, 0, pageWidth, 40, 'F');
-      
-      // Título principal
-      doc.setTextColor(255, 255, 255);
-      doc.setFontSize(24);
-      doc.setFont('helvetica', 'bold');
-      doc.text('Sua Opinião é Valiosa!', pageWidth / 2, 25, { align: 'center' });
+      // ===== CABEÇALHO CLEAN E PROFISSIONAL =====
+      // Fundo branco limpo
+      doc.setFillColor(255, 255, 255);
+      doc.rect(0, 0, pageWidth, pageHeight, 'F');
 
-      // ===== INFORMAÇÕES BÁSICAS =====
-      const infoY = 60;
+      // Logo da empresa (círculo minimalista) - centralizado
+      const logoSize = 8;
+      const logoY = 15;
+      doc.setFillColor(37, 99, 235);
+      doc.circle(pageWidth / 2, logoY + logoSize/2, logoSize/2, 'F');
+      
+      // Inicial da empresa
+      doc.setTextColor(255, 255, 255);
+      doc.setFontSize(6);
+      doc.setFont('helvetica', 'bold');
+      const companyInitial = userProfile?.company?.charAt(0) || 'K';
+      doc.text(companyInitial, pageWidth / 2, logoY + logoSize/2 + 0.5, { align: 'center' });
+
+      // Nome da empresa - centralizado
+      doc.setTextColor(30, 30, 30);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text(userProfile?.company || 'Klientti', pageWidth / 2, logoY + logoSize + 8, { align: 'center' });
+
+      // Título principal - Copy convidativo
       doc.setTextColor(30, 30, 30);
       doc.setFontSize(16);
       doc.setFont('helvetica', 'bold');
-      doc.text('Área:', margin, infoY);
-      doc.setFont('helvetica', 'normal');
-      doc.text(areaName, margin + 20, infoY);
+      doc.text('Avalie nossa qualidade', pageWidth / 2, 40, { align: 'center' });
       
-      if (userProfile?.company) {
-        doc.setFont('helvetica', 'bold');
-        doc.text('Empresa:', margin, infoY + 10);
-        doc.setFont('helvetica', 'normal');
-        doc.text(userProfile.company, margin + 25, infoY + 10);
-      }
+      // Subtítulo - CTA claro
+      doc.setFontSize(11);
+      doc.setFont('helvetica', 'normal');
+      doc.setTextColor(100, 100, 100);
+      doc.text('Sua opinião nos ajuda a melhorar', pageWidth / 2, 47, { align: 'center' });
 
-      // ===== QR CODE CENTRAL =====
-      const qrSize = 80;
+      // ===== QR CODE CENTRAL - DESIGN MINIMALISTA =====
+      const qrSize = 78; // Aumentado em 30% (60 * 1.3)
       const qrX = (pageWidth - qrSize) / 2;
-      const qrY = infoY + (userProfile?.company ? 30 : 20);
+      const qrY = 60;
 
-      // Borda moderna do QR Code
-      doc.setDrawColor(59, 130, 246);
-      doc.setLineWidth(2);
-      doc.rect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10);
+      // Fundo sutil do QR Code
+      doc.setFillColor(248, 250, 252);
+      doc.rect(qrX - 10, qrY - 10, qrSize + 20, qrSize + 20, 'F');
+      
+      // Borda sutil
+      doc.setDrawColor(229, 231, 235);
+      doc.setLineWidth(0.5);
+      doc.rect(qrX - 10, qrY - 10, qrSize + 20, qrSize + 20);
 
       // Gerar QR Code como imagem
       try {
@@ -182,40 +196,65 @@ export default function QRCodeGenerator({ areaId, areaName, size = 120, userProf
         doc.setFillColor(240, 240, 240);
         doc.rect(qrX, qrY, qrSize, qrSize, 'F');
         doc.setTextColor(100, 100, 100);
-        doc.setFontSize(12);
+        doc.setFontSize(10);
         doc.text('QR Code', qrX + qrSize/2, qrY + qrSize/2, { align: 'center' });
       }
 
-      // ===== INSTRUÇÕES MODERNAS =====
-      const instructionsY = qrY + qrSize + 20;
+      // ===== SEÇÃO DE INSTRUÇÕES CLEAN =====
+      const instructionsY = qrY + qrSize + 25;
+      
+      // Título das instruções - Copy convidativo
       doc.setTextColor(30, 30, 30);
       doc.setFontSize(14);
       doc.setFont('helvetica', 'bold');
-      doc.text('Como Participar:', pageWidth / 2, instructionsY, { align: 'center' });
+      doc.text('Como avaliar:', pageWidth / 2, instructionsY, { align: 'center' });
       
+      // Instruções simples e diretas
       const steps = [
-        '1. Abra a câmera do seu smartphone',
-        '2. Aponte para o QR Code acima',
-        '3. Toque na notificação que aparecer',
-        '4. Preencha o formulário de feedback'
+        '1. Abra a câmera do seu celular',
+        '2. Aponte para o código acima',
+        '3. Toque na notificação',
+        '4. Avalie em poucos segundos'
       ];
       
       doc.setFontSize(10);
       doc.setFont('helvetica', 'normal');
-      doc.setTextColor(60, 60, 60);
+      doc.setTextColor(80, 80, 80);
       
       steps.forEach((step, index) => {
-        const stepY = instructionsY + 10 + (index * 6);
+        const stepY = instructionsY + 8 + (index * 5);
         doc.text(step, pageWidth / 2, stepY, { align: 'center' });
       });
 
-      // ===== RODAPÉ MODERNO =====
-      const footerY = pageHeight - 20;
+      // ===== CTA PRINCIPAL =====
+      const ctaY = instructionsY + 35;
+      doc.setTextColor(37, 99, 235);
+      doc.setFontSize(12);
+      doc.setFont('helvetica', 'bold');
+      doc.text('É rápido e anônimo!', pageWidth / 2, ctaY, { align: 'center' });
+      
+      // Benefício adicional
       doc.setTextColor(100, 100, 100);
-      doc.setFontSize(8);
+      doc.setFontSize(9);
       doc.setFont('helvetica', 'normal');
-      doc.text('Gerado pelo Klientti', pageWidth / 2, footerY, { align: 'center' });
-      doc.text(`Data: ${new Date().toLocaleDateString('pt-BR')}`, pageWidth / 2, footerY + 5, { align: 'center' });
+      doc.text('Sua avaliação nos ajuda a oferecer um serviço ainda melhor', pageWidth / 2, ctaY + 6, { align: 'center' });
+
+      // ===== RODAPÉ MINIMALISTA =====
+      const footerY = pageHeight - 15;
+      
+      // Logo Klientti minimalista
+      doc.setFillColor(37, 99, 235);
+      doc.circle(pageWidth / 2, footerY, 2, 'F');
+      doc.setTextColor(37, 99, 235);
+      doc.setFontSize(6);
+      doc.setFont('helvetica', 'bold');
+      doc.text('K', pageWidth / 2, footerY + 0.5, { align: 'center' });
+      
+      // Texto do rodapé discreto
+      doc.setTextColor(150, 150, 150);
+      doc.setFontSize(7);
+      doc.setFont('helvetica', 'normal');
+      doc.text('Criado com Klientti', pageWidth / 2, footerY + 5, { align: 'center' });
       
       doc.save(`feedback-${areaName}-${new Date().toISOString().split('T')[0]}.pdf`);
       
