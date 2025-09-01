@@ -86,7 +86,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
 
       {/* Sidebar */}
       <div className={`
-        fixed top-0 left-0 h-full w-80 sidebar-theme border-r border-theme-secondary shadow-theme-lg z-50 transform transition-transform duration-300 ease-in-out flex flex-col
+        fixed top-0 left-0 h-full w-80 sidebar-theme border-r border-theme-secondary shadow-theme-lg z-50 transform transition-transform duration-300 ease-in-out flex flex-col overflow-hidden
         ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
         {/* Logo */}
@@ -98,7 +98,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
         </div>
 
         {/* Menu Items */}
-        <nav className="flex-1 p-4 space-y-2 overflow-y-auto scrollbar-theme">
+        <nav className="flex-1 p-4 space-y-2 overflow-y-auto overflow-x-hidden scrollbar-theme">
           {filteredMenuItems.map((item) => (
             <button
               key={item.id}

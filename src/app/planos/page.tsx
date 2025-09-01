@@ -7,7 +7,7 @@ import { auth, db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import Card, { CardHeader, CardContent, CardAction } from '@/components/Card';
 import Sidebar from '@/components/Sidebar';
-
+// import { loadStripe } from '@stripe/stripe-js';
 import { useActiveTab } from '@/hooks/useActiveTab';
 
 
@@ -102,19 +102,19 @@ export default function UpgradePage() {
       const { sessionId } = await response.json();
       console.log('Sessão de checkout criada:', sessionId);
 
-      // Redirecionar para Stripe Checkout
-      if (typeof window !== 'undefined' && (window as any).Stripe) {
-        const stripe = (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+      // Redirecionar para Stripe Checkout usando script dinâmico
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.onload = async () => {
+        const stripe = (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
         const { error } = await stripe.redirectToCheckout({ sessionId });
         
         if (error) {
           console.error('Erro ao redirecionar para checkout:', error);
           alert('Erro ao redirecionar para checkout. Tente novamente.');
         }
-      } else {
-        // Fallback: redirecionar diretamente
-        window.location.href = `/api/redirect-to-stripe?sessionId=${sessionId}`;
-      }
+      };
+      document.head.appendChild(script);
 
     } catch (error) {
       console.error('Erro ao fazer upgrade:', error);

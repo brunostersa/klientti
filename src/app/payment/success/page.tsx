@@ -68,17 +68,17 @@ function PaymentSuccessContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-primary flex items-center justify-center">
+      <div className="min-h-screen bg-theme-primary flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-border-primary mx-auto mb-4"></div>
+          <p className="text-theme-secondary">Carregando...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-primary">
+    <div className="min-h-screen bg-theme-primary">
       <Sidebar
         activeTab="planos"
         onTabChange={(tab) => {
@@ -104,24 +104,24 @@ function PaymentSuccessContent() {
               </svg>
             </div>
 
-            <h1 className="text-3xl font-bold text-white mb-4">
+            <h1 className="text-3xl font-bold text-theme-inverse mb-4">
               🎉 Pagamento Confirmado!
             </h1>
 
-            <p className="text-xl text-white mb-8">
+            <p className="text-xl text-theme-inverse mb-8">
               Seu plano foi ativado com sucesso. Bem-vindo ao Pesquisou!
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
                 onClick={() => router.push('/dashboard')}
-                className="px-8 py-3 bg-secondary-color text-white rounded-lg font-medium hover:bg-secondary-color/90 transition-colors"
+                className="px-8 py-3 bg-brand-secondary text-theme-inverse rounded-lg font-medium hover:bg-brand-secondary-hover transition-colors"
               >
                 🏠 Ir para Meu Painel
               </button>
               <button
                 onClick={() => router.push('/areas')}
-                className="px-8 py-3 bg-white text-gray-900 rounded-lg font-medium hover:bg-gray-100 transition-colors"
+                className="px-8 py-3 bg-theme-inverse text-theme-primary rounded-lg font-medium hover:bg-theme-secondary transition-colors"
               >
                 📍 Criar Primeira Área
               </button>
@@ -136,10 +136,10 @@ function PaymentSuccessContent() {
 export default function PaymentSuccessPage() {
   return (
     <Suspense fallback={
-      <div className="min-h-screen bg-primary flex items-center justify-center">
+      <div className="min-h-screen bg-theme-primary flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Carregando...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-border-primary mx-auto mb-4"></div>
+          <p className="text-theme-secondary">Carregando...</p>
         </div>
       </div>
     }>

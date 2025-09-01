@@ -8,6 +8,7 @@ import { auth, db } from '@/lib/firebase';
 import Sidebar from '@/components/Sidebar';
 import Card, { CardHeader, CardContent } from '@/components/Card';
 import { useActiveTab } from '@/hooks/useActiveTab';
+// import { loadStripe } from '@stripe/stripe-js';
 interface SubscriptionData {
   plan: 'free' | 'starter' | 'professional';
   subscriptionStatus?: string;
@@ -94,19 +95,19 @@ export default function SubscriptionPage() {
       const { sessionId } = await response.json();
       console.log('Sessão de checkout criada:', sessionId);
 
-      // Redirecionar para Stripe Checkout
-      if (typeof window !== 'undefined' && (window as any).Stripe) {
-        const stripe = (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY);
+      // Redirecionar para Stripe Checkout usando script dinâmico
+      const script = document.createElement('script');
+      script.src = 'https://js.stripe.com/v3/';
+      script.onload = async () => {
+        const stripe = (window as any).Stripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
         const { error } = await stripe.redirectToCheckout({ sessionId });
         
         if (error) {
           console.error('Erro ao redirecionar para checkout:', error);
           alert('Erro ao redirecionar para checkout. Tente novamente.');
         }
-      } else {
-        // Fallback: redirecionar diretamente
-        window.location.href = `/api/redirect-to-stripe?sessionId=${sessionId}`;
-      }
+      };
+      document.head.appendChild(script);
 
     } catch (error) {
       console.error('Erro ao fazer upgrade:', error);
@@ -379,31 +380,31 @@ export default function SubscriptionPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <div className="bg-theme-secondary p-4 rounded-lg border border-theme-primary shadow-theme-sm">
                   <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                    <div className="w-8 h-8 bg-brand-primary rounded-full flex items-center justify-center text-theme-inverse text-sm font-bold mr-3">
                       M
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900 dark:text-white text-sm">Maria Silva</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Restaurante Sabor & Arte</p>
+                      <p className="font-semibold text-theme-primary text-sm">Maria Silva</p>
+                      <p className="text-xs text-theme-secondary">Restaurante Sabor & Arte</p>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-theme-secondary">
                     "O upgrade para Professional transformou nosso atendimento. Agora temos insights valiosos sobre nossos clientes."
                   </p>
                 </div>
-                <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
+                <div className="bg-theme-secondary p-4 rounded-lg border border-theme-primary shadow-theme-sm">
                   <div className="flex items-center mb-3">
-                    <div className="w-8 h-8 bg-green-600 rounded-full flex items-center justify-center text-white text-sm font-bold mr-3">
+                    <div className="w-8 h-8 bg-theme-success rounded-full flex items-center justify-center text-theme-inverse text-sm font-bold mr-3">
                       J
                     </div>
                     <div>
-                      <p className="font-semibold text-gray-900 dark:text-white text-sm">João Santos</p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400">Farmácia Popular</p>
+                      <p className="font-semibold text-theme-primary text-sm">João Santos</p>
+                      <p className="text-xs text-theme-secondary">Farmácia Popular</p>
                     </div>
                   </div>
-                  <p className="text-sm text-gray-600 dark:text-gray-400">
+                  <p className="text-sm text-theme-secondary">
                     "Com o plano Starter, conseguimos expandir para 5 áreas e melhorar significativamente nosso serviço."
                   </p>
                 </div>
@@ -412,19 +413,19 @@ export default function SubscriptionPage() {
           </Card>
 
           {/* Cancellation Info - Simplified */}
-          <div className="mt-8 pt-6 border-t border-gray-200 dark:border-gray-700">
+          <div className="mt-8 pt-6 border-t border-theme-primary">
             <div className="text-center">
-              <h3 className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">
+              <h3 className="text-sm font-medium text-theme-secondary mb-2">
                 Precisa cancelar sua assinatura?
               </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-500 mb-3">
+              <p className="text-xs text-theme-muted mb-3">
                 Envie um email para{' '}
-                <a href="mailto:suporte@pesquisou.com.br" className="text-blue-600 dark:text-blue-400 hover:underline">
+                <a href="mailto:suporte@pesquisou.com.br" className="text-brand-primary hover:underline">
                   suporte@pesquisou.com.br
                 </a>{' '}
                 com o assunto &quot;Cancelamento de Assinatura&quot;
               </p>
-              <p className="text-xs text-gray-400 dark:text-gray-500">
+              <p className="text-xs text-theme-muted">
                 Inclua seu nome, email da conta e data desejada para o cancelamento
               </p>
             </div>
