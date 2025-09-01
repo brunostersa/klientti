@@ -337,7 +337,7 @@ export default function ProfilePage() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Informações Pessoais */}
-                <div className="border-b border-gray-100 dark:border-gray-600 pb-6">
+                <div className="border-b border-gray-50 dark:border-gray-500 pb-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informações Pessoais</h3>
                   
                   {/* Nota sobre campos obrigatórios */}
@@ -481,7 +481,7 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Seção do Logo da Empresa */}
-                <div className="border-t border-gray-100 dark:border-gray-600 pt-6">
+                <div className="border-t border-gray-50 dark:border-gray-500 pt-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Logo da Empresa</h3>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4">
@@ -506,7 +506,7 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Ações */}
-                <div className="border-t border-gray-100 dark:border-gray-600 pt-6">
+                <div className="border-t border-gray-50 dark:border-gray-500 pt-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Ações</h3>
                   
                   <div className="flex gap-4">
