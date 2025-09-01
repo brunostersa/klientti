@@ -337,7 +337,7 @@ export default function ProfilePage() {
 
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Informações Pessoais */}
-                <div className="border-b border-gray-200 dark:border-gray-700 pb-6">
+                <div className="border-b border-gray-100 dark:border-gray-600 pb-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Informações Pessoais</h3>
                   
                   {/* Nota sobre campos obrigatórios */}
@@ -481,7 +481,7 @@ export default function ProfilePage() {
                 </div>
 
                 {/* Seção do Logo da Empresa */}
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <div className="border-t border-gray-100 dark:border-gray-600 pt-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Logo da Empresa</h3>
                   <div className="space-y-4">
                     <div className="flex items-center space-x-4">
@@ -505,114 +505,8 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
-                {/* Preferências */}
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Preferências</h3>
-                  
-                  <div className="space-y-6">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Tema da Interface
-                      </label>
-                      <div className="flex items-center space-x-4">
-                        {/* Toggle de Tema Estilo Google */}
-                        <div className="flex items-center space-x-3">
-                          {/* Ícone Sol */}
-                          <div className={`flex items-center space-x-2 ${theme === 'light' ? 'text-yellow-500' : 'text-gray-400'}`}>
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
-                            </svg>
-                            <span className="text-sm font-medium">Claro</span>
-                          </div>
-
-                          {/* Toggle Switch */}
-                          <button
-                            type="button"
-                            onClick={() => {
-                              const newTheme = theme === 'light' ? 'dark' : 'light';
-                              handleThemeChange(newTheme);
-                            }}
-                            className={`
-                              relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                              ${theme === 'dark' ? 'bg-blue-600' : 'bg-gray-300'}
-                            `}
-                          >
-                            <span
-                              className={`
-                                inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 ease-in-out shadow-md
-                                ${theme === 'dark' ? 'translate-x-6' : 'translate-x-1'}
-                              `}
-                            />
-                          </button>
-
-                          {/* Ícone Lua */}
-                          <div className={`flex items-center space-x-2 ${theme === 'dark' ? 'text-blue-500' : 'text-gray-400'}`}>
-                            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                              <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                            </svg>
-                            <span className="text-sm font-medium">Escuro</span>
-                          </div>
-                        </div>
-
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          Clique no toggle para alternar entre modo claro e escuro
-                        </span>
-                      </div>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                        Sua preferência será salva automaticamente no seu perfil
-                      </p>
-                    </div>
-
-                    {/* Toggle de Modo Admin */}
-                    {(userProfile?.role === 'admin' || userProfile?.role === 'super_admin') && (
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                          Modo de Visualização
-                        </label>
-                        <div className="flex items-center space-x-4">
-                          <button
-                            type="button"
-                            onClick={handleToggleAdminMode}
-                            className={`
-                              relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
-                              ${isAdminMode 
-                                ? 'bg-blue-600' 
-                                : 'bg-gray-300'
-                              }
-                            `}
-                          >
-                            <span
-                              className={`
-                                inline-block h-4 w-4 transform rounded-full bg-white transition-transform
-                                ${isAdminMode ? 'translate-x-6' : 'translate-x-1'}
-                              `}
-                            />
-                          </button>
-                          <div className="flex flex-col">
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
-                              {isAdminMode ? 'Modo Admin' : 'Modo Usuário'}
-                            </span>
-                            <span className="text-xs text-gray-600 dark:text-gray-400">
-                              {isAdminMode 
-                                ? (userProfile?.role === 'super_admin' 
-                                    ? 'Apenas funcionalidades administrativas (Escritório + Usuários Admin)' 
-                                    : 'Menus completos com funcionalidades administrativas'
-                                  )
-                                : 'Menus simplificados para usuários comuns'
-                              }
-                            </span>
-                          </div>
-                        </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
-                          Alterna entre visualização de admin e usuário normal no sistema
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
                 {/* Ações */}
-                <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+                <div className="border-t border-gray-100 dark:border-gray-600 pt-6">
                   <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Ações</h3>
                   
                   <div className="flex gap-4">
@@ -634,6 +528,116 @@ export default function ProfilePage() {
                   </div>
                 </div>
               </form>
+            </div>
+          </div>
+
+          {/* Card de Preferências */}
+          <div className="mt-6 bg-theme-card rounded-lg shadow-theme-sm border border-theme-primary">
+            <div className="p-6">
+              <h2 className="text-2xl font-bold text-theme-primary mb-2">Preferências</h2>
+              <p className="text-theme-secondary mb-6">Configure suas preferências de interface</p>
+
+              <div className="space-y-6">
+                {/* Tema da Interface */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                    Tema da Interface
+                  </label>
+                  <div className="flex items-center space-x-4">
+                    {/* Toggle de Tema Estilo Google */}
+                    <div className="flex items-center space-x-3">
+                      {/* Ícone Sol */}
+                      <div className={`flex items-center space-x-2 ${theme === 'light' ? 'text-yellow-500' : 'text-gray-400'}`}>
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clipRule="evenodd" />
+                        </svg>
+                        <span className="text-sm font-medium">Claro</span>
+                      </div>
+
+                      {/* Toggle Switch */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const newTheme = theme === 'light' ? 'dark' : 'light';
+                          handleThemeChange(newTheme);
+                        }}
+                        className={`
+                          relative inline-flex h-6 w-11 items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                          ${theme === 'dark' ? 'bg-blue-600' : 'bg-gray-300'}
+                        `}
+                      >
+                        <span
+                          className={`
+                            inline-block h-4 w-4 transform rounded-full bg-white transition-all duration-300 ease-in-out shadow-md
+                            ${theme === 'dark' ? 'translate-x-6' : 'translate-x-1'}
+                          `}
+                        />
+                      </button>
+
+                      {/* Ícone Lua */}
+                      <div className={`flex items-center space-x-2 ${theme === 'dark' ? 'text-blue-500' : 'text-gray-400'}`}>
+                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                          <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                        </svg>
+                        <span className="text-sm font-medium">Escuro</span>
+                      </div>
+                    </div>
+
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      Clique no toggle para alternar entre modo claro e escuro
+                    </span>
+                  </div>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                    Sua preferência será salva automaticamente no seu perfil
+                  </p>
+                </div>
+
+                {/* Toggle de Modo Admin */}
+                {(userProfile?.role === 'admin' || userProfile?.role === 'super_admin') && (
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                      Modo de Visualização
+                    </label>
+                    <div className="flex items-center space-x-4">
+                      <button
+                        type="button"
+                        onClick={handleToggleAdminMode}
+                        className={`
+                          relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                          ${isAdminMode 
+                            ? 'bg-blue-600' 
+                            : 'bg-gray-300'
+                          }
+                        `}
+                      >
+                        <span
+                          className={`
+                            inline-block h-4 w-4 transform rounded-full bg-white transition-transform
+                            ${isAdminMode ? 'translate-x-6' : 'translate-x-1'}
+                          `}
+                        />
+                      </button>
+                      <div className="flex flex-col">
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          {isAdminMode ? 'Modo Admin' : 'Modo Usuário'}
+                        </span>
+                        <span className="text-xs text-gray-600 dark:text-gray-400">
+                          {isAdminMode 
+                            ? (userProfile?.role === 'super_admin' 
+                                ? 'Apenas funcionalidades administrativas (Escritório + Usuários Admin)' 
+                                : 'Menus completos com funcionalidades administrativas'
+                              )
+                            : 'Menus simplificados para usuários comuns'
+                          }
+                        </span>
+                      </div>
+                    </div>
+                    <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                      Alterna entre visualização de admin e usuário normal no sistema
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>

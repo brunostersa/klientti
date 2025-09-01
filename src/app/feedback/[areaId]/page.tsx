@@ -37,8 +37,6 @@ export default function FeedbackPage() {
             const userDoc = await getDoc(doc(db, 'users', area.userId));
             if (userDoc.exists()) {
               const userData = { id: userDoc.id, ...userDoc.data() };
-              console.log('🔍 UserProfile carregado:', userData);
-              console.log('🔍 GoogleMapsUrl:', userData.googleMapsUrl);
               setUserProfile(userData);
             }
           }
@@ -74,8 +72,6 @@ export default function FeedbackPage() {
 
       await addDoc(collection(db, 'feedbacks'), feedbackData);
       
-      console.log('🔍 Rating submetido:', rating);
-      console.log('🔍 UserProfile no submit:', userProfile);
       setSubmittedRating(rating);
       setSubmitted(true);
     } catch (error) {
@@ -132,10 +128,7 @@ export default function FeedbackPage() {
             <div className="p-8 text-center">
 
 
-              {/* Debug info - remover depois */}
-              <div className="mt-4 p-2 bg-gray-100 text-xs text-gray-600">
-                Debug: Rating: {submittedRating}, GoogleMaps: {userProfile?.googleMapsUrl ? 'Sim' : 'Não'}
-              </div>
+
 
               {/* Link do Google Maps para avaliações 4+ estrelas */}
               {submittedRating >= 4 && userProfile?.googleMapsUrl && (
