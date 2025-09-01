@@ -19,6 +19,7 @@ interface UserProfile {
   segment?: string;
   phone?: string;
   logoUrl?: string;
+  googleMapsUrl?: string;
   role?: 'user' | 'admin' | 'super_admin';
   createdAt?: Date;
   updatedAt?: Date;
@@ -40,7 +41,8 @@ export default function ProfilePage() {
     company: '',
     segment: '',
     phone: '',
-    logoUrl: ''
+    logoUrl: '',
+    googleMapsUrl: ''
   });
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string>('');
@@ -73,7 +75,8 @@ export default function ProfilePage() {
           company: data.company || '',
           segment: data.segment || '',
           phone: data.phone ? applyPhoneMask(data.phone) : '',
-          logoUrl: data.logoUrl || ''
+          logoUrl: data.logoUrl || '',
+          googleMapsUrl: data.googleMapsUrl || ''
         });
         setLogoPreview(data.logoUrl || '');
       } else {
@@ -91,7 +94,8 @@ export default function ProfilePage() {
           company: '',
           segment: '',
           phone: '',
-          logoUrl: ''
+          logoUrl: '',
+          googleMapsUrl: ''
         });
         setLogoPreview('');
       }
@@ -150,6 +154,7 @@ export default function ProfilePage() {
         segment: formData.segment,
         phone: removePhoneMask(formData.phone),
         logoUrl: formData.logoUrl,
+        googleMapsUrl: formData.googleMapsUrl,
         updatedAt: new Date()
       };
 
@@ -453,6 +458,24 @@ export default function ProfilePage() {
                         maxLength={15}
                       />
                       {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
+                    </div>
+
+                    <div>
+                      <label htmlFor="googleMapsUrl" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+                        Link do Google Maps
+                      </label>
+                      <input
+                        type="url"
+                        id="googleMapsUrl"
+                        name="googleMapsUrl"
+                        value={formData.googleMapsUrl}
+                        onChange={handleInputChange}
+                        className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent input-theme"
+                        placeholder="https://g.page/r/CTVidR-uGTADEBI/review"
+                      />
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Link para avaliação no Google Maps (opcional)
+                      </p>
                     </div>
                   </div>
                 </div>
