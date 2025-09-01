@@ -380,7 +380,7 @@ export default function ProfilePage() {
                         name="email"
                         value={formData.email}
                         disabled
-                        className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                        className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                         placeholder="Seu e-mail"
                       />
                       <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -498,7 +498,7 @@ export default function ProfilePage() {
                           type="file"
                           accept="image/*"
                           onChange={handleLogoChange}
-                          className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 dark:file:bg-blue-900 dark:file:text-blue-300"
+                          className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:text-sm file:font-medium file:bg-white file:text-gray-700 hover:file:bg-gray-50 dark:file:bg-gray-800 dark:file:text-gray-300 dark:file:border-gray-600"
                         />
                         <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           PNG, JPG até 5MB
