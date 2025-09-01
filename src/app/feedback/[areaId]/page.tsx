@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { addDoc, collection } from 'firebase/firestore';
+import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 
 export default function FeedbackPage() {
@@ -13,23 +13,44 @@ export default function FeedbackPage() {
   const [submitting, setSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
   
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState('');
+  const [areaData, setAreaData] = useState<any>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
-    // Teste de conectividade com Firestore
-    const testFirestoreConnection = async () => {
+    const loadAreaAndUserData = async () => {
       try {
-      
-        // Teste de conectividade concluído
+        setLoading(true);
+        
+        // Buscar dados da área
+        const areaDoc = await getDoc(doc(db, 'areas', areaId));
+        if (areaDoc.exists()) {
+          const area = { id: areaDoc.id, ...areaDoc.data() };
+          setAreaData(area);
+          
+          // Buscar dados do usuário proprietário da área
+          if (area.userId) {
+            const userDoc = await getDoc(doc(db, 'users', area.userId));
+            if (userDoc.exists()) {
+              setUserProfile({ id: userDoc.id, ...userDoc.data() });
+            }
+          }
+        }
       } catch (error) {
-        console.error('❌ Erro na conectividade com Firestore:', error);
+        console.error('❌ Erro ao carregar dados:', error);
+        setError('Erro ao carregar informações da área');
+      } finally {
+        setLoading(false);
       }
     };
     
-    testFirestoreConnection();
-  }, [areaId, params]);
+    if (areaId) {
+      loadAreaAndUserData();
+    }
+  }, [areaId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -57,6 +78,17 @@ export default function FeedbackPage() {
       setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-primary">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mx-auto mb-4"></div>
+          <p className="text-white text-lg">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (submitted) {
     return (
@@ -93,56 +125,98 @@ export default function FeedbackPage() {
       <div className="max-w-lg mx-auto">
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="mx-auto w-16 h-16 bg-secondary-color rounded-xl flex items-center justify-center mb-4">
-            <span className="text-inverse font-bold text-2xl">K</span>
+          <div className="mx-auto w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-600 rounded-2xl flex items-center justify-center mb-6 shadow-lg">
+            <span className="text-white font-bold text-3xl">K</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">
-            Klientti
-          </h1>
-          <p className="text-white/90 text-lg">
-            Deixe seu feedback sobre esta área
-          </p>
+          
+          {/* Nome da Empresa */}
+          {userProfile?.company && (
+            <div className="mb-4">
+              <h2 className="text-2xl font-bold text-white mb-1">
+                {userProfile.company}
+              </h2>
+              <div className="w-16 h-0.5 bg-white/30 mx-auto"></div>
+            </div>
+          )}
+          
+          {/* Nome da Área */}
+          {areaData?.name && (
+            <div className="mb-4">
+              <h3 className="text-xl font-semibold text-white/90 mb-2">
+                Área: {areaData.name}
+              </h3>
+              {areaData.description && (
+                <p className="text-white/70 text-sm max-w-md mx-auto">
+                  {areaData.description}
+                </p>
+              )}
+            </div>
+          )}
+          
+          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
+            <p className="text-white text-lg font-medium">
+              💬 Deixe seu feedback
+            </p>
+            <p className="text-white/80 text-sm mt-1">
+              Sua opinião é muito importante para nós
+            </p>
+          </div>
         </div>
 
         {/* Form */}
-        <div className="bg-card rounded-xl shadow-lg p-8">
+        <div className="bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/20">
           <form onSubmit={handleSubmit} className="space-y-8">
             {/* Rating */}
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-4 text-center">
-                Como você avalia sua experiência? *
+              <label className="block text-lg font-semibold text-gray-800 mb-6 text-center">
+                ⭐ Como você avalia sua experiência? *
               </label>
-              <div className="flex justify-center space-x-3">
+              <div className="flex justify-center space-x-4">
                 {[1, 2, 3, 4, 5].map((star) => (
                   <button
                     key={star}
                     type="button"
                     onClick={() => setRating(star)}
-                    className={`text-4xl transition-all duration-200 transform hover:scale-110 ${
-                      star <= rating ? 'text-yellow-400' : 'text-gray-300'
-                    } hover:text-yellow-400`}
+                    className={`text-5xl transition-all duration-300 transform hover:scale-125 ${
+                      star <= rating 
+                        ? 'text-yellow-400 drop-shadow-lg' 
+                        : 'text-gray-300 hover:text-yellow-300'
+                    }`}
                   >
                     ★
                   </button>
                 ))}
               </div>
-              <p className="text-center text-sm text-gray-500 mt-3">
-                {rating > 0 ? `${rating} estrela${rating > 1 ? 's' : ''}` : 'Selecione uma avaliação'}
-              </p>
+              <div className="text-center mt-4">
+                <p className="text-lg font-medium text-gray-700">
+                  {rating > 0 ? (
+                    <span className="text-yellow-600">
+                      {rating} estrela{rating > 1 ? 's' : ''} - {
+                        rating === 1 ? 'Péssimo' :
+                        rating === 2 ? 'Ruim' :
+                        rating === 3 ? 'Regular' :
+                        rating === 4 ? 'Bom' : 'Excelente'
+                      }
+                    </span>
+                  ) : (
+                    <span className="text-gray-500">Selecione uma avaliação</span>
+                  )}
+                </p>
+              </div>
             </div>
 
             {/* Comment */}
             <div>
-              <label htmlFor="comment" className="block text-sm font-medium text-gray-700 mb-3">
-                Comentário (opcional)
+              <label htmlFor="comment" className="block text-lg font-semibold text-gray-800 mb-4">
+                💭 Comentário (opcional)
               </label>
               <textarea
                 id="comment"
                 rows={4}
                 value={comment}
                 onChange={(e) => setComment(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none text-gray-900 placeholder-gray-500"
-                placeholder="Conte-nos mais sobre sua experiência..."
+                className="w-full px-6 py-4 border-2 border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 resize-none text-gray-900 placeholder-gray-500 text-lg shadow-sm hover:shadow-md"
+                placeholder="Conte-nos mais sobre sua experiência... O que podemos melhorar?"
               />
             </div>
 
@@ -166,15 +240,18 @@ export default function FeedbackPage() {
             <button
               type="submit"
               disabled={submitting || rating === 0}
-              className="w-full bg-indigo-600 text-white py-4 px-6 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors font-medium text-lg"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-5 px-8 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
             >
               {submitting ? (
                 <div className="flex items-center justify-center">
-                  <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white mr-3"></div>
                   Enviando...
                 </div>
               ) : (
-                'Enviar Feedback'
+                <div className="flex items-center justify-center">
+                  <span>🚀</span>
+                  <span className="ml-2">Enviar Feedback</span>
+                </div>
               )}
             </button>
           </form>
