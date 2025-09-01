@@ -153,14 +153,7 @@ export default function FeedbackPage() {
             </div>
           )}
           
-          <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4 border border-white/20">
-            <p className="text-white text-lg font-medium">
-              💬 Deixe seu feedback
-            </p>
-            <p className="text-white/80 text-sm mt-1">
-              Sua opinião é muito importante para nós
-            </p>
-          </div>
+
         </div>
 
         {/* Form */}
@@ -257,6 +250,14 @@ export default function FeedbackPage() {
           </form>
         </div>
 
+        {/* Tag flutuante "Criado com Klientti" */}
+        <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+          <div className="bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg border border-white/20">
+            <p className="text-sm text-gray-600 font-medium">
+              Criado com <span className="text-blue-600 font-bold">Klientti</span>
+            </p>
+          </div>
+        </div>
 
       </div>
     </div>
