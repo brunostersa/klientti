@@ -233,7 +233,7 @@ export default function FeedbackPage() {
             <button
               type="submit"
               disabled={submitting || rating === 0}
-              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-5 px-8 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
+              className="w-full bg-gradient-to-r from-blue-600 to-purple-600 !text-white py-5 px-8 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 font-bold text-xl shadow-lg hover:shadow-xl transform hover:scale-105 disabled:transform-none"
             >
               {submitting ? (
                 <div className="flex items-center justify-center">
@@ -254,7 +254,7 @@ export default function FeedbackPage() {
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg border border-white/20">
             <p className="text-sm text-gray-600 font-medium">
-              Criado com <span className="text-blue-600 font-bold">Klientti</span>
+              Criado com <a href="https://klientti.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Klientti</a>
             </p>
           </div>
         </div>
