@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { addDoc, collection, doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
+import { Area } from '@/types/Area';
 
 export default function FeedbackPage() {
   const params = useParams();
@@ -29,7 +30,7 @@ export default function FeedbackPage() {
         // Buscar dados da área
         const areaDoc = await getDoc(doc(db, 'areas', areaId));
         if (areaDoc.exists()) {
-          const area = { id: areaDoc.id, ...areaDoc.data() };
+          const area = { id: areaDoc.id, ...areaDoc.data() } as Area;
           setAreaData(area);
           
           // Buscar dados do usuário proprietário da área
