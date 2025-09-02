@@ -58,25 +58,31 @@ export default function HomePage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50">
       {/* Navigation */}
-      <nav className="border-b border-slate-200 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+      <nav className="border-b border-slate-200 bg-white/95 backdrop-blur-sm sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+          <div className="flex justify-between items-center h-16 lg:h-20">
+            {/* Logo e Nome */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">K</span>
+              <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg lg:text-xl">K</span>
               </div>
-              <span className="text-xl font-bold text-slate-900">Klientti</span>
+              <span className="text-xl lg:text-2xl font-bold text-slate-900">Klientti</span>
             </div>
-            <div className="flex items-center space-x-4">
+            
+
+            
+            {/* CTAs */}
+            <div className="flex items-center space-x-3 lg:space-x-4">
               <Link 
                 href="/login" 
-                className="text-slate-600 hover:text-slate-900 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                className="text-blue-600 hover:text-blue-700 px-3 py-2 lg:px-4 lg:py-2 rounded-md text-sm font-medium transition-colors hover:bg-blue-50"
               >
                 Entrar
               </Link>
               <Link 
                 href="/planos" 
-                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 lg:px-6 lg:py-3 rounded-lg text-sm lg:text-base font-medium hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                style={{ color: 'white !important' }}
               >
                 Começar Grátis
               </Link>
@@ -91,13 +97,13 @@ export default function HomePage() {
         <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
         <div className="max-w-7xl mx-auto text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-6" style={{ color: 'white !important' }}>
               Transforme 
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-orange-300"> feedback</span>
+              <span className="text-white" style={{ color: 'white !important' }}> feedback</span>
               <br />
               em crescimento real
             </h1>
-            <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+            <p className="text-xl text-white mb-8 leading-relaxed" style={{ color: 'white !important' }}>
               Pare de adivinhar. Com QR codes inteligentes e links de pesquisa, você entende seus clientes em tempo real, 
               melhora seus produtos e cria experiências que fidelizam.
             </p>
@@ -105,10 +111,11 @@ export default function HomePage() {
               <Link 
                 href="/planos" 
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                style={{ color: 'white !important' }}
               >
                 👉 Comece grátis por 14 dias
               </Link>
-              <button className="text-white hover:text-blue-100 px-6 py-4 rounded-xl text-lg font-medium transition-colors flex items-center space-x-2 border-2 border-white/30 hover:border-white/50 hover:bg-white/10 backdrop-blur-sm">
+              <button className="text-white hover:text-blue-100 px-6 py-4 rounded-xl text-lg font-medium transition-colors flex items-center space-x-2 border-2 border-white/50 hover:border-white/80 hover:bg-white/20 backdrop-blur-sm shadow-lg" style={{ color: 'white !important' }}>
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
@@ -170,7 +177,7 @@ export default function HomePage() {
               </div>
             </div>
             
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-100 p-8 rounded-2xl">
+            <div className="bg-white border-2 border-blue-100 p-8 rounded-2xl shadow-lg">
               <h3 className="text-2xl font-bold text-slate-900 mb-6 text-center">
                 ✅ Nossa solução
               </h3>
@@ -288,10 +295,10 @@ export default function HomePage() {
       {/* CTA Section - Opção 1 Forte */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-indigo-600">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6" style={{ color: 'white !important' }}>
             Está pronto para ouvir seus clientes e crescer de verdade?
           </h2>
-          <p className="text-xl text-blue-100 mb-8">
+          <p className="text-xl text-white mb-8" style={{ color: 'white !important' }}>
             Junte-se a centenas de empresas que já estão transformando feedback em resultado.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -301,62 +308,31 @@ export default function HomePage() {
             >
               👉 Começar grátis agora
             </Link>
-            <button className="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-white hover:text-blue-600 transition-colors">
+            <button className="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-white hover:text-blue-600 transition-colors shadow-lg hover:shadow-xl">
               ☎️ Falar com vendas
             </button>
           </div>
-          <p className="text-blue-200 text-sm mt-4">
-            Sem cartão de crédito • 14 dias grátis • Cancelamento a qualquer momento
-          </p>
+
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 text-white py-12 px-4 sm:px-6 lg:px-8">
+      <footer className="bg-white border-t border-slate-200 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">K</span>
-                </div>
-                <span className="text-xl font-bold">Klientti</span>
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-3 mb-6">
+              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
+                <span className="text-white font-bold text-lg">K</span>
               </div>
-              <p className="text-slate-400">
-                Transformando feedback em crescimento através de QR codes impressos e links de pesquisa para empresas de todos os tamanhos.
-              </p>
+              <span className="text-xl font-bold text-slate-900">Klientti</span>
             </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Produto</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">Recursos</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Preços</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Integrações</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Empresa</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">Sobre</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Carreiras</a></li>
-              </ul>
-            </div>
-            
-            <div>
-              <h3 className="font-semibold mb-4">Suporte</h3>
-              <ul className="space-y-2 text-slate-400">
-                <li><a href="#" className="hover:text-white transition-colors">Central de Ajuda</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Contato</a></li>
-                <li><a href="#" className="hover:text-white transition-colors">Status</a></li>
-              </ul>
-            </div>
+            <p className="text-slate-600 max-w-2xl mx-auto">
+              Transformando feedback em crescimento através de QR codes impressos e links de pesquisa para empresas de todos os tamanhos.
+            </p>
           </div>
           
-          <div className="border-t border-slate-800 mt-8 pt-8 text-center text-slate-400">
-            <p>&copy; 2024 Klientti. Todos os direitos reservados.</p>
+          <div className="border-t border-slate-200 mt-8 pt-8 text-center text-slate-500">
+            <p>&copy; Klientti. Todos os direitos reservados.</p>
           </div>
         </div>
       </footer>
