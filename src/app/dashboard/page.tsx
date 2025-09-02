@@ -957,25 +957,55 @@ export default function MeuPainelPage() {
 
       {/* Tutorial Modal */}
       {showTutorial && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-2xl">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Bem-vindo ao Klientti! 🎉</h3>
-            <div className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
-              <p>1. <strong>Crie áreas</strong> da sua empresa (ex: Recepção, Caixa)</p>
-              <p>2. <strong>Gere QR Codes</strong> para cada área automaticamente</p>
-              <p>3. <strong>Compartilhe</strong> os QR Codes com seus clientes</p>
-              <p>4. <strong>Receba feedbacks</strong> anônimos em tempo real</p>
-              <p>5. <strong>Analise</strong> os resultados no meu painel</p>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-gray-200/50 overflow-hidden">
+            {/* Header com gradiente */}
+            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-8 text-center">
+              <div className="mb-4">
+                <div className="mx-auto w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                  <span className="text-3xl">🎉</span>
+                </div>
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-2">Bem-vindo ao Klientti!</h3>
+              <p className="text-blue-100 text-sm">Vamos começar sua jornada de feedback</p>
             </div>
-            <div className="mt-6 flex justify-end">
+            
+            {/* Conteúdo */}
+            <div className="px-6 py-6 bg-gray-50">
+              <div className="space-y-4 text-sm text-gray-700">
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</div>
+                  <p><strong>Crie áreas</strong> da sua empresa (ex: Recepção, Caixa)</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</div>
+                  <p><strong>Gere QR Codes</strong> para cada área automaticamente</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</div>
+                  <p><strong>Compartilhe</strong> os QR Codes com seus clientes</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">4</div>
+                  <p><strong>Receba feedbacks</strong> anônimos em tempo real</p>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">5</div>
+                  <p><strong>Analise</strong> os resultados no meu painel</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* Botão */}
+            <div className="px-6 py-4 bg-white border-t border-gray-100">
               <button
                 onClick={() => {
                   setShowTutorial(false);
                   localStorage.setItem('hasSeenTutorial', 'true');
                 }}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
+                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
               >
-                Começar!
+                Começar! 🚀
               </button>
             </div>
           </div>
