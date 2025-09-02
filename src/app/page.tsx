@@ -107,20 +107,14 @@ export default function HomePage() {
               Pare de adivinhar. Com QR codes inteligentes e links de pesquisa, você entende seus clientes em tempo real, 
               melhora seus produtos e cria experiências que fidelizam.
             </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <div className="flex justify-center items-center">
               <Link 
                 href="/planos" 
                 className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
                 style={{ color: 'white !important' }}
               >
-                👉 Comece grátis por 14 dias
+                👉 Comece grátis
               </Link>
-              <button className="text-white hover:text-blue-100 px-6 py-4 rounded-xl text-lg font-medium transition-colors flex items-center space-x-2 border-2 border-white/50 hover:border-white/80 hover:bg-white/20 backdrop-blur-sm shadow-lg" style={{ color: 'white !important' }}>
-                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <span>⚡ Ver Demo</span>
-              </button>
             </div>
           </div>
         </div>
