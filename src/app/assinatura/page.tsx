@@ -179,56 +179,17 @@ export default function SubscriptionPage() {
               <h2 className="text-xl font-semibold text-theme-primary">Plano Atual</h2>
             </CardHeader>
             <CardContent>
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-2xl font-bold text-theme-primary">{currentPlan.name}</h3>
-                  <p className="text-theme-secondary">
-                    {currentPlan.price > 0 ? `R$ ${currentPlan.price},00/mês` : 'Gratuito'}
-                  </p>
-                  <div className="mt-2">
-                    {currentPlan.features.map((feature, index) => (
-                      <span key={index} className="inline-block bg-brand-primary-light text-brand-primary text-sm px-2 py-1 rounded mr-2 mb-1">
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p className="text-sm text-theme-secondary">Status</p>
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                    subscriptionData?.subscriptionStatus === 'active' 
-                      ? 'bg-theme-success-light text-theme-success-dark' 
-                      : 'bg-theme-button text-theme-muted'
-                  }`}>
-                    {subscriptionData?.subscriptionStatus === 'active' ? 'Ativo' : 'Inativo'}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Subscription Info */}
-          <Card className="mb-6">
-            <CardHeader>
-              <h2 className="text-xl font-semibold text-theme-primary">Informações da Assinatura</h2>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-theme-secondary p-4 rounded-lg border border-theme-primary shadow-theme-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium text-theme-primary">{formatDate(subscriptionData?.planUpdatedAt)}</p>
-                      <p className="text-sm text-theme-secondary">Data de Atualização</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="bg-theme-secondary p-4 rounded-lg border border-theme-primary shadow-theme-sm">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="font-medium capitalize text-theme-primary">{subscriptionData?.plan || 'free'}</p>
-                      <p className="text-sm text-theme-secondary">Plano Atual</p>
-                    </div>
-                  </div>
+              <div className="text-center">
+                <h3 className="text-3xl font-bold text-theme-primary mb-2">{currentPlan.name}</h3>
+                <p className="text-lg text-theme-secondary mb-4">
+                  {currentPlan.price > 0 ? `R$ ${currentPlan.price},00/mês` : 'Gratuito'}
+                </p>
+                <div className="flex flex-wrap justify-center gap-2">
+                  {currentPlan.features.map((feature, index) => (
+                    <span key={index} className="inline-block bg-blue-100 text-blue-800 text-sm px-3 py-2 rounded-full font-medium">
+                      {feature}
+                    </span>
+                  ))}
                 </div>
               </div>
             </CardContent>
@@ -316,8 +277,7 @@ export default function SubscriptionPage() {
                           handleUpgrade('professional');
                         }
                       }}
-                      className="bg-gradient-to-r from-brand-primary to-brand-secondary text-white px-8 py-3 rounded-lg font-semibold hover:from-brand-primary-hover hover:to-brand-secondary-hover transition-all transform hover:scale-105"
-                      style={{ color: 'white !important' }}
+                      className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl transition-all transform hover:scale-105 border-0"
                     >
                       {subscriptionData?.plan === 'free' 
                         ? 'Fazer Upgrade para Starter - R$ 29/mês' 
