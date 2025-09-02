@@ -577,11 +577,11 @@ export default function MeuPainelPage() {
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <span className="text-secondary">Feedbacks na última semana</span>
-                        <span className="font-semibold text-primary">{recentFeedbacks}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white">{recentFeedbacks}</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <span className="text-secondary">Áreas ativas</span>
-                        <span className="font-semibold text-primary">{areas.length}</span>
+                        <span className="font-semibold text-gray-900 dark:text-white">{areas.length}</span>
                       </div>
                     </div>
                   </CardContent>
@@ -958,9 +958,9 @@ export default function MeuPainelPage() {
       {/* Tutorial Modal */}
       {showTutorial && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 max-w-md mx-4">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Bem-vindo ao Klientti! 🎉</h3>
-            <div className="space-y-4 text-sm text-gray-600">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-md mx-4 shadow-2xl">
+            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">Bem-vindo ao Klientti! 🎉</h3>
+            <div className="space-y-4 text-sm text-gray-600 dark:text-gray-400">
               <p>1. <strong>Crie áreas</strong> da sua empresa (ex: Recepção, Caixa)</p>
               <p>2. <strong>Gere QR Codes</strong> para cada área automaticamente</p>
               <p>3. <strong>Compartilhe</strong> os QR Codes com seus clientes</p>
@@ -973,7 +973,7 @@ export default function MeuPainelPage() {
                   setShowTutorial(false);
                   localStorage.setItem('hasSeenTutorial', 'true');
                 }}
-                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700"
+                className="bg-indigo-600 text-white px-4 py-2 rounded-md hover:bg-indigo-700 transition-colors"
               >
                 Começar!
               </button>

@@ -158,18 +158,18 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
   }, [selectedArea]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-      <div className="bg-card rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center p-4 z-50">
+      <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
         <div className="p-6">
           {/* Header */}
           <div className="flex items-center justify-between mb-6">
             <div>
               <h2 className="text-2xl font-bold text-blue-600">🤖 Análise Inteligente de IA</h2>
-              <p className="text-secondary">Análise focada e recomendações personalizadas</p>
+              <p className="text-gray-600">Análise focada e recomendações personalizadas</p>
             </div>
             <button
               onClick={onClose}
-              className="text-gray-600 hover:text-blue-600 transition-colors"
+              className="text-gray-600 hover:text-gray-900 transition-colors p-2 rounded-lg hover:bg-gray-100"
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
@@ -179,13 +179,13 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
 
           {/* Seletor de Área */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-brand-primary mb-2">
+            <label className="block text-sm font-medium text-gray-900 mb-2">
               Selecione uma área para análise:
             </label>
             <select
               value={selectedArea}
               onChange={(e) => setSelectedArea(e.target.value)}
-              className="w-full px-3 py-2 border border-theme-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-primary input-theme"
+              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
             >
               <option value="">Escolha uma área...</option>
               {areas.map((area) => (
@@ -199,8 +199,8 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
           {/* Loading */}
           {loading && (
             <div className="text-center py-8">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary mx-auto mb-4"></div>
-              <p className="text-theme-secondary">Analisando dados da área...</p>
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">Analisando dados da área...</p>
             </div>
           )}
 
@@ -211,11 +211,11 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               <Card variant="elevated">
                 <CardHeader>
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-semibold text-brand-primary">{analysis.areaName}</h3>
+                    <h3 className="text-xl font-semibold text-gray-900">{analysis.areaName}</h3>
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                      analysis.priority === 'high' ? 'bg-theme-error-light text-theme-error' :
-                      analysis.priority === 'medium' ? 'bg-theme-warning-light text-theme-warning' :
-                      'bg-theme-success-light text-theme-success'
+                      analysis.priority === 'high' ? 'bg-red-100 text-red-800' :
+                      analysis.priority === 'medium' ? 'bg-yellow-100 text-yellow-800' :
+                      'bg-green-100 text-green-800'
                     }`}>
                       Prioridade {analysis.priority === 'high' ? 'Alta' : 
                                  analysis.priority === 'medium' ? 'Média' : 'Baixa'}
@@ -225,18 +225,18 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
                 <CardContent>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-brand-primary">{analysis.totalFeedbacks}</div>
-                      <div className="text-sm text-theme-secondary">Total de Feedbacks</div>
+                      <div className="text-2xl font-bold text-blue-600">{analysis.totalFeedbacks}</div>
+                      <div className="text-sm text-gray-600">Total de Feedbacks</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-brand-primary">
+                      <div className="text-2xl font-bold text-blue-600">
                         {analysis.averageRating.toFixed(1)}
                       </div>
-                      <div className="text-sm text-theme-secondary">Avaliação Média</div>
+                      <div className="text-sm text-gray-600">Avaliação Média</div>
                     </div>
                     <div className="text-center">
-                      <div className="text-2xl font-bold text-brand-primary">{analysis.topIssues.length}</div>
-                      <div className="text-sm text-theme-secondary">Problemas Identificados</div>
+                      <div className="text-2xl font-bold text-blue-600">{analysis.topIssues.length}</div>
+                      <div className="text-sm text-gray-600">Problemas Identificados</div>
                     </div>
                   </div>
                 </CardContent>
@@ -245,14 +245,14 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               {/* Problemas Identificados */}
               <Card variant="elevated">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold text-brand-primary">🚨 Problemas Identificados</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">🚨 Problemas Identificados</h3>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {analysis.topIssues.map((issue, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-3 bg-theme-error-light rounded-lg">
-                        <span className="text-theme-error mt-1">•</span>
-                        <span className="text-theme-primary">{issue}</span>
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-red-50 rounded-lg">
+                        <span className="text-red-600 mt-1">•</span>
+                        <span className="text-gray-900">{issue}</span>
                       </div>
                     ))}
                   </div>
@@ -262,14 +262,14 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               {/* Recomendações */}
               <Card variant="elevated">
                 <CardHeader>
-                  <h3 className="text-lg font-semibold text-brand-primary">💡 Recomendações de Melhoria</h3>
+                  <h3 className="text-lg font-semibold text-gray-900">💡 Recomendações de Melhoria</h3>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-3">
                     {analysis.recommendations.map((recommendation, index) => (
-                      <div key={index} className="flex items-start space-x-3 p-3 bg-theme-success-light rounded-lg">
-                        <span className="text-theme-success mt-1">•</span>
-                        <span className="text-theme-primary">{recommendation}</span>
+                      <div key={index} className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg">
+                        <span className="text-green-600 mt-1">•</span>
+                        <span className="text-gray-900">{recommendation}</span>
                       </div>
                     ))}
                   </div>
@@ -280,10 +280,10 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               {userSegment && (
                 <Card variant="elevated">
                   <CardHeader>
-                    <h3 className="text-lg font-semibold text-blue-600 dark:text-blue-400">🎯 Insights do Segmento: {userSegment}</h3>
+                    <h3 className="text-lg font-semibold text-blue-600">🎯 Insights do Segmento: {userSegment}</h3>
                   </CardHeader>
                   <CardContent>
-                    <div className="text-sm text-gray-600 dark:text-gray-400">
+                    <div className="text-sm text-gray-600">
                       <p className="mb-2">
                         Esta análise foi personalizada para o seu segmento de atuação, 
                         considerando as melhores práticas e desafios específicos da área.
@@ -307,10 +307,10 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
                 </svg>
               </div>
-              <h3 className="text-lg font-medium text-blue-600 dark:text-blue-400 mb-2">
+              <h3 className="text-lg font-medium text-blue-600 mb-2">
                 Selecione uma área para análise
               </h3>
-              <p className="text-gray-600 dark:text-gray-400">
+              <p className="text-gray-600">
                 Escolha uma área específica para receber análises inteligentes e recomendações personalizadas.
               </p>
             </div>

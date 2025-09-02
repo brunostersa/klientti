@@ -498,7 +498,7 @@ export default function ProfilePage() {
                           type="file"
                           accept="image/*"
                           onChange={handleLogoChange}
-                          className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:text-sm file:font-medium file:bg-white file:text-gray-700 hover:file:bg-gray-50 dark:file:bg-gray-800 dark:file:text-gray-300 dark:file:border-gray-600"
+                          className="block w-full text-sm text-gray-500 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border file:border-gray-300 file:text-sm file:font-medium file:bg-white file:text-gray-700 hover:file:bg-gray-50 dark:file:bg-gray-800 dark:file:text-gray-200 dark:file:border-gray-600"
                         />
                         <span className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                           PNG, JPG até 5MB
@@ -519,14 +519,6 @@ export default function ProfilePage() {
                       className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                     >
                       {saving ? 'Salvando...' : 'Salvar Alterações'}
-                    </button>
-                    
-                    <button
-                      type="button"
-                      onClick={handleLogout}
-                      className="px-6 py-2 border border-gray-300 dark:border-gray-600 rounded-lg text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                    >
-                      Sair da Conta
                     </button>
                   </div>
                 </div>

@@ -132,16 +132,16 @@ export default function FeedbackPage() {
 
               {/* Link do Google Maps para avaliações 4+ estrelas */}
               {submittedRating >= 4 && userProfile?.googleMapsUrl && (
-                <div className="mt-6 bg-blue-50 rounded-xl p-6 border border-blue-100">
+                <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-6 border border-blue-100 dark:border-blue-800">
                   <div className="flex items-center justify-center mb-4">
-                    <svg className="w-8 h-8 text-blue-600 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                    <svg className="w-8 h-8 text-blue-600 dark:text-blue-400 mr-2" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
                     </svg>
-                    <h3 className="text-lg font-bold text-blue-800">
+                    <h3 className="text-lg font-bold text-blue-800 dark:text-blue-200">
                       Avalie a gente no Google também!
                     </h3>
                   </div>
-                  <p className="text-blue-700 mb-4">
+                  <p className="text-blue-700 dark:text-blue-300 mb-4">
                     Que bom que você gostou! Sua avaliação no Google Maps nos ajuda muito.
                   </p>
                   <a

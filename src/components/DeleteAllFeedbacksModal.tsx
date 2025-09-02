@@ -34,14 +34,14 @@ export default function DeleteAllFeedbacksModal({ onClose, onConfirm, totalFeedb
   };
 
   return (
-    <div className="fixed inset-0 bg-overlay flex items-center justify-center z-50 p-4">
-      <div className="bg-card rounded-lg shadow-xl max-w-md w-full">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl max-w-md w-full">
         <div className="p-6">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-red-600">⚠️ Excluir Todas as Avaliações</h2>
+            <h2 className="text-xl font-bold text-red-600 dark:text-red-400">⚠️ Excluir Todas as Avaliações</h2>
             <button
               onClick={onClose}
-              className="text-secondary hover:text-primary transition-colors"
+              className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700"
               disabled={loading}
             >
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -51,19 +51,19 @@ export default function DeleteAllFeedbacksModal({ onClose, onConfirm, totalFeedb
           </div>
 
           <div className="mb-6">
-            <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-4">
+            <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4 mb-4">
               <div className="flex items-center mb-2">
-                <svg className="w-5 h-5 text-red-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-5 h-5 text-red-600 dark:text-red-400 mr-2" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                 </svg>
-                <span className="font-semibold text-red-800">Ação Irreversível</span>
+                <span className="font-semibold text-red-800 dark:text-red-300">Ação Irreversível</span>
               </div>
-              <p className="text-red-700 text-sm">
+              <p className="text-red-700 dark:text-red-300 text-sm">
                 Esta ação irá excluir permanentemente <strong>{totalFeedbacks} avaliação{totalFeedbacks !== 1 ? 'ões' : ''}</strong> de todas as suas áreas.
               </p>
             </div>
 
-            <p className="text-primary text-sm mb-4">
+            <p className="text-gray-900 dark:text-white text-sm mb-4">
               Para confirmar esta ação, digite <strong>EXCLUIR TODOS</strong> no campo abaixo:
             </p>
 
@@ -72,7 +72,7 @@ export default function DeleteAllFeedbacksModal({ onClose, onConfirm, totalFeedb
               value={confirmationText}
               onChange={(e) => setConfirmationText(e.target.value)}
               placeholder="Digite: EXCLUIR TODOS"
-              className="w-full px-3 py-2 border border-custom rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-card text-primary"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
               disabled={loading}
             />
 
@@ -85,7 +85,7 @@ export default function DeleteAllFeedbacksModal({ onClose, onConfirm, totalFeedb
             <button
               type="button"
               onClick={onClose}
-              className="flex-1 px-4 py-2 border border-custom rounded-md text-primary hover:bg-tertiary transition-colors"
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
               disabled={loading}
             >
               Cancelar
