@@ -342,10 +342,12 @@ export default function LoginPage() {
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
-            <div className="mx-auto h-12 w-12 bg-green-600 rounded-lg flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+            <div className="mx-auto flex items-center justify-center mb-4">
+              <img 
+                src="/logo-klientti.svg" 
+                alt="Klientti" 
+                className="h-16 w-auto"
+              />
             </div>
             <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
               Complete seu Perfil
@@ -468,8 +470,12 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div>
-          <div className="mx-auto h-12 w-12 bg-blue-600 rounded-lg flex items-center justify-center">
-            <span className="text-white font-bold text-xl">K</span>
+          <div className="mx-auto flex items-center justify-center mb-4">
+            <img 
+              src="/logo-klientti.svg" 
+              alt="Klientti" 
+              className="h-16 w-auto"
+            />
           </div>
           <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
             {isSignUp ? 'Criar conta' : 'Entrar na sua conta'}

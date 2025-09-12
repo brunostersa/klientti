@@ -9,6 +9,7 @@ import Card, { CardHeader, CardContent, CardAction } from '@/components/Card';
 import Sidebar from '@/components/Sidebar';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useActiveTab } from '@/hooks/useActiveTab';
+import { Area } from '@/types/Area';
 interface UserData {
   uid: string;
   email: string;
@@ -67,7 +68,7 @@ export default function AdminUsersPage() {
       const usersSnapshot = await getDocs(collection(db, 'users'));
       const areasSnapshot = await getDocs(collection(db, 'areas'));
       
-      const areas = areasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as any[];
+      const areas = areasSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as Area[];
       
       const usersData = usersSnapshot.docs.map(doc => {
         const userData = doc.data();

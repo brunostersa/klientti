@@ -169,9 +169,16 @@ export default function FeedbackPage() {
           {/* Tag flutuante "Criado com Klientti" */}
           <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
             <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl rounded-b-lg px-6 py-3 shadow-xl border-2 border-blue-200/50 hover:border-blue-300/70 transition-all duration-300">
-              <p className="text-sm text-gray-700 font-medium">
-                Criado com <a href="https://klientti.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Klientti</a>
-              </p>
+              <div className="flex items-center justify-center space-x-2">
+                <img 
+                  src="/icone.svg" 
+                  alt="Klientti" 
+                  className="h-4 w-4"
+                />
+                <p className="text-sm text-gray-700 font-medium">
+                  Criado com <a href="https://klientti.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Klientti</a>
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -320,9 +327,16 @@ export default function FeedbackPage() {
         {/* Tag flutuante "Criado com Klientti" */}
         <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
           <div className="bg-white/95 backdrop-blur-sm rounded-t-2xl rounded-b-lg px-6 py-3 shadow-xl border-2 border-blue-200/50 hover:border-blue-300/70 transition-all duration-300">
-            <p className="text-sm text-gray-700 font-medium">
-              Criado com <a href="https://klientti.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Klientti</a>
-            </p>
+            <div className="flex items-center justify-center space-x-2">
+              <img 
+                src="/icone.svg" 
+                alt="Klientti" 
+                className="h-4 w-4"
+              />
+              <p className="text-sm text-gray-700 font-medium">
+                Criado com <a href="https://klientti.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 font-bold hover:text-blue-700 transition-colors">Klientti</a>
+              </p>
+            </div>
           </div>
         </div>
 

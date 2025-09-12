@@ -19,10 +19,11 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center">
-            <div className="w-8 h-8 bg-logo rounded-lg flex items-center justify-center mr-3">
-              <span className="text-logo font-bold text-sm">K</span>
-            </div>
-            <h1 className="text-xl font-bold text-theme-primary">Klientti</h1>
+            <img 
+              src="/logo-klientti.svg" 
+              alt="Klientti" 
+              className="h-8 w-auto mr-3"
+            />
           </div>
 
           {/* Right side */}

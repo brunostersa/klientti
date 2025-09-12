@@ -5,6 +5,8 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, query, getDocs, doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
+import { Area } from '@/types/Area';
+import { Feedback } from '@/types/Feedback';
 
 export default function TestDBPage() {
   const [user, setUser] = useState<User | null>(null);
@@ -44,7 +46,7 @@ export default function TestDBPage() {
       const areas = areasSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      })) as any[];
+      })) as Area[];
       console.log('🏢 Total de áreas no banco:', areas.length);
       console.log('🏢 Áreas do usuário:', areas.filter(a => a.userId === userId));
       console.log('🏢 Todas as áreas:', areas);
@@ -56,7 +58,7 @@ export default function TestDBPage() {
       const feedbacks = feedbacksSnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      })) as any[];
+      })) as Feedback[];
       console.log('💬 Total de feedbacks no banco:', feedbacks.length);
       console.log('💬 Todos os feedbacks:', feedbacks);
 

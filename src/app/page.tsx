@@ -63,10 +63,11 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-16 lg:h-20">
             {/* Logo e Nome */}
             <div className="flex items-center space-x-3">
-              <div className="w-8 h-8 lg:w-10 lg:h-10 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg lg:text-xl">K</span>
-              </div>
-              <span className="text-xl lg:text-2xl font-bold text-slate-900">Klientti</span>
+              <img 
+                src="/logo-klientti.svg" 
+                alt="Klientti" 
+                className="h-8 lg:h-10 w-auto"
+              />
             </div>
             
 
@@ -315,10 +316,11 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center">
             <div className="flex items-center justify-center space-x-3 mb-6">
-              <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">K</span>
-              </div>
-              <span className="text-xl font-bold text-slate-900">Klientti</span>
+              <img 
+                src="/logo-klientti.svg" 
+                alt="Klientti" 
+                className="h-8 w-auto"
+              />
             </div>
             <p className="text-slate-600 max-w-2xl mx-auto">
               Transformando feedback em crescimento através de QR codes impressos e links de pesquisa para empresas de todos os tamanhos.

@@ -37,6 +37,14 @@ export const metadata: Metadata = {
   authors: [{ name: 'Klientti', url: 'https://klientti.com' }],
   creator: 'Klientti',
   publisher: 'Klientti',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/icone.svg', type: 'image/svg+xml' }
+    ],
+    shortcut: '/favicon.svg',
+    apple: '/icone.svg',
+  },
   formatDetection: {
     email: false,
     address: false,
@@ -55,9 +63,9 @@ export const metadata: Metadata = {
     siteName: 'Klientti',
     images: [
       {
-        url: '/og-image.png',
-        width: 1200,
-        height: 630,
+        url: '/logo-klientti.svg',
+        width: 432,
+        height: 96,
         alt: 'Klientti - Sistema de Feedback Inteligente',
       },
     ],
@@ -66,7 +74,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Klientti - Transforme Feedback em Crescimento Real',
     description: 'Sistema inteligente de feedback com QR codes e links de pesquisa.',
-    images: ['/og-image.png'],
+    images: ['/logo-klientti.svg'],
     creator: '@klientti',
     site: '@klientti',
   },

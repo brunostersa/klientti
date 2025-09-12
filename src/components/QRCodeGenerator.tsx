@@ -242,13 +242,13 @@ export default function QRCodeGenerator({ areaId, areaName, size = 120, userProf
       // ===== RODAPÉ MINIMALISTA =====
       const footerY = pageHeight - 15;
       
-      // Logo Klientti minimalista
-      doc.setFillColor(37, 99, 235);
+      // Logo Klientti minimalista - usando as cores do ícone
+      doc.setFillColor(255, 178, 91); // Cor laranja do ícone
+      doc.circle(pageWidth / 2 - 8, footerY, 2, 'F');
+      doc.setFillColor(249, 99, 155); // Cor rosa do ícone
       doc.circle(pageWidth / 2, footerY, 2, 'F');
-      doc.setTextColor(37, 99, 235);
-      doc.setFontSize(6);
-      doc.setFont('helvetica', 'bold');
-      doc.text('K', pageWidth / 2, footerY + 0.5, { align: 'center' });
+      doc.setFillColor(144, 51, 223); // Cor roxa do ícone
+      doc.circle(pageWidth / 2 + 8, footerY, 2, 'F');
       
       // Texto do rodapé discreto
       doc.setTextColor(150, 150, 150);

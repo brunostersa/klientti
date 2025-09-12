@@ -141,10 +141,11 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
       `}>
         {/* Logo */}
         <div className="flex items-center space-x-3 px-6 py-4 border-b border-theme-secondary">
-          <div className="w-8 h-8 bg-brand-primary rounded-lg flex items-center justify-center">
-            <span className="text-theme-inverse font-bold text-lg">K</span>
-          </div>
-          <span className="text-xl font-semibold text-theme-primary">Klientti</span>
+          <img 
+            src="/logo-klientti.svg" 
+            alt="Klientti" 
+            className="h-8 w-auto"
+          />
         </div>
 
         {/* Menu Items */}
