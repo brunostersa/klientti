@@ -21,6 +21,9 @@ interface AIAnalysis {
   topIssues: string[];
   recommendations: string[];
   priority: 'high' | 'medium' | 'low';
+  summary?: string;
+  description?: string;
+  createdAt?: Date;
 }
 
 export default function AIAgent({ feedbacks, areas, userSegment, userProfile, onClose }: AIAgentProps) {
@@ -85,6 +88,10 @@ export default function AIAgent({ feedbacks, areas, userSegment, userProfile, on
       // Verificar quantidade mínima de feedbacks para análise confiável
       if (areaFeedbacks.length < 10) {
         setAnalysis({
+          areaId: selectedArea,
+          areaName: area?.name || 'Área',
+          totalFeedbacks: areaFeedbacks.length,
+          averageRating: 0,
           summary: `Análise de IA indisponível`,
           description: `Para gerar insights confiáveis, é necessário pelo menos 10 feedbacks nesta área. Atualmente você tem ${areaFeedbacks.length} feedback(s).`,
           topIssues: ['Coleta de dados insuficiente'],
