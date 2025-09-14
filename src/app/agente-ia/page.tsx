@@ -467,7 +467,8 @@ export default function AIAgentPage() {
                         comment: 'Feedback temporário para super_admin',
                         areaId: areas[0]?.id || 'temp',
                         createdAt: new Date(),
-                        userId: user?.uid || 'temp'
+                        userId: user?.uid || 'temp',
+                        isAnonymous: true
                       }));
                       setFeedbacks([...feedbacks, ...tempFeedbacks]);
                     }}
