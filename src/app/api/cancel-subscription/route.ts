@@ -7,7 +7,7 @@ export async function POST(request: NextRequest) {
   try {
     // Inicializar Stripe apenas quando necessário
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-      apiVersion: '2025-07-30.basil' as any,
+      apiVersion: '2025-08-27.basil' as any,
     });
 
     const { subscriptionId, userId } = await request.json();

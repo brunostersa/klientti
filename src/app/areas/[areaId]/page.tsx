@@ -274,6 +274,8 @@ export default function AreaDetailsPage() {
         user={user}
         userProfile={userProfile}
         onLogout={handleLogout}
+        isMobileMenuOpen={false}
+        onMobileMenuToggle={() => {}}
       />
 
       <div className="lg:ml-80">
