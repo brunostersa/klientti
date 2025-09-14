@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { collection, query, where, onSnapshot, getDoc, doc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, getDoc, doc, getDocs } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import Card, { CardHeader, CardContent, CardAction } from '@/components/Card';
@@ -85,7 +85,18 @@ export default function AIAgentPage() {
         id: doc.id,
         ...doc.data()
       })) as Feedback[];
-      setFeedbacks(feedbacksData);
+      
+      // Filtrar apenas feedbacks do usuário atual
+      // Usar o estado atual de areas para garantir que está atualizado
+      const userFeedbacks = feedbacksData.filter(feedback => {
+        const area = areas.find(a => a.id === feedback.areaId);
+        return area && area.userId === userId;
+      });
+      
+      console.log('Feedbacks carregados:', userFeedbacks.length, 'de', feedbacksData.length, 'total');
+      console.log('Áreas disponíveis:', areas.length);
+      console.log('Feedbacks filtrados:', userFeedbacks.map(f => ({ id: f.id, areaId: f.areaId })));
+      setFeedbacks(userFeedbacks);
     });
 
     return unsubscribe;
@@ -103,11 +114,47 @@ export default function AIAgentPage() {
     }
   };
 
+  const reloadFeedbacks = async () => {
+    if (!user) return;
+    
+    try {
+      const q = query(collection(db, 'feedbacks'));
+      const snapshot = await getDocs(q);
+      const feedbacksData = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      })) as Feedback[];
+      
+      // Filtrar apenas feedbacks do usuário atual com áreas atualizadas
+      const userFeedbacks = feedbacksData.filter(feedback => {
+        const area = areas.find(a => a.id === feedback.areaId);
+        return area && area.userId === user.uid;
+      });
+      
+      console.log('Feedbacks recarregados:', userFeedbacks.length, 'de', feedbacksData.length, 'total');
+      console.log('Áreas atuais:', areas.length);
+      console.log('Feedbacks filtrados:', userFeedbacks.map(f => ({ id: f.id, areaId: f.areaId })));
+      setFeedbacks(userFeedbacks);
+    } catch (error) {
+      console.error('Erro ao recarregar feedbacks:', error);
+    }
+  };
+
+  // Recarregar feedbacks quando áreas mudarem
+  useEffect(() => {
+    if (user && areas.length > 0) {
+      reloadFeedbacks();
+    }
+  }, [areas, user]);
+
   // Gerar insights de IA
   useEffect(() => {
     if (feedbacks.length > 0 && areas.length > 0) {
-      generateAIInsights();
-      generateTrendData();
+      // Só gerar insights se tiver dados suficientes
+      if (feedbacks.length >= 10) {
+        generateAIInsights();
+        generateTrendData();
+      }
     }
   }, [feedbacks, areas]);
 
@@ -402,6 +449,112 @@ export default function AIAgentPage() {
             <p className="text-gray-600 dark:text-gray-400">Dashboard avançado com análises preditivas e insights inteligentes</p>
           </div>
 
+          {/* Aviso de dados insuficientes - Overlay com blur */}
+          {(() => {
+            console.log('Renderizando popup:', feedbacks.length < 10, 'feedbacks:', feedbacks.length);
+            return feedbacks.length < 10;
+          })() && (
+            <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+              <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl border border-amber-200 relative">
+                {/* Botão X para super_admin */}
+                {userProfile?.role === 'super_admin' && (
+                  <button
+                    onClick={() => {
+                      // Simular 10+ feedbacks para abrir a tela de IA normalmente
+                      const tempFeedbacks = Array.from({ length: 10 }, (_, i) => ({
+                        id: `temp-${i}`,
+                        rating: 5,
+                        comment: 'Feedback temporário para super_admin',
+                        areaId: areas[0]?.id || 'temp',
+                        createdAt: new Date(),
+                        userId: user?.uid || 'temp'
+                      }));
+                      setFeedbacks([...feedbacks, ...tempFeedbacks]);
+                    }}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+                    title="Fechar aviso e abrir IA (apenas para super_admin)"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+                <div className="p-8">
+                  <div className="text-center mb-8">
+                    <div className="mx-auto w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mb-6">
+                      <svg className="h-10 w-10 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                      </svg>
+                    </div>
+                    <h2 className="text-3xl font-bold text-amber-800 mb-4">
+                      Dados Insuficientes para Análise de IA
+                    </h2>
+                    <p className="text-lg text-amber-700 mb-6">
+                      Para gerar insights confiáveis, é necessário pelo menos <strong>10 feedbacks</strong>. 
+                      Atualmente você tem <strong>{feedbacks.length} feedback(s)</strong>.
+                    </p>
+                  </div>
+
+                  <div className="bg-amber-50 rounded-xl p-6 mb-8">
+                    <h3 className="text-xl font-semibold text-amber-800 mb-4">
+                      💡 Dicas para aumentar a coleta de feedbacks:
+                    </h3>
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <div className="flex items-start space-x-3">
+                        <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-amber-800 text-sm font-bold">1</span>
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-amber-800">Compartilhe QR codes</h4>
+                          <p className="text-amber-700 text-sm">Coloque em mesas, balcões e pontos estratégicos</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-amber-800 text-sm font-bold">2</span>
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-amber-800">Peça após atendimento</h4>
+                          <p className="text-amber-700 text-sm">Solicite feedback no final do serviço</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-amber-800 text-sm font-bold">3</span>
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-amber-800">Crie incentivos</h4>
+                          <p className="text-amber-700 text-sm">Descontos ou brindes para quem participar</p>
+                        </div>
+                      </div>
+                      <div className="flex items-start space-x-3">
+                        <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                          <span className="text-amber-800 text-sm font-bold">4</span>
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-amber-800">Treine a equipe</h4>
+                          <p className="text-amber-700 text-sm">Ensine como pedir feedback de forma natural</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <button
+                      onClick={() => router.push('/dashboard')}
+                      className="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                    >
+                      Ir para Dashboard
+                    </button>
+                    <p className="text-amber-600 text-sm mt-4">
+                      Acesse o dashboard para gerenciar suas áreas e feedbacks
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Tabs de Navegação */}
           <div className="mb-8">
             <div className="border-b border-gray-200 dark:border-gray-700">
@@ -476,7 +629,7 @@ export default function AIAgentPage() {
                   <CardContent>
                     <div className="text-center">
                       <div className="text-3xl font-bold text-theme-primary mb-2">
-                        {userFeedbacks.length}
+                        {userFeedbacks.filter(f => !f.id.startsWith('temp-')).length}
                       </div>
                       <div className="text-theme-secondary">Feedbacks Analisados</div>
                       <div className="text-xs text-theme-secondary mt-1">Base de dados para IA</div>
@@ -538,8 +691,9 @@ export default function AIAgentPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {areas.map((area) => {
                       const areaFeedbacks = userFeedbacks.filter(f => f.areaId === area.id);
-                      const avgRating = areaFeedbacks.length > 0 
-                        ? areaFeedbacks.reduce((sum, f) => sum + f.rating, 0) / areaFeedbacks.length 
+                      const realFeedbacks = areaFeedbacks.filter(f => !f.id.startsWith('temp-'));
+                      const avgRating = realFeedbacks.length > 0 
+                        ? realFeedbacks.reduce((sum, f) => sum + f.rating, 0) / realFeedbacks.length 
                         : 0;
                       
                       return (
@@ -555,7 +709,7 @@ export default function AIAgentPage() {
                             </span>
                           </div>
                           <div className="text-sm text-secondary">
-                            {areaFeedbacks.length} feedback{areaFeedbacks.length !== 1 ? 's' : ''}
+                            {realFeedbacks.length} feedback{realFeedbacks.length !== 1 ? 's' : ''}
                           </div>
                           <button
                             onClick={() => {
@@ -681,19 +835,11 @@ export default function AIAgentPage() {
           feedbacks={userFeedbacks}
           areas={areas}
           userSegment={userProfile?.segment}
+          userProfile={userProfile}
           onClose={() => setShowAIAnalysis(false)}
         />
       )}
 
-      {/* Notification */}
-      {aiInsights && (
-        <div className="fixed bottom-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg">
-          <div className="flex items-center space-x-2">
-            <span>🤖</span>
-            <span>IA atualizada com sucesso!</span>
-          </div>
-        </div>
-      )}
     </div>
   );
 } 

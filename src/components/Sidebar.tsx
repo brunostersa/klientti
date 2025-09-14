@@ -87,7 +87,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
     { id: 'areas', label: 'Áreas de Pesquisa', icon: 'projects', path: '/areas' },
     { id: 'feedbacks', label: 'Feedbacks', icon: 'tasks', path: '/feedbacks' },
     { id: 'base-conhecimento', label: 'Base de Conhecimento', icon: 'insights', path: '/base-conhecimento' },
-    { id: 'agente-ia', label: 'Agente IA', icon: 'ai', path: '/agente-ia' },
+    { id: 'agente-ia', label: 'Agente IA (BETA)', icon: 'ai', path: '/agente-ia' },
     
     // Menus administrativos
     { id: 'escritorio', label: 'Escritório', icon: 'office', path: '/escritorio' },

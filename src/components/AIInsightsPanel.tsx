@@ -49,6 +49,24 @@ export default function AIInsightsPanel({ areas, feedbacks, userSegment }: AIIns
         return;
       }
 
+      // Verificar quantidade mínima de feedbacks para análise confiável
+      if (userFeedbacks.length < 10) {
+        newInsights.push({
+          id: 'insufficient-data',
+          type: 'warning',
+          title: '⚠️ Dados Insuficientes para Análise de IA',
+          message: `Para gerar insights confiáveis, é necessário pelo menos 10 feedbacks. Atualmente você tem ${userFeedbacks.length} feedback(s).`,
+          priority: 'high',
+          timestamp: new Date(),
+          actionable: true,
+          action: 'Continue coletando feedbacks para desbloquear análises de IA'
+        });
+        
+        setInsights(newInsights);
+        setLoading(false);
+        return;
+      }
+
       // Calcular métricas gerais
       const totalRating = userFeedbacks.reduce((sum, f) => sum + f.rating, 0);
       const avgRating = totalRating / userFeedbacks.length;

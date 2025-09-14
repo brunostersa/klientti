@@ -9,6 +9,7 @@ interface AIAgentProps {
   feedbacks: Feedback[];
   areas: Area[];
   userSegment?: string;
+  userProfile?: any;
   onClose: () => void;
 }
 
@@ -22,7 +23,7 @@ interface AIAnalysis {
   priority: 'high' | 'medium' | 'low';
 }
 
-export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAgentProps) {
+export default function AIAgent({ feedbacks, areas, userSegment, userProfile, onClose }: AIAgentProps) {
   const [selectedArea, setSelectedArea] = useState<string>('');
   const [analysis, setAnalysis] = useState<AIAnalysis | null>(null);
   const [loading, setLoading] = useState(false);
@@ -81,6 +82,24 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
         return;
       }
 
+      // Verificar quantidade mínima de feedbacks para análise confiável
+      if (areaFeedbacks.length < 10) {
+        setAnalysis({
+          summary: `Análise de IA indisponível`,
+          description: `Para gerar insights confiáveis, é necessário pelo menos 10 feedbacks nesta área. Atualmente você tem ${areaFeedbacks.length} feedback(s).`,
+          topIssues: ['Coleta de dados insuficiente'],
+          recommendations: [
+            'Continue coletando feedbacks dos clientes',
+            'Implemente estratégias para aumentar a participação',
+            'Considere incentivos para feedbacks'
+          ],
+          priority: 'medium',
+          createdAt: new Date()
+        });
+        setLoading(false);
+        return;
+      }
+
       const avgRating = areaFeedbacks.reduce((sum, f) => sum + f.rating, 0) / areaFeedbacks.length;
       const insights = getSegmentInsights(userSegment);
       
@@ -135,11 +154,17 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
         priority = 'low';
       }
 
+      // Filtrar apenas feedbacks reais (não temporários)
+      const realFeedbacks = areaFeedbacks.filter(f => !f.id.startsWith('temp-'));
+      const realAvgRating = realFeedbacks.length > 0 
+        ? realFeedbacks.reduce((sum, f) => sum + f.rating, 0) / realFeedbacks.length 
+        : 0;
+
       setAnalysis({
         areaId: area.id,
         areaName: area.name,
-        totalFeedbacks: areaFeedbacks.length,
-        averageRating: avgRating,
+        totalFeedbacks: realFeedbacks.length,
+        averageRating: realAvgRating,
         topIssues,
         recommendations,
         priority
@@ -177,6 +202,106 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
             </button>
           </div>
 
+          {/* Aviso de dados insuficientes - Overlay com blur */}
+          {feedbacks.length < 10 && (
+            <div className="absolute inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+              <div className="max-w-2xl w-full bg-white rounded-2xl shadow-2xl border border-amber-200 relative">
+                {/* Botão X para super_admin */}
+                {userProfile?.role === 'super_admin' && (
+                  <button
+                    onClick={() => {
+                      // Simular 10+ feedbacks para abrir a tela de IA normalmente
+                      const tempFeedbacks = Array.from({ length: 10 }, (_, i) => ({
+                        id: `temp-${i}`,
+                        rating: 5,
+                        comment: 'Feedback temporário para super_admin',
+                        areaId: areas[0]?.id || 'temp',
+                        createdAt: new Date(),
+                        userId: 'temp'
+                      }));
+                      // Adicionar feedbacks temporários e fechar o modal
+                      window.location.reload(); // Recarregar para aplicar os feedbacks temporários
+                    }}
+                    className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors z-10"
+                    title="Fechar aviso e abrir IA (apenas para super_admin)"
+                  >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                )}
+                <div className="p-8 text-center">
+              <div className="mx-auto w-20 h-20 bg-amber-100 rounded-full flex items-center justify-center mb-6">
+                <svg className="h-10 w-10 text-amber-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <h2 className="text-2xl font-bold text-amber-800 mb-4">
+                Dados Insuficientes para Análise de IA
+              </h2>
+              <p className="text-lg text-amber-700 mb-8">
+                Para gerar insights confiáveis, é necessário pelo menos <strong>10 feedbacks</strong>. 
+                Atualmente você tem <strong>{feedbacks.length} feedback(s)</strong>.
+              </p>
+
+              <div className="bg-amber-50 rounded-xl p-6 mb-8 max-w-2xl mx-auto">
+                <h3 className="text-xl font-semibold text-amber-800 mb-4">
+                  💡 Dicas para aumentar a coleta de feedbacks:
+                </h3>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-amber-800 text-sm font-bold">1</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-amber-800">Compartilhe QR codes</h4>
+                      <p className="text-amber-700 text-sm">Coloque em mesas, balcões e pontos estratégicos</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-amber-800 text-sm font-bold">2</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-amber-800">Peça após atendimento</h4>
+                      <p className="text-amber-700 text-sm">Solicite feedback no final do serviço</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-amber-800 text-sm font-bold">3</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-amber-800">Crie incentivos</h4>
+                      <p className="text-amber-700 text-sm">Descontos ou brindes para quem participar</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start space-x-3">
+                    <div className="w-6 h-6 bg-amber-200 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                      <span className="text-amber-800 text-sm font-bold">4</span>
+                    </div>
+                    <div>
+                      <h4 className="font-medium text-amber-800">Treine a equipe</h4>
+                      <p className="text-amber-700 text-sm">Ensine como pedir feedback de forma natural</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+                  <button
+                    onClick={() => {
+                      onClose();
+                      window.location.href = '/dashboard';
+                    }}
+                    className="bg-amber-600 hover:bg-amber-700 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
+                  >
+                    Ir para Dashboard
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Seletor de Área */}
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-900 mb-2">
@@ -186,14 +311,24 @@ export default function AIAgent({ feedbacks, areas, userSegment, onClose }: AIAg
               value={selectedArea}
               onChange={(e) => setSelectedArea(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-gray-900"
+              disabled={feedbacks.length < 10}
             >
               <option value="">Escolha uma área...</option>
-              {areas.map((area) => (
-                <option key={area.id} value={area.id}>
-                  {area.name} ({feedbacks.filter(f => f.areaId === area.id).length} feedbacks)
-                </option>
-              ))}
+              {areas.map((area) => {
+                const areaFeedbacks = feedbacks.filter(f => f.areaId === area.id);
+                const realFeedbacks = areaFeedbacks.filter(f => !f.id.startsWith('temp-'));
+                return (
+                  <option key={area.id} value={area.id}>
+                    {area.name} ({realFeedbacks.length} feedbacks)
+                  </option>
+                );
+              })}
             </select>
+            {feedbacks.length < 10 && (
+              <p className="mt-2 text-sm text-gray-500">
+                ⚠️ Análise de IA desabilitada - colete mais feedbacks para desbloquear
+              </p>
+            )}
           </div>
 
           {/* Loading */}

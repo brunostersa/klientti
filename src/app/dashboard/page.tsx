@@ -40,6 +40,7 @@ export default function MeuPainelPage() {
 
   const activeTab = useActiveTab();
   const [showTutorial, setShowTutorial] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
   const [selectedAreaFilter, setSelectedAreaFilter] = useState<string>('');
   const [selectedRatingFilter, setSelectedRatingFilter] = useState<string>('');
   const [showDeleteAllModal, setShowDeleteAllModal] = useState(false);
@@ -965,58 +966,112 @@ export default function MeuPainelPage() {
       </div>
     </div>
 
-      {/* Tutorial Modal */}
+      {/* Tutorial Modal - Carrossel */}
       {showTutorial && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full border border-gray-200/50 overflow-hidden">
-            {/* Header com gradiente */}
-            <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 px-6 py-8 text-center">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-lg w-full overflow-hidden">
+            {/* Header */}
+            <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-8 text-center">
               <div className="mb-4">
                 <div className="mx-auto w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
                   <span className="text-3xl">🎉</span>
                 </div>
               </div>
-              <h3 className="text-2xl font-bold text-white mb-2">Bem-vindo ao Klientti!</h3>
-              <p className="text-blue-100 text-sm">Vamos começar sua jornada de feedback</p>
+              <h3 className="text-2xl font-bold text-white mb-2" style={{ color: 'white !important' }}>Bem-vindo a Klientti!</h3>
+              <p className="text-white text-sm" style={{ color: 'white !important' }}>Vamos começar sua jornada de feedback</p>
             </div>
             
-            {/* Conteúdo */}
-            <div className="px-6 py-6 bg-gray-50">
-              <div className="space-y-4 text-sm text-gray-700">
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">1</div>
-                  <p><strong>Crie áreas</strong> da sua empresa (ex: Recepção, Caixa)</p>
+            {/* Conteúdo do Carrossel */}
+            <div className="px-6 py-8 min-h-[300px] flex flex-col justify-center bg-white">
+              {tutorialStep === 0 && (
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span className="text-4xl">🏢</span>
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">1. Crie suas áreas</h4>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Defina as áreas da sua empresa como <strong className="text-gray-900">Recepção</strong>, <strong className="text-gray-900">Caixa</strong> ou <strong className="text-gray-900">Atendimento</strong>. 
+                    Cada área terá seu próprio QR Code.
+                  </p>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-indigo-100 text-indigo-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">2</div>
-                  <p><strong>Gere QR Codes</strong> para cada área automaticamente</p>
+              )}
+              
+              {tutorialStep === 1 && (
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-indigo-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span className="text-4xl">📱</span>
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">2. Gere QR Codes e Links</h4>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    QR Codes e <strong className="text-gray-900">links diretos</strong> são criados automaticamente para cada área. 
+                    <strong className="text-gray-900">Cole em mesas</strong>, <strong className="text-gray-900">balcões</strong> ou <strong className="text-gray-900">cardápios</strong> para seus clientes acessarem.
+                  </p>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">3</div>
-                  <p><strong>Compartilhe</strong> os QR Codes com seus clientes</p>
+              )}
+              
+              {tutorialStep === 2 && (
+                <div className="text-center">
+                  <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <span className="text-4xl">📊</span>
+                  </div>
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">3. Analise os resultados</h4>
+                  <p className="text-gray-600 text-sm leading-relaxed">
+                    Receba <strong className="text-gray-900">feedbacks anônimos</strong> em tempo real e analise os resultados 
+                    no seu painel para melhorar continuamente.
+                  </p>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">4</div>
-                  <p><strong>Receba feedbacks</strong> anônimos em tempo real</p>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <div className="w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">5</div>
-                  <p><strong>Analise</strong> os resultados no meu painel</p>
-                </div>
+              )}
+            </div>
+            
+            {/* Indicadores e Navegação */}
+            <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
+              {/* Indicadores */}
+              <div className="flex justify-center space-x-2 mb-4">
+                {[0, 1, 2].map((step) => (
+                  <button
+                    key={step}
+                    onClick={() => setTutorialStep(step)}
+                    className={`w-2 h-2 rounded-full transition-colors ${
+                      tutorialStep === step ? 'bg-blue-600' : 'bg-gray-300'
+                    }`}
+                  />
+                ))}
               </div>
-            </div>
-            
-            {/* Botão */}
-            <div className="px-6 py-4 bg-white border-t border-gray-100">
-              <button
-                onClick={() => {
-                  setShowTutorial(false);
-                  localStorage.setItem('hasSeenTutorial', 'true');
-                }}
-                className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-blue-700 hover:to-purple-700 transform hover:scale-105 transition-all duration-200 shadow-lg hover:shadow-xl"
-              >
-                Começar! 🚀
-              </button>
+              
+              {/* Botões de navegação */}
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={() => setTutorialStep(Math.max(0, tutorialStep - 1))}
+                  disabled={tutorialStep === 0}
+                  className={`px-4 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    tutorialStep === 0
+                      ? 'text-gray-400 cursor-not-allowed'
+                      : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+                  }`}
+                >
+                  Anterior
+                </button>
+                
+                {tutorialStep < 2 ? (
+                  <button
+                    onClick={() => setTutorialStep(tutorialStep + 1)}
+                    className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:bg-blue-700 transition-colors"
+                  >
+                    Próximo
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => {
+                      setShowTutorial(false);
+                      localStorage.setItem('hasSeenTutorial', 'true');
+                    }}
+                    className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700 transition-all duration-200 flex items-center space-x-2 shadow-lg"
+                  >
+                    <span>Começar!</span>
+                    <span>🚀</span>
+                  </button>
+                )}
+              </div>
             </div>
           </div>
         </div>
