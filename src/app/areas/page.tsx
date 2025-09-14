@@ -9,6 +9,7 @@ import Card, { CardHeader, CardContent, CardAction } from '@/components/Card';
 import QRCodeGenerator from '@/components/QRCodeGenerator';
 import Notification from '@/components/Notification';
 import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import { Area } from '@/types/Area';
 import { useActiveTab } from '@/hooks/useActiveTab';
 
@@ -24,6 +25,7 @@ export default function AreasPage() {
     type: 'success' | 'error';
   } | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const router = useRouter();
   const activeTab = useActiveTab();
@@ -170,6 +172,12 @@ export default function AreasPage() {
 
   return (
     <div className="min-h-screen bg-theme-primary">
+      {/* Header */}
+      <Header 
+        onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        showMenuButton={true}
+      />
+      
       <Sidebar
         activeTab={activeTab}
         onTabChange={(tab) => {
@@ -183,9 +191,11 @@ export default function AreasPage() {
         user={user}
         userProfile={userProfile}
         onLogout={handleLogout}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
-      <div className="lg:ml-80">
+      <div className="lg:ml-80 pt-16 lg:pt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
           <nav className="mb-8">

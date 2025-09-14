@@ -8,6 +8,7 @@ import { auth, db } from '@/lib/firebase';
 import Notification from '@/components/Notification';
 import { applyPhoneMask, removePhoneMask } from '@/lib/masks';
 import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import { useAdminMode } from '@/contexts/AdminModeContext';
 import { useTheme } from '@/components/ThemeProvider';
 
@@ -47,6 +48,7 @@ export default function ProfilePage() {
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string>('');
   const [errors, setErrors] = useState<{[key: string]: string}>({});
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { isAdminMode, toggleAdminMode } = useAdminMode();
 
   useEffect(() => {
@@ -282,6 +284,12 @@ export default function ProfilePage() {
 
   return (
     <div className="min-h-screen bg-theme-primary">
+      {/* Header */}
+      <Header 
+        onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        showMenuButton={true}
+      />
+      
       {/* Sidebar */}
       <Sidebar
         activeTab={activeTab}
@@ -293,10 +301,12 @@ export default function ProfilePage() {
         user={user}
         userProfile={userProfile}
         onLogout={handleLogout}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
       {/* Main Content */}
-      <div className="lg:ml-80">
+      <div className="lg:ml-80 pt-16 lg:pt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumbs */}
           <nav className="flex mb-6" aria-label="Breadcrumb">

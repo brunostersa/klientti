@@ -26,6 +26,7 @@ import DeleteAllFeedbacksModal from '@/components/DeleteAllFeedbacksModal';
 import Notification from '@/components/Notification';
 import Card, { CardHeader, CardContent, CardMetric, CardAction } from '@/components/Card';
 import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import { LazyKnowledgeBase, LazyAIAgent, LazyFeedbackChart } from '@/components/LazyComponents';
 
 export default function MeuPainelPage() {
@@ -54,6 +55,7 @@ export default function MeuPainelPage() {
     phone?: string;
     updatedAt?: unknown;
   } | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const router = useRouter();
   
@@ -461,6 +463,12 @@ export default function MeuPainelPage() {
 
     return (
     <div className="min-h-screen layout-content">
+      {/* Header */}
+      <Header 
+        onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        showMenuButton={true}
+      />
+      
       {/* Sidebar */}
       <Sidebar
         activeTab={activeTab}
@@ -495,10 +503,12 @@ export default function MeuPainelPage() {
         user={user}
         userProfile={userProfile}
         onLogout={handleLogout}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
       {/* Main Content */}
-      <div className="lg:ml-80">
+      <div className="lg:ml-80 pt-16 lg:pt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Tutorial Button and Quick Actions */}
           <div className="flex justify-between items-center mb-6">

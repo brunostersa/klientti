@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
 import { useAdminMode } from '@/contexts/AdminModeContext';
+import Link from 'next/link';
 
 interface SidebarProps {
   activeTab: string;
@@ -12,6 +13,8 @@ interface SidebarProps {
   user: any;
   userProfile: any;
   onLogout: () => void;
+  isMobileMenuOpen: boolean;
+  onMobileMenuToggle: () => void;
 }
 
 // Componente para ícones SVG profissionais
@@ -64,8 +67,7 @@ const SidebarIcon = ({ icon, isActive }: { icon: string; isActive: boolean }) =>
   return icons[icon as keyof typeof icons] || null;
 };
 
-export default function Sidebar({ activeTab, onTabChange, user, userProfile, onLogout }: SidebarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+export default function Sidebar({ activeTab, onTabChange, user, userProfile, onLogout, isMobileMenuOpen, onMobileMenuToggle }: SidebarProps) {
   const router = useRouter();
   const { isAdminMode } = useAdminMode();
 
@@ -86,7 +88,6 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
     { id: 'feedbacks', label: 'Feedbacks', icon: 'tasks', path: '/feedbacks' },
     { id: 'base-conhecimento', label: 'Base de Conhecimento', icon: 'insights', path: '/base-conhecimento' },
     { id: 'agente-ia', label: 'Agente IA', icon: 'ai', path: '/agente-ia' },
-    { id: 'assinatura', label: 'Assinatura', icon: 'billing', path: '/assinatura' },
     
     // Menus administrativos
     { id: 'escritorio', label: 'Escritório', icon: 'office', path: '/escritorio' },
@@ -116,31 +117,21 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
 
   return (
     <>
-      {/* Botão para abrir sidebar em mobile */}
-      <button
-        onClick={() => setIsOpen(true)}
-        className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-theme-primary text-theme-inverse rounded-lg hover:bg-theme-secondary transition-colors duration-200 shadow-lg"
-      >
-        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
-        </svg>
-      </button>
-
       {/* Overlay para mobile */}
-      {isOpen && (
+      {isMobileMenuOpen && (
         <div 
           className="lg:hidden fixed inset-0 overlay-theme z-40"
-          onClick={() => setIsOpen(false)}
+          onClick={onMobileMenuToggle}
         />
       )}
 
       {/* Sidebar */}
       <div className={`
         fixed top-0 left-0 h-full w-80 sidebar-theme border-r border-theme-secondary shadow-theme-lg z-50 transform transition-transform duration-300 ease-in-out flex flex-col overflow-hidden
-        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
       `}>
-        {/* Logo */}
-        <div className="flex items-center space-x-3 px-6 py-4 border-b border-theme-secondary">
+        {/* Logo - sempre visível */}
+        <div className="flex items-center space-x-3 px-6 pt-4 pb-4 border-b border-theme-secondary">
           <img 
             src="/logo-klientti.svg" 
             alt="Klientti" 
@@ -149,13 +140,13 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
         </div>
 
         {/* Menu Items */}
-        <nav className="flex-1 py-4 overflow-y-auto overflow-x-hidden scrollbar-theme">
+        <nav className="flex-1 py-4 lg:py-6 overflow-y-auto overflow-x-hidden scrollbar-theme">
           {filteredMenuItems.map((item) => (
             <button
               key={item.id}
               onClick={() => {
                 onTabChange(item.id);
-                setIsOpen(false);
+                onMobileMenuToggle(); // Fechar menu mobile
                 
                 // Navegar para a página correspondente
                 if (item.path) {
@@ -176,7 +167,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
           ))}
         </nav>
 
-        {/* Seção de Perfil */}
+        {/* Seção de Perfil - mobile e desktop */}
         <div className="p-4 border-t border-theme-secondary">
           {/* User Profile Card */}
           {user && (
@@ -208,6 +199,29 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
               </div>
             </div>
           )}
+          
+          {/* Links do usuário - apenas em desktop */}
+          <div className="hidden lg:block space-y-2 mb-4">
+            <Link
+              href="/profile"
+              className="w-full flex items-center space-x-3 text-left sidebar-item transition-all duration-200"
+            >
+              <svg className="w-5 h-5 text-theme-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span className="font-medium text-sm text-theme-secondary">Meu Perfil</span>
+            </Link>
+            
+            <Link
+              href="/assinatura"
+              className="w-full flex items-center space-x-3 text-left sidebar-item transition-all duration-200"
+            >
+              <svg className="w-5 h-5 text-theme-secondary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+              </svg>
+              <span className="font-medium text-sm text-theme-secondary">Assinatura</span>
+            </Link>
+          </div>
           
           <button
             onClick={handleLogout}

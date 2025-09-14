@@ -6,6 +6,7 @@ import { onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import Card, { CardHeader, CardContent } from '@/components/Card';
 import { useActiveTab } from '@/hooks/useActiveTab';
 // import { loadStripe } from '@stripe/stripe-js';
@@ -20,6 +21,7 @@ export default function SubscriptionPage() {
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [subscriptionData, setSubscriptionData] = useState<SubscriptionData | null>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const router = useRouter();
   const activeTab = useActiveTab();
 
@@ -149,6 +151,12 @@ export default function SubscriptionPage() {
 
   return (
     <div className="min-h-screen bg-theme-primary">
+      {/* Header */}
+      <Header 
+        onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        showMenuButton={true}
+      />
+      
       <Sidebar
         activeTab={activeTab}
         onTabChange={(tab) => {
@@ -163,9 +171,11 @@ export default function SubscriptionPage() {
         user={user}
         userProfile={userProfile}
         onLogout={handleLogout}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
-      <div className="lg:ml-80">
+      <div className="lg:ml-80 pt-16 lg:pt-0">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Header */}
           <div className="mb-8">

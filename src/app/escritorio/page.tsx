@@ -7,6 +7,7 @@ import { auth, db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import Card, { CardHeader, CardContent, CardAction } from '@/components/Card';
 import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useActiveTab } from '@/hooks/useActiveTab';
 interface BackofficeStats {
@@ -40,6 +41,7 @@ export default function BackofficePage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [stats, setStats] = useState<BackofficeStats>({
     totalUsers: 0,
     activeUsers: 0,
@@ -190,15 +192,23 @@ export default function BackofficePage() {
   return (
     <ProtectedRoute requiredRole="admin">
       <div className="min-h-screen bg-theme-primary">
+        {/* Header */}
+        <Header 
+          onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          showMenuButton={true}
+        />
+        
         <Sidebar 
           user={user} 
           userProfile={userProfile} 
           onLogout={handleLogout}
           onTabChange={(tab) => router.push(`/${tab}`)}
           activeTab={activeTab}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         />
         
-        <div className="lg:ml-80 p-6">
+        <div className="lg:ml-80 pt-16 lg:pt-0 p-6">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-8">

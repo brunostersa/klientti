@@ -7,6 +7,7 @@ import { auth, db } from '@/lib/firebase';
 import { useRouter } from 'next/navigation';
 import Card, { CardHeader, CardContent, CardAction } from '@/components/Card';
 import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import { useActiveTab } from '@/hooks/useActiveTab';
 import { Area } from '@/types/Area';
@@ -25,6 +26,7 @@ export default function AdminUsersPage() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [users, setUsers] = useState<UserData[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<UserData[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -219,15 +221,23 @@ export default function AdminUsersPage() {
   return (
     <ProtectedRoute requiredRole="super_admin">
       <div className="min-h-screen bg-theme-primary">
+        {/* Header */}
+        <Header 
+          onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          showMenuButton={true}
+        />
+        
         <Sidebar 
           user={user} 
           userProfile={userProfile} 
           onLogout={handleLogout}
           onTabChange={(tab) => router.push(`/${tab}`)}
           activeTab={activeTab}
+          isMobileMenuOpen={isMobileMenuOpen}
+          onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
         />
         
-        <div className="lg:ml-80 p-6">
+        <div className="lg:ml-80 pt-16 lg:pt-0 p-6">
           <div className="max-w-7xl mx-auto">
             {/* Header */}
             <div className="mb-8">

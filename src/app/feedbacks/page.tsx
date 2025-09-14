@@ -10,6 +10,7 @@ import FeedbackList from '@/components/FeedbackList';
 import DeleteAllFeedbacksModal from '@/components/DeleteAllFeedbacksModal';
 import Notification from '@/components/Notification';
 import Sidebar from '@/components/Sidebar';
+import Header from '@/components/Header';
 import AIAgent from '@/components/AIAgent';
 import { Area } from '@/types/Area';
 import { Feedback } from '@/types/Feedback';
@@ -29,6 +30,7 @@ export default function OpinioesPage() {
     type: 'success' | 'error';
   } | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const router = useRouter();
   const activeTab = useActiveTab();
@@ -243,6 +245,12 @@ export default function OpinioesPage() {
 
   return (
     <div className="min-h-screen bg-theme-primary">
+      {/* Header */}
+      <Header 
+        onMenuClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        showMenuButton={true}
+      />
+      
       <Sidebar
         activeTab={activeTab}
         onTabChange={(tab) => {
@@ -256,9 +264,11 @@ export default function OpinioesPage() {
         user={user}
         userProfile={userProfile}
         onLogout={handleLogout}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onMobileMenuToggle={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
 
-      <div className="lg:ml-80">
+      <div className="lg:ml-80 pt-16 lg:pt-0">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           {/* Breadcrumb */}
           <nav className="mb-8">
