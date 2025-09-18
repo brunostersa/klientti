@@ -366,7 +366,7 @@ export default function UpgradePage() {
                 {plan.id === currentPlan ? (
                   <button
                     disabled
-                    className="w-full py-3 px-6 rounded-lg font-medium bg-theme-button text-theme-muted cursor-not-allowed"
+                    className="w-full py-3 px-6 rounded-lg font-medium bg-gray-100 text-gray-500 cursor-not-allowed"
                   >
                     {plan.buttonText}
                   </button>
@@ -375,10 +375,10 @@ export default function UpgradePage() {
                     onClick={() => handleUpgrade(plan.id as 'starter' | 'premium' | 'pro')}
                     className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
                       plan.buttonVariant === 'primary' 
-                        ? 'bg-brand-primary hover:bg-brand-primary-hover text-theme-inverse' 
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
                         : plan.buttonVariant === 'secondary'
-                        ? 'bg-brand-secondary hover:bg-brand-secondary-hover text-theme-inverse'
-                        : 'bg-theme-button hover:bg-theme-border-primary text-theme-primary border border-theme-border-primary'
+                        ? 'bg-purple-600 hover:bg-purple-700 text-white'
+                        : 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-300'
                     }`}
                   >
                     {plan.buttonText}
