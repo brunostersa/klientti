@@ -320,7 +320,7 @@ export default function SubscriptionPage() {
           )}
 
           {/* Usage Analytics & Upgrade Motivation */}
-          {subscriptionData?.plan === 'free' && (
+          {(!subscriptionData?.plan || subscriptionData.plan === 'starter') && (
             <Card className="mb-6">
               <CardHeader>
                 <h2 className="text-xl font-semibold text-theme-primary">📊 Seu Uso Atual</h2>
