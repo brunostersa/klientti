@@ -367,6 +367,7 @@ export default function UpgradePage() {
                   <button
                     disabled
                     className="w-full py-3 px-6 rounded-lg font-medium bg-gray-100 text-gray-500 cursor-not-allowed"
+                    style={{ backgroundColor: '#f3f4f6', color: '#6b7280' }}
                   >
                     {plan.buttonText}
                   </button>
@@ -380,6 +381,11 @@ export default function UpgradePage() {
                         ? 'bg-purple-600 hover:bg-purple-700 text-white'
                         : 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-300'
                     }`}
+                    style={{
+                      backgroundColor: plan.buttonVariant === 'primary' ? '#2563eb' : 
+                                     plan.buttonVariant === 'secondary' ? '#7c3aed' : '#ffffff',
+                      color: plan.buttonVariant === 'outline' ? '#111827' : '#ffffff'
+                    }}
                   >
                     {plan.buttonText}
                   </button>
