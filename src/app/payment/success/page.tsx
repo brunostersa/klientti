@@ -142,7 +142,7 @@ function PaymentSuccessContent() {
             </div>
 
             <h1 className="text-3xl font-bold text-theme-primary mb-4">
-              {isFromOnboarding ? '🎉 Bem-vindo ao Klientti!' : '🎉 Pagamento Confirmado!'}
+              {isFromOnboarding ? '🎉 Bem-vindo à Klientti!' : '🎉 Pagamento Confirmado!'}
             </h1>
 
             <p className="text-xl text-theme-secondary mb-8">

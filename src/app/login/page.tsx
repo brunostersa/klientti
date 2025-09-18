@@ -353,7 +353,7 @@ export default function LoginPage() {
               Complete seu Perfil
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
-              Precisamos de algumas informações para personalizar sua experiência no Klientti
+              Precisamos de algumas informações para personalizar sua experiência na Klientti
             </p>
             {googleUser && (
               <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-md">

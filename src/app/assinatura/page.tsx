@@ -235,7 +235,7 @@ export default function SubscriptionPage() {
                   </div>
 
                                      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                     {subscriptionData?.plan === 'free' ? (
+                     {!subscriptionData?.plan || subscriptionData.plan === 'starter' ? (
                       <>
                         <div className="bg-theme-card p-4 rounded-lg border border-theme-primary shadow-theme-sm">
                           <h4 className="font-semibold text-theme-primary mb-3">✅ O que você ganha:</h4>

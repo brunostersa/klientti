@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'Página não encontrada | Klientti',
-  description: 'A página que você está procurando não foi encontrada. Volte para o Klientti e descubra como transformar feedback em crescimento real.',
+  description: 'A página que você está procurando não foi encontrada. Volte para a Klientti e descubra como transformar feedback em crescimento real.',
   robots: {
     index: false,
     follow: false,

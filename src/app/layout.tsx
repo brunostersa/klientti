@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import ThemeProvider from "@/components/ThemeProvider";
 import { AdminModeProvider } from "@/contexts/AdminModeContext";
+import WhatsAppFloat from "@/components/WhatsAppFloat";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -115,6 +116,7 @@ export default function RootLayout({
         <ThemeProvider>
           <AdminModeProvider>
             {children}
+            <WhatsAppFloat />
           </AdminModeProvider>
         </ThemeProvider>
       </body>

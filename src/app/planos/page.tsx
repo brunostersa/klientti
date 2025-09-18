@@ -178,7 +178,7 @@ export default function UpgradePage() {
         };
       default:
         return {
-          title: '🚀 Desbloqueie todo o potencial do Klientti',
+          title: '🚀 Desbloqueie todo o potencial da Klientti',
           subtitle: 'Escolha o plano ideal para acelerar seu crescimento',
           cta: 'Comece seu teste grátis de 7 dias agora'
         };

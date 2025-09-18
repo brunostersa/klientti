@@ -19,7 +19,7 @@ interface OnboardingSlide {
 const onboardingSlides: OnboardingSlide[] = [
   {
     id: 1,
-    title: "Bem-vindo ao Klientti",
+    title: "Bem-vindo à Klientti",
     description: "A plataforma completa para coleta e análise de feedbacks dos seus clientes",
     features: [
       "Coleta inteligente de feedbacks",

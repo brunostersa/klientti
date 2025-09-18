@@ -152,11 +152,11 @@ export default function HomePage() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <button 
+              <button
                 onClick={() => scrollToSection('features')}
-                className={`font-medium transition-colors duration-200 hover:scale-105 ${
-                  isScrolled 
-                    ? 'text-slate-600 hover:text-slate-900' 
+                className={`font-bold transition-colors duration-200 hover:scale-105 ${
+                  isScrolled
+                    ? 'text-slate-600 hover:text-slate-900'
                     : 'text-white hover:text-white/80'
                 }`}
               >
@@ -164,9 +164,9 @@ export default function HomePage() {
               </button>
               <button 
                 onClick={() => scrollToSection('pricing')}
-                className={`font-medium transition-colors duration-200 hover:scale-105 ${
-                  isScrolled 
-                    ? 'text-slate-600 hover:text-slate-900' 
+                className={`font-bold transition-colors duration-200 hover:scale-105 ${
+                  isScrolled
+                    ? 'text-slate-600 hover:text-slate-900'
                     : 'text-white hover:text-white/80'
                 }`}
               >
@@ -174,9 +174,9 @@ export default function HomePage() {
               </button>
               <button 
                 onClick={() => scrollToSection('testimonials')}
-                className={`font-medium transition-colors duration-200 hover:scale-105 ${
-                  isScrolled 
-                    ? 'text-slate-600 hover:text-slate-900' 
+                className={`font-bold transition-colors duration-200 hover:scale-105 ${
+                  isScrolled
+                    ? 'text-slate-600 hover:text-slate-900'
                     : 'text-white hover:text-white/80'
                 }`}
               >
@@ -330,18 +330,18 @@ export default function HomePage() {
       )}
 
       {/* Hero Section - Opção 1 Transformacional */}
-      <section className="hero-section pt-20 pb-16 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 relative overflow-hidden">
+      <section className="hero-section pt-24 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 relative overflow-hidden">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
         <div className="max-w-7xl mx-auto text-center">
           <div className="max-w-4xl mx-auto">
-            <h1 className="hero-text text-5xl md:text-6xl font-bold leading-tight mb-6">
+            <h1 className="hero-text text-4xl sm:text-5xl md:text-6xl font-bold leading-tight sm:leading-tight md:leading-tight mb-8">
               Transforme 
               <span> feedback</span>
               <br />
               em crescimento real
             </h1>
-            <p className="hero-text text-xl mb-8 leading-relaxed">
+            <p className="hero-text text-lg sm:text-xl mb-12 leading-relaxed sm:leading-relaxed">
               Pare de adivinhar. Com QR codes inteligentes e links de pesquisa, você entende seus clientes em tempo real, 
               melhora seus produtos e cria experiências que fidelizam.
             </p>
@@ -366,10 +366,10 @@ export default function HomePage() {
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight sm:leading-tight md:leading-tight">
               🚨 Problema que resolvemos
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               Você já sabe que seus clientes têm muito a dizer.<br />
               O problema é que:
             </p>
@@ -382,7 +382,7 @@ export default function HomePage() {
                   <span className="text-2xl">⏳</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-2">As pesquisas chegam atrasadas</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2 leading-tight">As pesquisas chegam atrasadas</h3>
                   <p className="text-slate-600">Pesquisas tradicionais demoram semanas e custam milhares</p>
                 </div>
               </div>
@@ -392,7 +392,7 @@ export default function HomePage() {
                   <span className="text-2xl">🔍</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-2">Os dados não refletem a realidade</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2 leading-tight">Os dados não refletem a realidade</h3>
                   <p className="text-slate-600">Respostas enviesadas e amostras não representativas</p>
                 </div>
               </div>
@@ -402,14 +402,14 @@ export default function HomePage() {
                   <span className="text-2xl">🐌</span>
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold text-slate-900 mb-2">E quando você descobre o problema...</h3>
+                  <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2 leading-tight">E quando você descobre o problema...</h3>
                   <p className="text-slate-600">Já perdeu a oportunidade de agir</p>
                 </div>
               </div>
             </div>
             
             <div className="bg-white border-2 border-blue-100 p-8 rounded-2xl shadow-lg">
-              <h3 className="text-2xl font-bold text-slate-900 mb-6 text-center">
+              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6 text-center leading-tight">
                 ✅ Nossa solução
               </h3>
               <p className="text-slate-700 mb-6 text-center">
@@ -461,12 +461,12 @@ export default function HomePage() {
       <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight sm:leading-tight md:leading-tight">
               Tudo que você precisa para crescer
             </h2>
-                            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+                            <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
                   Basta um QR code impresso ou link de pesquisa, e seus clientes falam com você em segundos.
-                  O Klientti analisa, organiza e mostra exatamente onde você pode melhorar — sem complicação.
+                  A Klientti analisa, organiza e mostra exatamente onde você pode melhorar — sem complicação.
                 </p>
           </div>
           
@@ -475,7 +475,7 @@ export default function HomePage() {
               <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center mb-6">
                 <span className="text-2xl">📱</span>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">QR Codes e Links Inteligentes</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4 leading-tight">QR Codes e Links Inteligentes</h3>
               <p className="text-slate-600">Crie QR codes impressos e links de pesquisa personalizados para cada área da sua empresa em segundos</p>
             </div>
             
@@ -483,7 +483,7 @@ export default function HomePage() {
               <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center mb-6">
                 <span className="text-2xl">🤖</span>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">IA que Analisa</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4 leading-tight">IA que Analisa</h3>
               <p className="text-slate-600">Nossa inteligência artificial traduz feedback em insights claros e acionáveis</p>
             </div>
             
@@ -491,7 +491,7 @@ export default function HomePage() {
               <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center mb-6">
                 <span className="text-2xl">⚡</span>
               </div>
-              <h3 className="text-xl font-semibold text-slate-900 mb-4">Tempo Real</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4 leading-tight">Tempo Real</h3>
               <p className="text-slate-600">Receba notificações instantâneas e tome decisões mais rápidas e certeiras</p>
             </div>
           </div>
@@ -502,10 +502,10 @@ export default function HomePage() {
       <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8 bg-slate-50">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-6">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight sm:leading-tight md:leading-tight">
               Escolha seu plano ideal
             </h2>
-            <p className="text-xl text-slate-600 max-w-3xl mx-auto">
+            <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
               Comece grátis por 7 dias. Sem compromisso. Cancele quando quiser.
             </p>
           </div>
@@ -514,7 +514,7 @@ export default function HomePage() {
             {/* Starter Plan */}
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all border-2 border-transparent hover:border-blue-200">
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Starter</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 leading-tight">Starter</h3>
                 <div className="text-4xl font-bold text-blue-600 mb-2">
                   R$ 179,90
                   <span className="text-lg text-slate-500 font-normal">/mês</span>
@@ -551,22 +551,23 @@ export default function HomePage() {
               
               <Link 
                 href="/planos" 
-                className="btn-white w-full bg-gradient-to-r from-blue-600 to-indigo-600 py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all text-center block"
+                className="btn-white w-full bg-white text-blue-600 py-3 px-6 rounded-lg font-semibold hover:bg-blue-50 transition-all text-center block border-2 border-blue-600"
+                style={{ color: 'white' }}
               >
-                Começar Teste Grátis
+                <span style={{ color: 'white' }}>Começar Teste Grátis</span>
               </Link>
             </div>
 
             {/* Premium Plan */}
             <div className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all border-2 border-blue-200 relative">
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold">
+                <span className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-full text-sm font-semibold" style={{ color: 'white !important' }}>
                   Mais Popular
                 </span>
               </div>
               
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Premium</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 leading-tight">Premium</h3>
                 <div className="text-4xl font-bold text-blue-600 mb-2">
                   R$ 249,90
                   <span className="text-lg text-slate-500 font-normal">/mês</span>
@@ -609,16 +610,17 @@ export default function HomePage() {
               
               <Link 
                 href="/planos" 
-                className="btn-white w-full bg-gradient-to-r from-blue-600 to-indigo-600 py-3 px-6 rounded-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all text-center block"
+                className="btn-white w-full bg-white text-blue-600 py-3 px-6 rounded-lg font-semibold hover:bg-blue-50 transition-all text-center block border-2 border-blue-600"
+                style={{ color: 'white' }}
               >
-                Começar Teste Grátis
+                <span style={{ color: 'white' }}>Começar Teste Grátis</span>
               </Link>
             </div>
 
             {/* Pro Plan */}
             <div className="bg-white p-8 rounded-2xl shadow-sm hover:shadow-lg transition-all border-2 border-transparent hover:border-purple-200">
               <div className="text-center mb-6">
-                <h3 className="text-2xl font-bold text-slate-900 mb-2">Pro</h3>
+                <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-2 leading-tight">Pro</h3>
                 <div className="text-4xl font-bold text-purple-600 mb-2">
                   R$ 479,90
                   <span className="text-lg text-slate-500 font-normal">/mês</span>
@@ -662,8 +664,9 @@ export default function HomePage() {
               <Link 
                 href="/planos" 
                 className="btn-white w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all text-center block"
+                style={{ color: 'white' }}
               >
-                Começar Teste Grátis
+                <span style={{ color: 'white' }}>Começar Teste Grátis</span>
               </Link>
             </div>
           </div>
@@ -679,13 +682,13 @@ export default function HomePage() {
       {/* Social Proof - Opção 2 Depoimento humanizado */}
       <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-16">
-            📈 Empresas que confiam no Klientti
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-16 leading-tight sm:leading-tight md:leading-tight">
+            📈 Empresas que confiam na Klientti
           </h2>
           
           <div className="bg-slate-50 p-8 rounded-2xl max-w-4xl mx-auto">
             <p className="text-lg text-slate-700 mb-6 italic leading-relaxed">
-              "O Klientti mudou a forma como ouvimos nossos clientes. Em 30 dias, resolvemos 3 problemas críticos 
+              "A Klientti mudou a forma como ouvimos nossos clientes. Em 30 dias, resolvemos 3 problemas críticos 
               que estavam escondidos."
             </p>
             <div className="flex items-center justify-center space-x-3">
@@ -704,7 +707,7 @@ export default function HomePage() {
       {/* CTA Section - Opção 1 Forte */}
       <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-blue-600 to-indigo-600">
         <div className="max-w-4xl mx-auto text-center">
-          <h2 className="hero-text text-3xl md:text-4xl font-bold mb-6">
+          <h2 className="hero-text text-2xl sm:text-3xl md:text-4xl font-bold mb-6 leading-tight sm:leading-tight md:leading-tight">
             Está pronto para ouvir seus clientes e crescer de verdade?
           </h2>
           <p className="hero-text text-xl mb-8">
@@ -731,21 +734,75 @@ export default function HomePage() {
       {/* Footer */}
       <footer className="bg-white border-t border-slate-200 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="flex items-center justify-center space-x-3 mb-6">
-              <img 
-                src="/logo-klientti.svg" 
-                alt="Klientti" 
-                className="h-8 w-auto"
-              />
+          <div className="grid md:grid-cols-4 gap-8">
+            {/* Logo e Descrição */}
+            <div className="md:col-span-2">
+              <div className="flex items-center space-x-3 mb-4">
+                <img 
+                  src="/logo-klientti.svg" 
+                  alt="Klientti" 
+                  className="h-8 w-auto"
+                />
+                <span className="text-xl font-bold text-slate-900">Klientti</span>
+              </div>
+              <p className="text-slate-600 mb-6 max-w-md">
+                Transforme feedback em crescimento real. QR codes inteligentes e IA para entender seus clientes em tempo real.
+              </p>
+              
+              {/* Redes Sociais */}
+              <div className="flex space-x-4">
+                <a 
+                  href="http://instagram.com/klientti" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center hover:bg-slate-200 transition-colors"
+                  aria-label="Instagram"
+                >
+                  <svg className="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                  </svg>
+                </a>
+                
+                <a 
+                  href="https://www.linkedin.com/company/109091903/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center hover:bg-slate-200 transition-colors"
+                  aria-label="LinkedIn"
+                >
+                  <svg className="w-5 h-5 text-slate-600" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </a>
+              </div>
             </div>
-            <p className="text-slate-600 max-w-2xl mx-auto">
-              Transformando feedback em crescimento através de QR codes impressos e links de pesquisa para empresas de todos os tamanhos.
-            </p>
+
+            {/* Links Rápidos */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-slate-900">Produto</h3>
+              <ul className="space-y-2">
+                <li><a href="#features" className="text-slate-600 hover:text-blue-600 transition-colors">Funcionalidades</a></li>
+                <li><a href="#pricing" className="text-slate-600 hover:text-blue-600 transition-colors">Planos</a></li>
+                <li><a href="#testimonials" className="text-slate-600 hover:text-blue-600 transition-colors">Depoimentos</a></li>
+                <li><Link href="/planos" className="text-slate-600 hover:text-blue-600 transition-colors">Começar Grátis</Link></li>
+              </ul>
+            </div>
+
+            {/* Suporte */}
+            <div>
+              <h3 className="text-lg font-semibold mb-4 text-slate-900">Suporte</h3>
+              <ul className="space-y-2">
+                <li><Link href="/login" className="text-slate-600 hover:text-blue-600 transition-colors">Entrar</Link></li>
+                <li><Link href="/privacidade" className="text-slate-600 hover:text-blue-600 transition-colors">Privacidade</Link></li>
+              </ul>
+            </div>
           </div>
-          
-          <div className="border-t border-slate-200 mt-8 pt-8 text-center text-slate-500">
-            <p>&copy; Klientti. Todos os direitos reservados.</p>
+
+          {/* Copyright */}
+          <div className="border-t border-slate-200 mt-8 pt-8 text-center">
+            <p className="text-slate-500">
+              © Klientti. Todos os direitos reservados.
+            </p>
           </div>
         </div>
       </footer>

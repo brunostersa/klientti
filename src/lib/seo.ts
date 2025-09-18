@@ -90,7 +90,7 @@ export const pageMetadata = {
   },
   login: {
     title: 'Login | Klientti',
-    description: 'Acesse sua conta no Klientti e continue transformando feedback em crescimento real. Login seguro com Google ou email.',
+    description: 'Acesse sua conta na Klientti e continue transformando feedback em crescimento real. Login seguro com Google ou email.',
     robots: {
       index: false,
       follow: false,

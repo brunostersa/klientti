@@ -47,7 +47,7 @@ export default function FeedbackChart({ feedbacks }: FeedbackChartProps) {
       <div className="flex items-center justify-between mb-6">
         <div>
           <h3 className="text-lg font-semibold text-theme-primary">Estatísticas dos Últimos {selectedDays} Dias</h3>
-          <p className="text-sm text-theme-secondary">Resumo das opiniões recebidas através do Klientti</p>
+          <p className="text-sm text-theme-secondary">Resumo das opiniões recebidas através da Klientti</p>
         </div>
         
         {/* Seletor de período */}
