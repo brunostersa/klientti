@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
           const updateData: any = {
             plan: session.metadata.plan,
             stripeCustomerId: session.customer,
-            subscriptionStatus: 'active',
+            subscriptionStatus: 'trialing', // Status durante o período de teste
             planUpdatedAt: new Date(),
           };
           
@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
           
           await updateDoc(userRef, updateData);
           
-          console.log(`Plano atualizado para usuário ${session.metadata.userId}: ${session.metadata.plan}`);
+          console.log(`Plano atualizado para usuário ${session.metadata.userId}: ${session.metadata.plan} (Status: trialing)`);
           console.log('Dados atualizados:', updateData);
         } else {
           console.log('Metadata não encontrada ou incompleta:', session.metadata);
@@ -125,7 +125,7 @@ export async function POST(request: NextRequest) {
         if (deletedUserId) {
           const userRef = doc(db, 'users', deletedUserId);
           await updateDoc(userRef, {
-            plan: 'free',
+            plan: '', // Remover plano quando cancelar
             subscriptionStatus: 'canceled',
             planUpdatedAt: new Date(),
           });

@@ -62,6 +62,11 @@ const SidebarIcon = ({ icon, isActive }: { icon: string; isActive: boolean }) =>
         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z" />
       </svg>
     ),
+    premium: (
+      <svg className={iconClass} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      </svg>
+    ),
   };
 
   return icons[icon as keyof typeof icons] || null;
@@ -88,6 +93,7 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
     { id: 'feedbacks', label: 'Feedbacks', icon: 'tasks', path: '/feedbacks' },
     { id: 'base-conhecimento', label: 'Base de Conhecimento', icon: 'insights', path: '/base-conhecimento' },
     { id: 'agente-ia', label: 'Agente IA (BETA)', icon: 'ai', path: '/agente-ia' },
+    { id: 'grupo-premium', label: 'Grupo Premium', icon: 'premium', path: '/grupo-premium' },
     
     // Menus administrativos
     { id: 'escritorio', label: 'Escritório', icon: 'office', path: '/escritorio' },
@@ -96,13 +102,19 @@ export default function Sidebar({ activeTab, onTabChange, user, userProfile, onL
 
   const filteredMenuItems = menuItems.filter(item => {
     const isAdminItem = ['escritorio', 'usuarios-admin'].includes(item.id);
-    const isBasicItem = !isAdminItem;
+    const isBasicItem = !isAdminItem && item.id !== 'grupo-premium';
+    const isPremiumItem = item.id === 'grupo-premium';
+    const userPlan = userProfile?.plan || 'starter';
+    const hasPremiumAccess = ['premium', 'pro'].includes(userPlan);
     
     if (isAdminMode) {
       // Modo admin: mostrar APENAS menus administrativos
       return isAdminItem;
     } else {
-      // Modo usuário: mostrar menus básicos (excluir administrativos)
+      // Modo usuário: mostrar menus básicos + grupo premium se tiver acesso
+      if (isPremiumItem) {
+        return hasPremiumAccess;
+      }
       return isBasicItem;
     }
   });

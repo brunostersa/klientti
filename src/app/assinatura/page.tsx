@@ -11,7 +11,7 @@ import Card, { CardHeader, CardContent } from '@/components/Card';
 import { useActiveTab } from '@/hooks/useActiveTab';
 // import { loadStripe } from '@stripe/stripe-js';
 interface SubscriptionData {
-  plan: 'free' | 'starter' | 'professional';
+  plan: 'starter' | 'premium' | 'pro';
   subscriptionStatus?: string;
   planUpdatedAt?: Date;
 }
@@ -67,7 +67,7 @@ export default function SubscriptionPage() {
   };
 
   // Função para fazer upgrade via Stripe
-  const handleUpgrade = async (plan: 'starter' | 'professional') => {
+  const handleUpgrade = async (plan: 'starter' | 'premium' | 'pro') => {
     if (!user) {
       console.error('Usuário não autenticado');
       return;
@@ -120,14 +120,14 @@ export default function SubscriptionPage() {
 
   const getPlanInfo = (plan: string) => {
     switch (plan) {
-      case 'free':
-        return { name: 'Gratuito', price: 0, features: ['2 áreas', '50 feedbacks/mês'] };
       case 'starter':
-        return { name: 'Starter', price: 29, features: ['5 áreas', '200 feedbacks/mês'] };
-      case 'professional':
-        return { name: 'Professional', price: 79, features: ['Ilimitado', 'Suporte 24/7'] };
+        return { name: 'Starter', price: 179.90, features: ['3 áreas', '100 feedbacks/mês', 'QR Codes personalizados'] };
+      case 'premium':
+        return { name: 'Premium', price: 249.90, features: ['10 áreas', '500 feedbacks/mês', 'Grupo Premium', 'IA completa'] };
+      case 'pro':
+        return { name: 'Pro', price: 479.90, features: ['Ilimitado', 'Grupo Premium', 'Suporte 24/7', 'Treinamento personalizado'] };
       default:
-        return { name: 'Gratuito', price: 0, features: [] };
+        return { name: 'Sem Plano', price: 0, features: ['Acesso limitado'] };
     }
   };
 
@@ -208,7 +208,7 @@ export default function SubscriptionPage() {
 
 
           {/* Upgrade CTA Section */}
-          {subscriptionData?.plan !== 'professional' && (
+          {subscriptionData?.plan !== 'pro' && (
             <Card className="mb-6">
               <CardHeader>
                 <h2 className="text-xl font-semibold text-theme-primary">🚀 Desbloqueie Mais Recursos</h2>
@@ -217,15 +217,19 @@ export default function SubscriptionPage() {
                 <div className="bg-gradient-to-r from-brand-primary-light to-brand-secondary-light rounded-lg p-6">
                   <div className="text-center mb-6">
                                          <h3 className="text-2xl font-bold text-theme-primary mb-2">
-                       {subscriptionData?.plan === 'free' 
-                         ? 'Transforme seu negócio com o Plano Starter' 
-                         : 'Leve seu negócio ao próximo nível com o Plano Professional'
+                       {subscriptionData?.plan === 'starter'
+                         ? 'Acesse o Grupo Premium com o Plano Premium'
+                         : subscriptionData?.plan === 'premium'
+                         ? 'Tenha acesso total com o Plano Pro'
+                         : 'Escolha o plano ideal para seu negócio'
                        }
                      </h3>
                      <p className="text-theme-secondary text-lg">
-                       {subscriptionData?.plan === 'free' 
-                         ? 'Aproveite recursos avançados que vão revolucionar sua experiência com feedbacks'
-                         : 'Tenha acesso ilimitado a todas as funcionalidades e suporte premium'
+                       {subscriptionData?.plan === 'starter'
+                         ? 'Acesse o grupo exclusivo e recursos avançados'
+                         : subscriptionData?.plan === 'premium'
+                         ? 'Tenha acesso ilimitado a todas as funcionalidades'
+                         : 'Teste grátis por 7 dias, sem compromisso'
                        }
                      </p>
                   </div>
@@ -281,22 +285,34 @@ export default function SubscriptionPage() {
                   <div className="text-center">
                     <button
                       onClick={() => {
-                        if (subscriptionData?.plan === 'free') {
+                        if (subscriptionData?.plan === 'starter') {
+                          handleUpgrade('premium');
+                        } else if (subscriptionData?.plan === 'premium') {
+                          handleUpgrade('pro');
+                        } else {
                           handleUpgrade('starter');
-                        } else if (subscriptionData?.plan === 'starter') {
-                          handleUpgrade('professional');
                         }
                       }}
                       className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-8 py-4 rounded-xl font-bold text-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 hover:shadow-xl transition-all transform hover:scale-105 border-0"
                     >
-                      {subscriptionData?.plan === 'free' 
-                        ? 'Fazer Upgrade para Starter - R$ 29/mês' 
-                        : 'Fazer Upgrade para Professional - R$ 79/mês'
+                      {subscriptionData?.plan === 'starter'
+                        ? 'Fazer Upgrade para Premium - R$ 249,90/mês'
+                        : subscriptionData?.plan === 'premium'
+                        ? 'Fazer Upgrade para Pro - R$ 479,90/mês'
+                        : 'Começar Teste Grátis - Starter R$ 179,90/mês'
                       }
                     </button>
                     <p className="text-xs text-theme-muted mt-2">
-                      Teste gratuito de 30 dias • Sem compromisso • Cancele a qualquer momento
+                      Teste gratuito de 7 dias • Sem compromisso • Cancele a qualquer momento
                     </p>
+                    <div className="mt-4">
+                      <button
+                        onClick={() => router.push('/planos')}
+                        className="text-sm text-blue-600 hover:text-blue-800 underline"
+                      >
+                        Ver todos os planos e comparação detalhada →
+                      </button>
+                    </div>
                   </div>
                 </div>
               </CardContent>

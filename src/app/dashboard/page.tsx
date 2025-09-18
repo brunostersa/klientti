@@ -57,6 +57,8 @@ export default function MeuPainelPage() {
     updatedAt?: unknown;
   } | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCheckingPlan, setIsCheckingPlan] = useState(true);
+  const hasCheckedPlanRef = useRef(false);
 
   const router = useRouter();
   
@@ -75,11 +77,26 @@ export default function MeuPainelPage() {
         setUser(user);
         
         try {
-          // Carregar dados de forma assíncrona
-          await Promise.all([
-            loadUserProfile(user.uid),
-            Promise.resolve(loadAreas(user.uid)) // loadAreas não é async, mas queremos aguardar
-          ]);
+          // Só verificar plano uma vez
+          if (!hasCheckedPlanRef.current) {
+            hasCheckedPlanRef.current = true;
+            
+            // Log para debug
+            console.log('🔍 Dashboard: Verificando plano do usuário...');
+            
+            const result = await loadUserProfile(user.uid);
+            console.log('🔍 Dashboard: Resultado da verificação:', result);
+            if (result?.shouldRedirect) {
+              console.log('🔍 Dashboard: Redirecionando para onboarding...');
+              router.push('/onboarding');
+              return;
+            } else {
+              console.log('🔍 Dashboard: Continuando no dashboard...');
+            }
+          }
+          
+          // Se não precisa redirecionar, carregar outros dados
+          loadAreas(user.uid);
           
           // Carregar feedbacks após áreas serem carregadas
           setTimeout(() => {
@@ -93,8 +110,12 @@ export default function MeuPainelPage() {
               setShowTutorial(true);
             }
           }
+          
+          // Finalizar verificação do plano
+          setIsCheckingPlan(false);
         } catch (error) {
           console.error('🔍 Dashboard: Erro ao carregar dados:', error);
+          setIsCheckingPlan(false);
         } finally {
           // Sempre finalizar o loading, mesmo em caso de erro
           console.log('🔍 Dashboard: Finalizando loading...');
@@ -243,7 +264,45 @@ export default function MeuPainelPage() {
       
       if (userDoc.exists()) {
         console.log('🔍 Dashboard: Perfil encontrado:', userDoc.data());
-        setUserProfile(userDoc.data());
+        const profileData = userDoc.data();
+        setUserProfile(profileData);
+        
+        // Verificar se o usuário tem um plano ativo
+        const plan = profileData.plan || '';
+        const subscriptionStatus = profileData.subscriptionStatus || '';
+        
+        console.log('🔍 Dashboard: Verificando plano:', { plan, subscriptionStatus });
+        
+        // Se não tem plano, plano foi cancelado, ou tem plano "free" (que não existe mais), marcar para redirecionamento
+        if (!plan || subscriptionStatus === 'canceled' || plan === 'free') {
+          console.log('🔍 Dashboard: Usuário sem plano ativo, marcando para redirecionamento...');
+          console.log('🔍 Dashboard: Detalhes - plan:', plan, 'subscriptionStatus:', subscriptionStatus);
+          
+          // Se veio do payment/success, aguardar um pouco e tentar novamente
+          if (document.referrer.includes('/payment/success')) {
+            console.log('🔍 Dashboard: Detectado retorno do pagamento, aguardando atualização...');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            // Tentar recarregar o perfil
+            const retryResult = await loadUserProfile(user.uid);
+            if (retryResult?.shouldRedirect === false) {
+              console.log('🔍 Dashboard: Plano atualizado após retry, continuando no dashboard');
+              return { shouldRedirect: false };
+            }
+          }
+          
+          return { shouldRedirect: true };
+        }
+        
+        // Se está em trial ou ativo, pode continuar no dashboard
+        if (subscriptionStatus === 'trialing' || subscriptionStatus === 'active') {
+          console.log('🔍 Dashboard: Usuário com plano ativo, continuando no dashboard');
+          return { shouldRedirect: false };
+        }
+        
+        // Se chegou até aqui, não tem plano válido
+        console.log('🔍 Dashboard: Plano inválido, marcando para redirecionamento...');
+        return { shouldRedirect: true };
       } else {
         console.log('🔍 Dashboard: Perfil não encontrado, criando perfil básico...');
         
@@ -265,10 +324,18 @@ export default function MeuPainelPage() {
           await setDoc(userRef, basicProfile);
           console.log('🔍 Dashboard: Perfil básico criado com sucesso!');
           setUserProfile(basicProfile);
+          
+          // Usuário novo sem plano, marcar para redirecionamento
+          console.log('🔍 Dashboard: Usuário novo sem plano, marcando para redirecionamento...');
+          return { shouldRedirect: true };
         } catch (setDocError) {
           console.error('🔍 Dashboard: Erro ao criar perfil no Firestore:', setDocError);
           // Se falhar ao criar no Firestore, usar dados locais
           setUserProfile(basicProfile);
+          
+          // Mesmo assim, marcar para redirecionamento
+          console.log('🔍 Dashboard: Usuário sem plano, marcando para redirecionamento...');
+          return { shouldRedirect: true };
         }
       }
     } catch (error) {
@@ -285,6 +352,10 @@ export default function MeuPainelPage() {
       
       console.log('🔍 Dashboard: Usando perfil de fallback:', fallbackProfile);
       setUserProfile(fallbackProfile);
+      
+      // Em caso de erro, também marcar para redirecionamento
+      console.log('🔍 Dashboard: Erro ao carregar perfil, marcando para redirecionamento...');
+      return { shouldRedirect: true };
     }
   };
 
@@ -437,20 +508,24 @@ export default function MeuPainelPage() {
 
 
 
-  if (loading) {
+  if (loading || isCheckingPlan) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-theme-primary">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-          <p className="text-blue-600">Carregando meu painel...</p>
-          <p className="text-sm text-theme-secondary mt-2">Verificando autenticação...</p>
+          <p className="text-blue-600">
+            {loading ? 'Carregando meu painel...' : 'Verificando plano...'}
+          </p>
+          <p className="text-sm text-theme-secondary mt-2">
+            {loading ? 'Verificando autenticação...' : 'Aguarde...'}
+          </p>
         </div>
       </div>
     );
   }
 
   // Loading adicional para quando ainda não temos dados
-  if (!user || loading) {
+  if (!user) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-theme-primary">
         <div className="text-center">
@@ -605,6 +680,20 @@ export default function MeuPainelPage() {
               <div className="text-center">
                 <h2 className="text-2xl font-bold text-primary mb-2">Descubra mais</h2>
                 <p className="text-secondary">Boas práticas para fazer pesquisa com seus clientes</p>
+              </div>
+              
+              {/* Botão de Upgrade */}
+              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-6 text-center">
+                <h3 className="text-lg font-semibold text-theme-primary mb-2">Quer mais funcionalidades?</h3>
+                <p className="text-theme-secondary mb-4">
+                  Faça upgrade para desbloquear mais áreas de pesquisa, feedbacks ilimitados e acesso ao Grupo Premium!
+                </p>
+                <button
+                  onClick={() => router.push('/planos')}
+                  className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg font-medium hover:from-blue-700 hover:to-indigo-700 transition-all transform hover:scale-105 shadow-lg"
+                >
+                  Ver Planos e Preços
+                </button>
               </div>
               
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

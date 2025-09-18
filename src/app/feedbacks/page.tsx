@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, query, where, onSnapshot, deleteDoc, doc, getDoc, writeBatch } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -31,17 +31,31 @@ export default function OpinioesPage() {
   } | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCheckingPlan, setIsCheckingPlan] = useState(true);
+  const hasCheckedPlanRef = useRef(false);
 
   const router = useRouter();
   const activeTab = useActiveTab();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
         // Carregar dados em paralelo
         loadUserData(user.uid);
-        loadUserProfile(user.uid);
+        
+        // Só verificar plano uma vez
+        if (!hasCheckedPlanRef.current) {
+          hasCheckedPlanRef.current = true;
+          const result = await loadUserProfile(user.uid);
+          if (result?.shouldRedirect) {
+            router.push('/onboarding');
+            return;
+          }
+        }
+        
+        // Finalizar verificação do plano
+        setIsCheckingPlan(false);
       } else {
         router.push('/login');
       }
@@ -111,49 +125,89 @@ export default function OpinioesPage() {
       const userDoc = doc(db, 'users', userId);
       const userSnap = await getDoc(userDoc);
       if (userSnap.exists()) {
-        setUserProfile(userSnap.data());
+        const profileData = userSnap.data();
+        setUserProfile(profileData);
+        
+        // Verificar se o usuário tem um plano ativo
+        const plan = profileData.plan || '';
+        const subscriptionStatus = profileData.subscriptionStatus || '';
+        
+        // Se não tem plano ou plano foi cancelado, marcar para redirecionamento
+        if (!plan || subscriptionStatus === 'canceled') {
+          console.log('Usuário sem plano ativo, marcando para redirecionamento...');
+          return { shouldRedirect: true };
+        }
+        
+        // Se tem plano ativo, pode continuar
+        console.log('Usuário com plano ativo, continuando...');
+        return { shouldRedirect: false };
+      } else {
+        // Usuário sem perfil, marcar para redirecionamento
+        console.log('Usuário sem perfil, marcando para redirecionamento...');
+        return { shouldRedirect: true };
       }
     } catch (error) {
       console.error('Erro ao carregar perfil:', error);
+      // Em caso de erro, marcar para redirecionamento
+      return { shouldRedirect: true };
     }
   };
 
   // Função para obter limite de feedbacks baseado no plano
   const getFeedbackLimit = (plan: string) => {
     switch (plan) {
-      case 'free':
-        return 50;
       case 'starter':
-        return 200;
-      case 'professional':
+        return 100;
+      case 'premium':
+        return 500;
+      case 'pro':
         return 9999; // Praticamente ilimitado
       default:
-        return 50;
+        return 0; // Sem plano = sem acesso
     }
   };
 
   // Função para verificar se está próximo do limite de feedbacks
   const getFeedbackUsage = () => {
-    if (!userProfile) return { current: 0, limit: 50, percentage: 0 };
+    if (!userProfile) return { current: 0, limit: 0, percentage: 0 };
     
-    const currentPlan = userProfile.plan || 'free';
-    const limit = getFeedbackLimit(currentPlan);
+    const currentPlan = userProfile.plan || '';
+    const subscriptionStatus = userProfile.subscriptionStatus || '';
     
-    // Contar feedbacks do mês atual
-    const currentMonth = new Date().getMonth();
-    const currentYear = new Date().getFullYear();
-    const monthlyFeedbacks = feedbacks.filter(feedback => {
-      const feedbackDate = new Date(feedback.createdAt);
-      return feedbackDate.getMonth() === currentMonth && feedbackDate.getFullYear() === currentYear;
-    }).length;
+    console.log('🔍 Feedbacks: Verificando uso - Plan:', currentPlan, 'Status:', subscriptionStatus);
     
-    const percentage = Math.round((monthlyFeedbacks / limit) * 100);
+    // Se não tem plano, plano foi cancelado, ou tem plano "free" (que não existe mais), não pode receber feedbacks
+    if (!currentPlan || subscriptionStatus === 'canceled' || currentPlan === 'free') {
+      console.log('🔍 Feedbacks: Sem plano ativo (plan:', currentPlan, 'status:', subscriptionStatus, '), retornando limite 0');
+      return { current: 0, limit: 0, percentage: 100 };
+    }
     
-    return {
-      current: monthlyFeedbacks,
-      limit,
-      percentage: Math.min(percentage, 100)
-    };
+    // Se está em trial ou ativo, pode receber feedbacks dentro do limite
+    if (subscriptionStatus === 'trialing' || subscriptionStatus === 'active') {
+      const limit = getFeedbackLimit(currentPlan);
+      console.log('🔍 Feedbacks: Plano ativo, limite:', limit);
+      
+      // Contar feedbacks do mês atual
+      const currentMonth = new Date().getMonth();
+      const currentYear = new Date().getFullYear();
+      const monthlyFeedbacks = feedbacks.filter(feedback => {
+        const feedbackDate = new Date(feedback.createdAt);
+        return feedbackDate.getMonth() === currentMonth && feedbackDate.getFullYear() === currentYear;
+      }).length;
+      
+      const percentage = limit > 0 ? Math.round((monthlyFeedbacks / limit) * 100) : 0;
+      
+      console.log('🔍 Feedbacks: Uso calculado - Atual:', monthlyFeedbacks, 'Limite:', limit, 'Percentual:', percentage);
+      
+      return {
+        current: monthlyFeedbacks,
+        limit,
+        percentage: Math.min(percentage, 100)
+      };
+    }
+    
+    console.log('🔍 Feedbacks: Status inválido, retornando limite 0');
+    return { current: 0, limit: 0, percentage: 100 };
   };
 
   // Função para verificar se está próximo do limite
@@ -232,12 +286,14 @@ export default function OpinioesPage() {
     ? userFeedbacks.reduce((sum, f) => sum + f.rating, 0) / totalFeedbacks 
     : 0;
 
-  if (loading) {
+  if (loading || isCheckingPlan) {
     return (
       <div className="min-h-screen bg-theme-primary flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-theme-border-primary mx-auto mb-4"></div>
-          <p className="text-theme-primary">Carregando...</p>
+          <p className="text-theme-primary">
+            {loading ? 'Carregando...' : 'Verificando plano...'}
+          </p>
         </div>
       </div>
     );
@@ -303,24 +359,36 @@ export default function OpinioesPage() {
                 <div className="flex items-center space-x-4">
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-theme-primary">
-                        Opiniões este mês: {getFeedbackUsage().current}/{getFeedbackUsage().limit}
-                      </span>
-                      <span className="text-sm text-theme-secondary">
-                        {getFeedbackUsage().percentage}%
-                      </span>
+                      {(() => {
+                        const usage = getFeedbackUsage();
+                        return (
+                          <>
+                            <span className="text-sm font-medium text-theme-primary">
+                              Opiniões este mês: {usage.current}/{usage.limit}
+                            </span>
+                            <span className="text-sm text-theme-secondary">
+                              {usage.percentage}%
+                            </span>
+                          </>
+                        );
+                      })()}
                     </div>
                     <div className="w-full bg-theme-button rounded-full h-2">
-                      <div 
-                        className={`h-2 rounded-full transition-all ${
-                          hasReachedFeedbackLimit() 
-                            ? 'bg-theme-error' 
-                            : isNearFeedbackLimit() 
-                              ? 'bg-theme-warning' 
-                              : 'bg-brand-primary'
-                        }`}
-                        style={{ width: `${getFeedbackUsage().percentage}%` }}
-                      />
+                      {(() => {
+                        const usage = getFeedbackUsage();
+                        return (
+                          <div 
+                            className={`h-2 rounded-full transition-all ${
+                              hasReachedFeedbackLimit() 
+                                ? 'bg-theme-error' 
+                                : isNearFeedbackLimit() 
+                                  ? 'bg-theme-warning' 
+                                  : 'bg-brand-primary'
+                            }`}
+                            style={{ width: `${usage.percentage}%` }}
+                          />
+                        );
+                      })()}
                     </div>
                   </div>
                 </div>
@@ -355,7 +423,7 @@ export default function OpinioesPage() {
                       <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                     </svg>
                     <span className="text-sm text-theme-error-dark">
-                      <strong>Limite atingido!</strong> Você atingiu o máximo de {getFeedbackLimit(userProfile.plan || 'free')} opiniões/mês do seu plano gratuito. 
+                      <strong>Limite atingido!</strong> Você atingiu o máximo de {getFeedbackLimit(userProfile.plan || '')} opiniões/mês do seu plano atual. 
                       <button 
                         onClick={() => router.push('/planos')}
                         className="ml-2 text-brand-primary hover:underline font-medium"

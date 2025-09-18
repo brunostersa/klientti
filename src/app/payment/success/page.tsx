@@ -3,7 +3,7 @@
 import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { onAuthStateChanged, User } from 'firebase/auth';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import Sidebar from '@/components/Sidebar';
 
@@ -11,10 +11,17 @@ function PaymentSuccessContent() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
+  const [isFromOnboarding, setIsFromOnboarding] = useState(false);
   const router = useRouter();
   const searchParams = useSearchParams();
 
   useEffect(() => {
+    // Verificar se veio do onboarding
+    const onboardingParam = searchParams.get('onboarding');
+    if (onboardingParam === 'success') {
+      setIsFromOnboarding(true);
+    }
+
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
@@ -26,7 +33,7 @@ function PaymentSuccessContent() {
     });
 
     return () => unsubscribe();
-  }, [router]);
+  }, [router, searchParams]);
 
   const loadUserProfile = async (userId: string) => {
     try {
@@ -36,14 +43,42 @@ function PaymentSuccessContent() {
         const userData = userSnap.data();
         setUserProfile(userData);
         
-        // Verificar se precisa atualizar dados da assinatura
-        if (userData.plan && userData.plan !== 'free' && (!userData.subscriptionStatus || userData.subscriptionStatus === 'inactive')) {
-          console.log('Verificando dados da assinatura...');
-          await checkAndUpdateSubscription(userId);
+        console.log('🔍 Payment Success: Perfil carregado:', userData);
+        
+        // Se veio do onboarding e não tem plano ativo, forçar atualização
+        if (isFromOnboarding && (!userData.plan || userData.subscriptionStatus !== 'trialing')) {
+          console.log('🔍 Payment Success: Forçando atualização do plano...');
+          await forceUpdateUserPlan(userId);
         }
       }
     } catch (error) {
       console.error('Erro ao carregar perfil:', error);
+    }
+  };
+
+  const forceUpdateUserPlan = async (userId: string) => {
+    try {
+      console.log('🔍 Payment Success: Atualizando plano manualmente...');
+      
+      const userRef = doc(db, 'users', userId);
+      await updateDoc(userRef, {
+        plan: 'starter',
+        subscriptionStatus: 'trialing',
+        planUpdatedAt: new Date(),
+        updatedAt: new Date()
+      });
+      
+      console.log('🔍 Payment Success: Plano atualizado com sucesso!');
+      
+      // Recarregar perfil atualizado
+      const updatedDoc = await getDoc(userRef);
+      if (updatedDoc.exists()) {
+        const updatedData = updatedDoc.data();
+        setUserProfile(updatedData);
+        console.log('🔍 Payment Success: Perfil atualizado:', updatedData);
+      }
+    } catch (error) {
+      console.error('Erro ao forçar atualização do plano:', error);
     }
   };
 
@@ -106,26 +141,55 @@ function PaymentSuccessContent() {
               </svg>
             </div>
 
-            <h1 className="text-3xl font-bold text-theme-inverse mb-4">
-              🎉 Pagamento Confirmado!
+            <h1 className="text-3xl font-bold text-theme-primary mb-4">
+              {isFromOnboarding ? '🎉 Bem-vindo ao Klientti!' : '🎉 Pagamento Confirmado!'}
             </h1>
 
-            <p className="text-xl text-theme-inverse mb-8">
-              Seu plano foi ativado com sucesso. Bem-vindo a Klientti!
+            <p className="text-xl text-theme-secondary mb-8">
+              {isFromOnboarding 
+                ? 'Sua conta foi configurada com sucesso! Agora você pode começar a coletar feedbacks dos seus clientes.'
+                : 'Seu plano foi ativado com sucesso. Bem-vindo a Klientti!'
+              }
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button
-                onClick={() => router.push('/dashboard')}
+                onClick={async () => {
+                  if (isFromOnboarding) {
+                    console.log('🔍 Payment Success: Forçando atualização do plano antes de redirecionar...');
+                    
+                    // Forçar atualização do plano
+                    if (user) {
+                      try {
+                        const userRef = doc(db, 'users', user.uid);
+                        await updateDoc(userRef, {
+                          plan: 'starter',
+                          subscriptionStatus: 'trialing',
+                          planUpdatedAt: new Date(),
+                          updatedAt: new Date()
+                        });
+                        console.log('🔍 Payment Success: Plano atualizado com sucesso!');
+                      } catch (error) {
+                        console.error('🔍 Payment Success: Erro ao atualizar plano:', error);
+                      }
+                    }
+                    
+                    // Aguardar um pouco para garantir que a atualização foi processada
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                  }
+                  
+                  console.log('🔍 Payment Success: Redirecionando para dashboard...');
+                  router.push('/dashboard');
+                }}
                 className="px-8 py-3 bg-brand-secondary text-theme-inverse rounded-lg font-medium hover:bg-brand-secondary-hover transition-colors"
               >
-                🏠 Ir para Meu Painel
+                {isFromOnboarding ? '🚀 Começar a Usar' : '🏠 Ir para Meu Painel'}
               </button>
               <button
                 onClick={() => router.push('/areas')}
                 className="px-8 py-3 bg-theme-inverse text-theme-primary rounded-lg font-medium hover:bg-theme-secondary transition-colors"
               >
-                📍 Criar Primeira Área
+                📍 {isFromOnboarding ? 'Criar Primeira Área de Pesquisa' : 'Criar Primeira Área'}
               </button>
             </div>
           </div>

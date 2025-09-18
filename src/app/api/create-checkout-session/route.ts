@@ -8,19 +8,24 @@ export async function POST(request: NextRequest) {
       apiVersion: '2025-08-27.basil' as any,
     });
 
-    const { plan, userId, userEmail } = await request.json();
+    const { plan, userId, userEmail, successUrl, cancelUrl } = await request.json();
 
     // Definir preços dos planos
     const planPrices = {
       starter: {
-        price: 2900, // R$ 29,00 em centavos
+        price: 17990, // R$ 179,90 em centavos
         name: 'Starter',
-        description: 'Plano Starter - Ideal para pequenas empresas'
+        description: 'Plano Starter - Ideal para pequenos negócios que estão começando'
       },
-      professional: {
-        price: 7900, // R$ 79,00 em centavos
-        name: 'Professional',
-        description: 'Plano Professional - Para empresas em crescimento'
+      premium: {
+        price: 24990, // R$ 249,90 em centavos
+        name: 'Premium',
+        description: 'Plano Premium - Para empresas em crescimento com acesso ao grupo premium'
+      },
+      pro: {
+        price: 47990, // R$ 479,90 em centavos
+        name: 'Pro',
+        description: 'Plano Pro - Para empresas que querem dominar o mercado'
       }
     };
 
@@ -88,7 +93,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Criar sessão de checkout
+    // Criar sessão de checkout com período de teste
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
@@ -98,8 +103,11 @@ export async function POST(request: NextRequest) {
         },
       ],
       mode: 'subscription',
-      success_url: `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
-              cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/planos`,
+      subscription_data: {
+        trial_period_days: 7, // 7 dias de teste grátis
+      },
+      success_url: successUrl || `${process.env.NEXT_PUBLIC_BASE_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: cancelUrl || `${process.env.NEXT_PUBLIC_BASE_URL}/planos`,
       customer_email: userEmail,
       metadata: {
         userId,
@@ -107,7 +115,10 @@ export async function POST(request: NextRequest) {
       },
     });
 
-    return NextResponse.json({ sessionId: session.id });
+    return NextResponse.json({ 
+      sessionId: session.id,
+      url: session.url 
+    });
   } catch (error) {
     console.error('Erro ao criar sessão de checkout:', error);
     return NextResponse.json(

@@ -29,7 +29,7 @@ export default function UpgradePage() {
   const [loading, setLoading] = useState(true);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
-  const [currentPlan, setCurrentPlan] = useState<string>('free');
+  const [currentPlan, setCurrentPlan] = useState<string>('');
 
   const router = useRouter();
   const activeTab = useActiveTab();
@@ -55,7 +55,7 @@ export default function UpgradePage() {
       if (userSnap.exists()) {
         const data = userSnap.data();
         setUserProfile(data);
-        setCurrentPlan(data.plan || 'free');
+        setCurrentPlan(data.plan || '');
       }
     } catch (error) {
       console.error('Erro ao carregar perfil:', error);
@@ -72,7 +72,7 @@ export default function UpgradePage() {
   };
 
   // Função para fazer upgrade via Stripe
-  const handleUpgrade = async (plan: 'starter' | 'professional') => {
+  const handleUpgrade = async (plan: 'starter' | 'premium' | 'pro') => {
     if (!user) {
       console.error('Usuário não autenticado');
       return;
@@ -125,52 +125,52 @@ export default function UpgradePage() {
 
   const getCurrentPlanInfo = (plan: string) => {
     switch (plan) {
-      case 'free':
-        return { 
-          name: 'Gratuito', 
-          price: 0, 
-          features: ['2 áreas', '50 feedbacks/mês'],
-          limitations: ['QR Codes básicos', 'Painel simples', 'Suporte por email']
-        };
       case 'starter':
         return { 
           name: 'Starter', 
-          price: 29, 
-          features: ['5 áreas', '200 feedbacks/mês'],
-          limitations: ['Sem IA avançada', 'Sem exportação', 'Suporte limitado']
+          price: 179.90, 
+          features: ['3 áreas', '100 feedbacks/mês', 'QR Codes personalizados'],
+          limitations: ['Sem grupo premium', 'IA básica', 'Suporte limitado']
         };
-      case 'professional':
+      case 'premium':
         return { 
-          name: 'Professional', 
-          price: 79, 
-          features: ['Ilimitado', 'Suporte 24/7'],
+          name: 'Premium', 
+          price: 249.90, 
+          features: ['10 áreas', '500 feedbacks/mês', 'Grupo Premium', 'IA completa'],
+          limitations: ['Áreas limitadas', 'Feedbacks limitados']
+        };
+      case 'pro':
+        return { 
+          name: 'Pro', 
+          price: 479.90, 
+          features: ['Ilimitado', 'Grupo Premium', 'Suporte 24/7'],
           limitations: []
         };
       default:
         return { 
-          name: 'Gratuito', 
+          name: 'Sem Plano', 
           price: 0, 
-          features: ['2 áreas', '50 feedbacks/mês'],
-          limitations: ['QR Codes básicos', 'Painel simples', 'Suporte por email']
+          features: ['Acesso limitado'],
+          limitations: ['Sem funcionalidades completas', 'Sem suporte', 'Sem grupo premium']
         };
     }
   };
 
   const getUpgradeMessage = (currentPlan: string) => {
     switch (currentPlan) {
-      case 'free':
-        return {
-          title: '🚀 Desbloqueie todo o potencial do Klientti',
-          subtitle: 'Você está usando apenas 20% das funcionalidades disponíveis',
-          cta: 'Faça upgrade agora e transforme seu negócio'
-        };
       case 'starter':
         return {
           title: '⚡ Leve seu negócio ao próximo nível',
-          subtitle: 'Aproveite recursos avançados para crescer ainda mais',
-          cta: 'Upgrade para Professional e tenha tudo ilimitado'
+          subtitle: 'Aproveite o grupo premium e recursos avançados',
+          cta: 'Upgrade para Premium e acesse o grupo de evolução'
         };
-      case 'professional':
+      case 'premium':
+        return {
+          title: '💎 Domine completamente o mercado',
+          subtitle: 'Tenha tudo ilimitado e recursos exclusivos',
+          cta: 'Upgrade para Pro e tenha acesso total'
+        };
+      case 'pro':
         return {
           title: '🎯 Você já tem o melhor plano!',
           subtitle: 'Aproveite ao máximo todas as funcionalidades',
@@ -179,8 +179,8 @@ export default function UpgradePage() {
       default:
         return {
           title: '🚀 Desbloqueie todo o potencial do Klientti',
-          subtitle: 'Você está usando apenas 20% das funcionalidades disponíveis',
-          cta: 'Faça upgrade agora e transforme seu negócio'
+          subtitle: 'Escolha o plano ideal para acelerar seu crescimento',
+          cta: 'Comece seu teste grátis de 7 dias agora'
         };
     }
   };
@@ -189,46 +189,72 @@ export default function UpgradePage() {
     {
       id: 'starter',
       name: 'Starter',
-      price: billingPeriod === 'monthly' ? 29 : 290,
+      price: billingPeriod === 'monthly' ? 179.90 : 1799,
       period: billingPeriod,
-      description: 'Ideal para pequenos negócios em crescimento',
+      description: 'Ideal para pequenos negócios que estão começando',
       features: [
-        '✅ Até 5 áreas de opiniões',
-        '✅ Máximo 200 feedbacks/mês',
+        '✅ Até 3 áreas de opiniões',
+        '✅ Máximo 100 feedbacks/mês',
         '✅ QR Codes personalizados',
         '✅ Meu Painel completo',
         '✅ Gráficos de evolução',
         '✅ Agente IA básico',
         '✅ Suporte prioritário',
-        '✅ Base de conhecimento completa'
+        '✅ Base de conhecimento completa',
+        '🎁 7 dias grátis para testar'
       ],
-      popular: currentPlan === 'free',
-      buttonText: currentPlan === 'free' ? 'Fazer Upgrade para Starter' : 'Mudar para Starter',
-      buttonVariant: 'primary',
-      upgradeFrom: 'free'
+      popular: !currentPlan || currentPlan === 'free',
+      buttonText: currentPlan === 'starter' ? 'Plano Atual' : 'Começar Teste Grátis',
+      buttonVariant: currentPlan === 'starter' ? 'outline' : 'primary',
+      upgradeFrom: currentPlan === 'starter' ? undefined : ''
     },
     {
-      id: 'professional',
-      name: 'Professional',
-      price: billingPeriod === 'monthly' ? 79 : 790,
+      id: 'premium',
+      name: 'Premium',
+      price: billingPeriod === 'monthly' ? 249.90 : 2499,
       period: billingPeriod,
-      description: 'Para empresas que querem dominar o mercado',
+      description: 'Para empresas em crescimento com acesso ao grupo premium',
       features: [
-        '🚀 Áreas ilimitadas',
-        '🚀 Opiniões ilimitadas',
+        '🚀 Até 10 áreas de opiniões',
+        '🚀 Máximo 500 feedbacks/mês',
         '🚀 QR Codes premium',
         '🚀 Meu Painel avançado',
         '🚀 Agente IA completo',
         '🚀 Análises detalhadas',
         '🚀 Exportação de dados',
         '🚀 Suporte 24/7',
-        '🚀 Treinamento personalizado',
-        '🚀 Integração com APIs'
+        '👥 Grupo de Evolução Premium',
+        '🎁 7 dias grátis para testar'
       ],
-      popular: currentPlan === 'free' || currentPlan === 'starter',
-      buttonText: currentPlan === 'professional' ? 'Plano Atual' : 'Fazer Upgrade para Professional',
-      buttonVariant: currentPlan === 'professional' ? 'outline' : 'secondary',
-      upgradeFrom: currentPlan === 'professional' ? undefined : 'starter'
+      popular: currentPlan === 'starter',
+      buttonText: currentPlan === 'premium' ? 'Plano Atual' : 'Começar Teste Grátis',
+      buttonVariant: currentPlan === 'premium' ? 'outline' : 'secondary',
+      upgradeFrom: currentPlan === 'premium' ? undefined : 'starter'
+    },
+    {
+      id: 'pro',
+      name: 'Pro',
+      price: billingPeriod === 'monthly' ? 479.90 : 4799,
+      period: billingPeriod,
+      description: 'Para empresas que querem dominar o mercado',
+      features: [
+        '💎 Áreas ilimitadas',
+        '💎 Opiniões ilimitadas',
+        '💎 QR Codes premium',
+        '💎 Meu Painel avançado',
+        '💎 Agente IA completo',
+        '💎 Análises detalhadas',
+        '💎 Exportação de dados',
+        '💎 Suporte 24/7',
+        '💎 Treinamento personalizado',
+        '💎 Integração com APIs',
+        '👥 Grupo de Evolução Premium',
+        '🎁 7 dias grátis para testar'
+      ],
+      popular: currentPlan === 'premium',
+      buttonText: currentPlan === 'pro' ? 'Plano Atual' : 'Começar Teste Grátis',
+      buttonVariant: currentPlan === 'pro' ? 'outline' : 'secondary',
+      upgradeFrom: currentPlan === 'pro' ? undefined : 'premium'
     }
   ];
 
@@ -272,7 +298,7 @@ export default function UpgradePage() {
           <div className="text-center mb-12">
             <div className="inline-flex items-center px-4 py-2 rounded-full bg-brand-primary-light text-brand-primary text-sm font-medium mb-6">
               <span className="mr-2">🎯</span>
-              Plano Atual: {currentPlanInfo.name}
+              {currentPlan ? `Plano Atual: ${currentPlanInfo.name}` : 'Escolha seu plano ideal'}
             </div>
             
             <h1 className="text-4xl font-bold text-theme-primary mb-4">
@@ -288,49 +314,8 @@ export default function UpgradePage() {
             </p>
           </div>
 
-          {/* Current Plan vs Upgrade Comparison */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
-            {/* Current Plan */}
-            <div className="relative p-6 bg-theme-secondary rounded-lg border-2 border-theme-primary shadow-theme-sm">
-              <div className="text-center mb-6">
-                <div className="inline-flex items-center px-3 py-1 rounded-full bg-theme-button text-theme-button-hover text-sm font-medium mb-4">
-                  Seu Plano Atual
-                </div>
-                <h3 className="text-2xl font-bold text-theme-primary mb-2">{currentPlanInfo.name}</h3>
-                <div className="text-4xl font-bold text-theme-primary mb-2">
-                  {currentPlanInfo.price > 0 ? `R$ ${currentPlanInfo.price}` : 'R$ 0'}
-                  <span className="text-lg font-normal text-theme-secondary">/mês</span>
-                </div>
-              </div>
-
-              <div className="space-y-3 mb-6">
-                <h4 className="font-semibold text-theme-primary mb-3">✅ O que você tem:</h4>
-                {currentPlanInfo.features.map((feature, index) => (
-                  <li key={index} className="flex items-center text-sm text-theme-primary">
-                    <svg className="w-4 h-4 text-theme-success mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                    {feature}
-                  </li>
-                ))}
-              </div>
-
-              {currentPlanInfo.limitations.length > 0 && (
-                <div className="space-y-3 mb-6">
-                  <h4 className="font-semibold text-theme-primary mb-3">❌ Limitações:</h4>
-                  {currentPlanInfo.limitations.map((limitation, index) => (
-                    <li key={index} className="flex items-center text-sm text-theme-muted">
-                      <svg className="w-4 h-4 text-theme-error mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                      {limitation}
-                    </li>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Upgrade Plans */}
+          {/* Plans Comparison */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-12">
             {plans.map((plan) => (
               <div key={plan.id} className={`relative p-6 rounded-lg shadow-theme-lg border-2 ${
                 plan.popular 
@@ -348,14 +333,14 @@ export default function UpgradePage() {
                 <div className="text-center mb-6">
                   <h3 className="text-2xl font-bold text-theme-primary mb-2">{plan.name}</h3>
                   <div className="text-4xl font-bold text-theme-primary mb-2">
-                    R$ {plan.price}
+                    R$ {plan.price.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     <span className="text-lg font-normal text-theme-secondary">
                       /{billingPeriod === 'monthly' ? 'mês' : 'ano'}
                     </span>
                   </div>
                   {billingPeriod === 'yearly' && (
                     <div className="text-sm text-theme-success font-medium">
-                      💰 Economia de R$ 58/ano
+                      💰 Economia de R$ {plan.id === 'starter' ? '359,80' : plan.id === 'premium' ? '499,80' : '959,80'}/ano
                     </div>
                   )}
                   <p className="text-theme-secondary">{plan.description}</p>
@@ -364,8 +349,16 @@ export default function UpgradePage() {
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, index) => (
                     <li key={index} className="flex items-start text-sm text-theme-primary">
-                      <span className="mr-2 mt-0.5">{feature.startsWith('✅') ? '✅' : '🚀'}</span>
-                      <span>{feature.replace('✅ ', '').replace('🚀 ', '')}</span>
+                      <span className="mr-2 mt-0.5">
+                        {feature.startsWith('✅') ? '✅' : 
+                         feature.startsWith('🚀') ? '🚀' : 
+                         feature.startsWith('💎') ? '💎' : 
+                         feature.startsWith('👥') ? '👥' : 
+                         feature.startsWith('🎁') ? '🎁' : '✅'}
+                      </span>
+                      <span>
+                        {feature.replace('✅ ', '').replace('🚀 ', '').replace('💎 ', '').replace('👥 ', '').replace('🎁 ', '')}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -379,8 +372,14 @@ export default function UpgradePage() {
                   </button>
                 ) : (
                   <button
-                    onClick={() => handleUpgrade(plan.id as 'starter' | 'professional')}
-                    className="w-full py-3 px-6 rounded-lg font-medium bg-brand-primary hover:bg-brand-primary-hover text-theme-inverse transition-colors"
+                    onClick={() => handleUpgrade(plan.id as 'starter' | 'premium' | 'pro')}
+                    className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
+                      plan.buttonVariant === 'primary' 
+                        ? 'bg-brand-primary hover:bg-brand-primary-hover text-theme-inverse' 
+                        : plan.buttonVariant === 'secondary'
+                        ? 'bg-brand-secondary hover:bg-brand-secondary-hover text-theme-inverse'
+                        : 'bg-theme-button hover:bg-theme-border-primary text-theme-primary border border-theme-border-primary'
+                    }`}
                   >
                     {plan.buttonText}
                   </button>
@@ -439,7 +438,7 @@ export default function UpgradePage() {
                   </div>
                 </div>
                 <p className="text-theme-secondary text-sm">
-                  "O upgrade para Professional transformou nosso atendimento. Agora temos insights valiosos sobre nossos clientes."
+                  "O upgrade para Pro transformou nosso atendimento. Agora temos insights valiosos sobre nossos clientes e acesso ao grupo premium."
                 </p>
               </div>
 
@@ -454,7 +453,7 @@ export default function UpgradePage() {
                   </div>
                 </div>
                 <p className="text-theme-secondary text-sm">
-                  "Com o plano Starter, conseguimos expandir para 5 áreas e melhorar significativamente nosso serviço."
+                  "Com o plano Premium, conseguimos expandir para 10 áreas e melhorar significativamente nosso serviço. O grupo premium é incrível!"
                 </p>
               </div>
 
@@ -484,18 +483,18 @@ export default function UpgradePage() {
               <div className="space-y-4">
                 <div className="card-theme p-4 rounded-lg">
                   <h4 className="font-semibold text-theme-primary mb-2">
-                    Posso mudar de plano a qualquer momento?
+                    Como funciona o período de teste de 7 dias?
                   </h4>
                   <p className="text-theme-secondary text-sm">
-                    Sim! Você pode fazer upgrade ou downgrade do seu plano a qualquer momento. As mudanças são aplicadas imediatamente.
+                    Todos os planos incluem 7 dias grátis para testar. Após o período, a cobrança é feita automaticamente. Você pode cancelar a qualquer momento.
                   </p>
                 </div>
                 <div className="card-theme p-4 rounded-lg">
                   <h4 className="font-semibold text-theme-primary mb-2">
-                    Há limite de usuários?
+                    O que é o Grupo de Evolução Premium?
                   </h4>
                   <p className="text-theme-secondary text-sm">
-                    O plano gratuito permite 1 usuário. Os planos pagos incluem múltiplos usuários e permissões avançadas.
+                    É um grupo exclusivo para clientes Premium e Pro com dicas, estratégias e networking para acelerar o crescimento do seu negócio.
                   </p>
                 </div>
               </div>

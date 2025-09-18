@@ -6,6 +6,6 @@ export interface User {
   logoUrl?: string; // URL do logo da empresa
   googleMapsUrl?: string; // Link de avaliação do Google Maps
   role?: 'user' | 'admin' | 'super_admin'; // Role do usuário
-  plan?: 'free' | 'starter' | 'professional'; // Plano do usuário
+  plan?: 'starter' | 'premium' | 'pro'; // Plano do usuário
   createdAt: Date;
 }

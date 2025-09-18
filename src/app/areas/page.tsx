@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { collection, query, where, onSnapshot, addDoc, deleteDoc, doc, updateDoc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
@@ -26,16 +26,30 @@ export default function AreasPage() {
   } | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isCheckingPlan, setIsCheckingPlan] = useState(true);
+  const hasCheckedPlanRef = useRef(false);
 
   const router = useRouter();
   const activeTab = useActiveTab();
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         setUser(user);
         loadAreas(user.uid);
-        loadUserProfile(user.uid);
+        
+        // Só verificar plano uma vez
+        if (!hasCheckedPlanRef.current) {
+          hasCheckedPlanRef.current = true;
+          const result = await loadUserProfile(user.uid);
+          if (result?.shouldRedirect) {
+            router.push('/onboarding');
+            return;
+          }
+        }
+        
+        // Finalizar verificação do plano
+        setIsCheckingPlan(false);
       } else {
         router.push('/login');
       }
@@ -63,10 +77,31 @@ export default function AreasPage() {
       const userDoc = doc(db, 'users', userId);
       const userSnap = await getDoc(userDoc);
       if (userSnap.exists()) {
-        setUserProfile(userSnap.data());
+        const profileData = userSnap.data();
+        setUserProfile(profileData);
+        
+        // Verificar se o usuário tem um plano ativo
+        const plan = profileData.plan || '';
+        const subscriptionStatus = profileData.subscriptionStatus || '';
+        
+        // Se não tem plano ou plano foi cancelado, marcar para redirecionamento
+        if (!plan || subscriptionStatus === 'canceled') {
+          console.log('Usuário sem plano ativo, marcando para redirecionamento...');
+          return { shouldRedirect: true };
+        }
+        
+        // Se tem plano ativo, pode continuar
+        console.log('Usuário com plano ativo, continuando...');
+        return { shouldRedirect: false };
+      } else {
+        // Usuário sem perfil, marcar para redirecionamento
+        console.log('Usuário sem perfil, marcando para redirecionamento...');
+        return { shouldRedirect: true };
       }
     } catch (error) {
       console.error('Erro ao carregar perfil:', error);
+      // Em caso de erro, marcar para redirecionamento
+      return { shouldRedirect: true };
     }
   };
 
@@ -74,12 +109,12 @@ export default function AreasPage() {
     if (!user || !newAreaName.trim()) return;
 
     // Verificar limite do plano
-    const currentPlan = userProfile?.plan || 'free';
+    const currentPlan = userProfile?.plan || '';
     const areaLimit = getAreaLimit(currentPlan);
     
     if (areas.length >= areaLimit) {
       setNotification({
-        message: `Você atingiu o limite de ${areaLimit} áreas do seu plano gratuito. Faça upgrade para criar mais áreas!`,
+        message: `Você atingiu o limite de ${areaLimit} áreas do seu plano atual. Faça upgrade para criar mais áreas!`,
         type: 'error'
       });
       return;
@@ -113,23 +148,33 @@ export default function AreasPage() {
   // Função para obter limite de áreas baseado no plano
   const getAreaLimit = (plan: string) => {
     switch (plan) {
-      case 'free':
-        return 2;
       case 'starter':
-        return 5;
-      case 'professional':
+        return 3;
+      case 'premium':
+        return 10;
+      case 'pro':
         return 999; // Praticamente ilimitado
       default:
-        return 2;
+        return 0; // Sem plano = sem acesso
     }
   };
 
   // Função para verificar se pode criar mais áreas
   const canCreateMoreAreas = () => {
     if (!userProfile) return false;
-    const currentPlan = userProfile.plan || 'free';
-    const areaLimit = getAreaLimit(currentPlan);
-    return areas.length < areaLimit;
+    const currentPlan = userProfile.plan || '';
+    const subscriptionStatus = userProfile.subscriptionStatus || '';
+    
+    // Se não tem plano, plano foi cancelado, ou tem plano "free" (que não existe mais), não pode criar
+    if (!currentPlan || subscriptionStatus === 'canceled' || currentPlan === 'free') return false;
+    
+    // Se está em trial ou ativo, pode criar dentro do limite
+    if (subscriptionStatus === 'trialing' || subscriptionStatus === 'active') {
+      const areaLimit = getAreaLimit(currentPlan);
+      return areas.length < areaLimit;
+    }
+    
+    return false;
   };
 
   const handleDeleteArea = async (areaId: string) => {
@@ -159,12 +204,14 @@ export default function AreasPage() {
     }
   };
 
-  if (loading) {
+  if (loading || isCheckingPlan) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-600 mx-auto mb-4"></div>
-          <p className="text-gray-700">Carregando...</p>
+          <p className="text-gray-700">
+            {loading ? 'Carregando...' : 'Verificando plano...'}
+          </p>
         </div>
       </div>
     );
@@ -251,10 +298,10 @@ export default function AreasPage() {
               
               <div className="text-right">
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Áreas: {areas.length}/{getAreaLimit(userProfile?.plan || 'free')}
+                  Áreas: {areas.length}/{getAreaLimit(userProfile?.plan || '')}
                 </p>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Plano: {userProfile?.plan === 'free' ? 'Gratuito' : userProfile?.plan === 'starter' ? 'Starter' : 'Professional'}
+                  Plano: {userProfile?.plan === 'starter' ? 'Starter' : userProfile?.plan === 'premium' ? 'Premium' : userProfile?.plan === 'pro' ? 'Pro' : 'Sem Plano'}
                 </p>
               </div>
             </div>
@@ -266,7 +313,7 @@ export default function AreasPage() {
                     <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
                   </svg>
                   <span className="text-sm text-yellow-700 dark:text-yellow-300">
-                    <strong>Limite atingido!</strong> Você atingiu o máximo de {getAreaLimit(userProfile?.plan || 'free')} áreas do seu plano gratuito. 
+                    <strong>Limite atingido!</strong> Você atingiu o máximo de {getAreaLimit(userProfile?.plan || '')} áreas do seu plano atual. 
                     <button 
                       onClick={() => router.push('/planos')}
                       className="ml-2 text-blue-600 dark:text-blue-400 hover:underline font-medium"

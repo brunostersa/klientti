@@ -1,0 +1,125 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Função para verificar o plano do usuário
+    function getUserPlan(userId) {
+      return get(/databases/$(database)/documents/users/$(userId)).data.plan;
+    }
+    
+    // Função para obter limite de áreas baseado no plano
+    function getAreaLimit(plan) {
+      return plan == 'starter' ? 3 : plan == 'premium' ? 10 : 999;
+    }
+    
+    // Função para obter limite de feedbacks baseado no plano
+    function getFeedbackLimit(plan) {
+      return plan == 'starter' ? 100 : plan == 'premium' ? 500 : 9999;
+    }
+    
+    // Função para verificar se o usuário tem acesso ao grupo premium
+    function hasPremiumGroupAccess(plan) {
+      return plan in ['premium', 'pro'];
+    }
+    
+    // Função para contar áreas do usuário
+    function countUserAreas(userId) {
+      return getAfter(/databases/$(database)/documents/areas).where('userId', '==', userId).size();
+    }
+    
+    // Função para contar feedbacks do usuário no mês atual
+    function countUserFeedbacksThisMonth(userId) {
+      let currentMonth = request.time.month;
+      let currentYear = request.time.year;
+      return getAfter(/databases/$(database)/documents/feedbacks)
+        .where('userId', '==', userId)
+        .where('createdAt', '>=', timestamp(currentYear, currentMonth, 1))
+        .where('createdAt', '<', timestamp(currentYear, currentMonth + 1, 1))
+        .size();
+    }
+    
+    // Regras para usuários
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Regras para áreas
+    match /areas/{areaId} {
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || 
+         getUserPlan(request.auth.uid) in ['admin', 'super_admin']);
+      
+      allow create: if request.auth != null && 
+        request.auth.uid == request.data.userId &&
+        countUserAreas(request.auth.uid) < getAreaLimit(getUserPlan(request.auth.uid));
+      
+      allow update, delete: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+    }
+    
+    // Regras para feedbacks
+    match /feedbacks/{feedbackId} {
+      allow read: if request.auth != null && 
+        (resource.data.userId == request.auth.uid || 
+         getUserPlan(request.auth.uid) in ['admin', 'super_admin']);
+      
+      allow create: if request.auth != null && 
+        request.auth.uid == request.data.userId &&
+        countUserFeedbacksThisMonth(request.auth.uid) < getFeedbackLimit(getUserPlan(request.auth.uid));
+      
+      allow update, delete: if request.auth != null && 
+        resource.data.userId == request.auth.uid;
+    }
+    
+    // Regras para grupo premium (novo)
+    match /premium-group/{groupId} {
+      allow read: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid));
+      
+      allow write: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid)) &&
+        request.auth.uid == resource.data.userId;
+    }
+    
+    // Regras para posts do grupo premium
+    match /premium-group/{groupId}/posts/{postId} {
+      allow read: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid));
+      
+      allow create: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid)) &&
+        request.auth.uid == request.data.authorId;
+      
+      allow update, delete: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid)) &&
+        request.auth.uid == resource.data.authorId;
+    }
+    
+    // Regras para comentários do grupo premium
+    match /premium-group/{groupId}/posts/{postId}/comments/{commentId} {
+      allow read: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid));
+      
+      allow create: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid)) &&
+        request.auth.uid == request.data.authorId;
+      
+      allow update, delete: if request.auth != null && 
+        hasPremiumGroupAccess(getUserPlan(request.auth.uid)) &&
+        request.auth.uid == resource.data.authorId;
+    }
+    
+    // Regras para base de conhecimento
+    match /knowledge/{knowledgeId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        getUserPlan(request.auth.uid) in ['admin', 'super_admin'];
+    }
+    
+    // Regras para configurações do sistema
+    match /system/{configId} {
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && 
+        getUserPlan(request.auth.uid) in ['admin', 'super_admin'];
+    }
+  }
+}
