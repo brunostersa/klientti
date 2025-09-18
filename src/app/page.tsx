@@ -137,6 +137,12 @@ export default function HomePage() {
           transform: translateY(-4px);
           box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
+        .hero-cta-button {
+          color: white !important;
+        }
+        .hero-cta-button * {
+          color: white !important;
+        }
         /* Forçar texto branco na seção azul */
         .solution-section * {
           color: white !important;
@@ -366,6 +372,7 @@ export default function HomePage() {
               <Link 
                 href="/planos" 
                 className="hero-cta-button bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-xl text-white hover:text-white cursor-pointer"
+                style={{ color: 'white !important' }}
               >
                 👉 Comece grátis
               </Link>
