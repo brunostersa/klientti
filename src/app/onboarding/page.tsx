@@ -194,7 +194,6 @@ export default function OnboardingPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center">
               <img src="/logo-klientti.svg" alt="Klientti" className="h-8 w-auto" />
-              <span className="ml-2 text-xl font-bold text-theme-primary">Klientti</span>
             </div>
             <div className="text-sm text-theme-secondary">
               {currentSlide + 1} de {onboardingSlides.length}

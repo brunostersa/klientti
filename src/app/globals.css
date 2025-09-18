@@ -344,6 +344,53 @@ a:hover {
   transition: all 0.2s ease;
 }
 
+/* ===== BOTÕES ESPECÍFICOS DA PÁGINA DE PLANOS ===== */
+.planos-btn-primary {
+  background-color: #2563eb !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.planos-btn-primary:hover {
+  background-color: #1d4ed8 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3) !important;
+}
+
+.planos-btn-secondary {
+  background-color: #7c3aed !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.planos-btn-secondary:hover {
+  background-color: #6d28d9 !important;
+  color: #ffffff !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.3) !important;
+}
+
+.planos-btn-outline {
+  background-color: #ffffff !important;
+  color: #111827 !important;
+  border: 2px solid #d1d5db !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+}
+
+.planos-btn-outline:hover {
+  background-color: #f9fafb !important;
+  color: #111827 !important;
+  border-color: #9ca3af !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1) !important;
+}
+
 .btn-theme-primary:hover {
   background-color: var(--color-primary-hover);
   border-color: var(--color-primary-hover);

@@ -376,15 +376,16 @@ export default function UpgradePage() {
                     onClick={() => handleUpgrade(plan.id as 'starter' | 'premium' | 'pro')}
                     className={`w-full py-3 px-6 rounded-lg font-medium transition-colors ${
                       plan.buttonVariant === 'primary' 
-                        ? 'bg-blue-600 hover:bg-blue-700 text-white' 
+                        ? 'planos-btn-primary' 
                         : plan.buttonVariant === 'secondary'
-                        ? 'bg-purple-600 hover:bg-purple-700 text-white'
-                        : 'bg-white hover:bg-gray-50 text-gray-900 border border-gray-300'
+                        ? 'planos-btn-secondary'
+                        : 'planos-btn-outline'
                     }`}
                     style={{
-                      backgroundColor: plan.buttonVariant === 'primary' ? '#2563eb' : 
-                                     plan.buttonVariant === 'secondary' ? '#7c3aed' : '#ffffff',
-                      color: plan.buttonVariant === 'outline' ? '#111827' : '#ffffff'
+                      backgroundColor: plan.buttonVariant === 'primary' ? '#2563eb !important' : 
+                                     plan.buttonVariant === 'secondary' ? '#7c3aed !important' : '#ffffff !important',
+                      color: plan.buttonVariant === 'outline' ? '#111827 !important' : '#ffffff !important',
+                      border: plan.buttonVariant === 'outline' ? '2px solid #d1d5db !important' : 'none !important'
                     }}
                   >
                     {plan.buttonText}

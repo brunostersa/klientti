@@ -551,10 +551,14 @@ export default function HomePage() {
               
               <Link 
                 href="/planos" 
-                className="btn-white w-full bg-white text-blue-600 py-3 px-6 rounded-lg font-semibold hover:bg-blue-50 transition-all text-center block border-2 border-blue-600"
-                style={{ color: 'white' }}
+                className="w-full py-3 px-6 rounded-lg font-semibold transition-all text-center block border-2 border-blue-600"
+                style={{ 
+                  backgroundColor: '#ffffff',
+                  color: '#2563eb',
+                  borderColor: '#2563eb'
+                }}
               >
-                <span style={{ color: 'white' }}>Começar Teste Grátis</span>
+                Começar Teste Grátis
               </Link>
             </div>
 
@@ -610,10 +614,14 @@ export default function HomePage() {
               
               <Link 
                 href="/planos" 
-                className="btn-white w-full bg-white text-blue-600 py-3 px-6 rounded-lg font-semibold hover:bg-blue-50 transition-all text-center block border-2 border-blue-600"
-                style={{ color: 'white' }}
+                className="w-full py-3 px-6 rounded-lg font-semibold transition-all text-center block border-2 border-blue-600"
+                style={{ 
+                  backgroundColor: '#ffffff',
+                  color: '#2563eb',
+                  borderColor: '#2563eb'
+                }}
               >
-                <span style={{ color: 'white' }}>Começar Teste Grátis</span>
+                Começar Teste Grátis
               </Link>
             </div>
 
@@ -663,10 +671,13 @@ export default function HomePage() {
               
               <Link 
                 href="/planos" 
-                className="btn-white w-full bg-gradient-to-r from-purple-600 to-indigo-600 py-3 px-6 rounded-lg font-semibold hover:from-purple-700 hover:to-indigo-700 transition-all text-center block"
-                style={{ color: 'white' }}
+                className="w-full py-3 px-6 rounded-lg font-semibold transition-all text-center block"
+                style={{ 
+                  background: 'linear-gradient(to right, #7c3aed, #4f46e5)',
+                  color: '#ffffff'
+                }}
               >
-                <span style={{ color: 'white' }}>Começar Teste Grátis</span>
+                Começar Teste Grátis
               </Link>
             </div>
           </div>
@@ -716,13 +727,22 @@ export default function HomePage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link 
               href="/planos" 
-              className="bg-white text-blue-600 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-slate-50 transition-colors shadow-lg"
+              className="px-8 py-4 rounded-xl text-lg font-semibold transition-colors shadow-lg"
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#2563eb'
+              }}
             >
               👉 Ver Planos e Preços
             </Link>
             <Link 
               href="/planos" 
-              className="border-2 border-white text-white px-8 py-4 rounded-xl text-lg font-medium hover:bg-white hover:text-blue-600 transition-colors shadow-lg hover:shadow-xl"
+              className="px-8 py-4 rounded-xl text-lg font-medium transition-colors shadow-lg hover:shadow-xl"
+              style={{
+                backgroundColor: '#ffffff',
+                color: '#2563eb',
+                border: '2px solid #ffffff'
+              }}
             >
               🚀 Começar Teste Grátis
             </Link>
