@@ -284,7 +284,7 @@ export default function MeuPainelPage() {
             await new Promise(resolve => setTimeout(resolve, 2000));
             
             // Tentar recarregar o perfil
-            const retryResult = await loadUserProfile(user.uid);
+            const retryResult = await loadUserProfile(userId);
             if (retryResult?.shouldRedirect === false) {
               console.log('🔍 Dashboard: Plano atualizado após retry, continuando no dashboard');
               return { shouldRedirect: false };
