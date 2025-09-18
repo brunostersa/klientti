@@ -127,6 +127,23 @@ export default function HomePage() {
         .header-transparent button:hover {
           color: rgba(255, 255, 255, 0.8) !important;
         }
+        /* Estilos para o botão do hero */
+        .hero-cta-button {
+          display: inline-block;
+          text-decoration: none;
+          transition: all 0.2s ease;
+        }
+        .hero-cta-button:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        /* Forçar texto branco na seção azul */
+        .solution-section * {
+          color: white !important;
+        }
+        .solution-section span {
+          color: white !important;
+        }
       `}</style>
       {/* Modern Navigation */}
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
@@ -138,12 +155,12 @@ export default function HomePage() {
           <div className="flex justify-between items-center h-16 lg:h-20">
             {/* Logo */}
             <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-3 group">
+              <Link href="/" className="flex items-center space-x-3">
                 <div className="relative">
                   <img 
                     src={isScrolled ? "/logo-klientti.svg" : "/logo-klientti-dark.svg"} 
                     alt="Klientti" 
-                    className="h-8 lg:h-10 w-auto transition-all duration-300 group-hover:scale-105"
+                    className="h-8 lg:h-10 w-auto"
                   />
                 </div>
               </Link>
@@ -154,30 +171,30 @@ export default function HomePage() {
             <div className="hidden md:flex items-center space-x-8">
               <button
                 onClick={() => scrollToSection('features')}
-                className={`font-bold transition-colors duration-200 hover:scale-105 ${
+                className={`font-bold transition-colors duration-200 px-3 py-1 rounded-lg ${
                   isScrolled
-                    ? 'text-slate-600 hover:text-slate-900'
-                    : 'text-white hover:text-white/80'
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
               >
                 Funcionalidades
               </button>
               <button 
                 onClick={() => scrollToSection('pricing')}
-                className={`font-bold transition-colors duration-200 hover:scale-105 ${
+                className={`font-bold transition-colors duration-200 px-3 py-1 rounded-lg ${
                   isScrolled
-                    ? 'text-slate-600 hover:text-slate-900'
-                    : 'text-white hover:text-white/80'
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
               >
                 Preços
               </button>
               <button 
                 onClick={() => scrollToSection('testimonials')}
-                className={`font-bold transition-colors duration-200 hover:scale-105 ${
+                className={`font-bold transition-colors duration-200 px-3 py-1 rounded-lg ${
                   isScrolled
-                    ? 'text-slate-600 hover:text-slate-900'
-                    : 'text-white hover:text-white/80'
+                    ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                    : 'text-white hover:text-white/80 hover:bg-white/10'
                 }`}
               >
                 Depoimentos
@@ -188,7 +205,7 @@ export default function HomePage() {
             <div className="hidden md:flex items-center space-x-3 lg:space-x-4">
               <Link 
                 href="/login" 
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 hover:scale-105 flex items-center space-x-2 ${
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 flex items-center space-x-2 ${
                   isScrolled 
                     ? 'text-slate-600 hover:text-slate-900 hover:bg-slate-100' 
                     : 'text-white hover:text-white/80 hover:bg-white/10'
@@ -212,7 +229,7 @@ export default function HomePage() {
               </Link>
               <Link 
                 href="/planos" 
-                className="btn-white bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-2.5 rounded-xl text-sm font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105"
+                className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-2.5 rounded-xl text-sm font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
                 style={{ color: 'white' }}
               >
                 Começar Grátis
@@ -312,17 +329,17 @@ export default function HomePage() {
                   <span>Entrar</span>
                 </Link>
                 
-                <Link 
-                  href="/planos" 
-                  className="w-full flex items-center justify-center space-x-2 px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  style={{ color: 'white' }}
-                >
-                  <span style={{ color: 'white' }}>Começar Grátis</span>
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'white' }}>
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </Link>
+              <Link 
+                href="/planos" 
+                className="w-full flex items-center justify-center space-x-2 px-6 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                onClick={() => setIsMobileMenuOpen(false)}
+                style={{ color: 'white' }}
+              >
+                <span style={{ color: 'white' }}>Começar Grátis</span>
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" style={{ color: 'white' }}>
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </Link>
               </div>
             </div>
           </div>
@@ -330,9 +347,9 @@ export default function HomePage() {
       )}
 
       {/* Hero Section - Opção 1 Transformacional */}
-      <section className="hero-section pt-24 pb-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 relative overflow-hidden">
+      <section className="hero-section pt-32 pb-32 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-600 via-indigo-700 to-purple-800 relative overflow-hidden">
         {/* Background Pattern */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none"></div>
         <div className="max-w-7xl mx-auto text-center">
           <div className="max-w-4xl mx-auto">
             <h1 className="hero-text text-4xl sm:text-5xl md:text-6xl font-bold leading-tight sm:leading-tight md:leading-tight mb-8">
@@ -348,7 +365,7 @@ export default function HomePage() {
             <div className="flex justify-center items-center">
               <Link 
                 href="/planos" 
-                className="btn-white bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+                className="hero-cta-button bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-xl text-white hover:text-white cursor-pointer"
               >
                 👉 Comece grátis
               </Link>
@@ -357,99 +374,154 @@ export default function HomePage() {
         </div>
         
         {/* Decorative Elements */}
-        <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-300/20 rounded-full blur-xl"></div>
-        <div className="absolute bottom-10 right-10 w-32 h-32 bg-purple-300/20 rounded-full blur-xl"></div>
-        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-blue-300/20 rounded-full blur-lg"></div>
+        <div className="absolute top-10 left-10 w-20 h-20 bg-yellow-300/20 rounded-full blur-xl pointer-events-none"></div>
+        <div className="absolute bottom-10 right-10 w-32 h-32 bg-purple-300/20 rounded-full blur-xl pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/4 w-16 h-16 bg-blue-300/20 rounded-full blur-lg pointer-events-none"></div>
       </section>
 
-      {/* Problem Section - Versão 2 Storytelling */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
+      {/* Problem Section - Redesenhada */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-slate-50 to-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight sm:leading-tight md:leading-tight">
-              🚨 Problema que resolvemos
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">
+              Desafios das empresas
             </h2>
             <p className="text-lg sm:text-xl text-slate-600 max-w-3xl mx-auto leading-relaxed">
-              Você já sabe que seus clientes têm muito a dizer.<br />
-              O problema é que:
+              Todo negócio quer crescer, mas alguns obstáculos impedem isso.
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">⏳</span>
+          {/* Grid de desafios */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-red-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <span className="text-2xl">📊</span>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">Sem medição</h3>
+              <p className="text-slate-600 text-center text-sm">Você voa no escuro</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-red-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <span className="text-2xl">😤</span>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">Problemas escondidos</h3>
+              <p className="text-slate-600 text-center text-sm">Reclamações param no colaborador</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-red-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <span className="text-2xl">🎯</span>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">Cliente fora do centro</h3>
+              <p className="text-slate-600 text-center text-sm">Decisões sem ouvir quem importa</p>
+            </div>
+            
+            <div className="bg-white p-6 rounded-xl shadow-sm border border-red-100 hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center mb-4 mx-auto">
+                <span className="text-2xl">💸</span>
+              </div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2 text-center">Dados sem ação</h3>
+              <p className="text-slate-600 text-center text-sm">Pesquisas que não geram mudança</p>
+            </div>
+          </div>
+
+          {/* Seção da solução */}
+          <div className="solution-section bg-gradient-to-r from-blue-600 to-indigo-600 rounded-3xl p-10 lg:p-16 text-white">
+            <div className="text-center mb-12">
+              <h3 className="text-2xl sm:text-3xl font-bold mb-6">
+                Nossa solução
+              </h3>
+              <p className="text-lg text-blue-100 max-w-2xl mx-auto">
+                Transforme feedback em crescimento real com ferramentas simples e poderosas.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2 leading-tight">As pesquisas chegam atrasadas</h3>
-                  <p className="text-slate-600">Pesquisas tradicionais demoram semanas e custam milhares</p>
-                </div>
+                <span className="text-sm font-medium text-white">Medir satisfação</span>
               </div>
               
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">🔍</span>
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2 leading-tight">Os dados não refletem a realidade</h3>
-                  <p className="text-slate-600">Respostas enviesadas e amostras não representativas</p>
-                </div>
+                <span className="text-sm font-medium text-white">Aumentar vendas</span>
               </div>
               
-              <div className="flex items-start space-x-4">
-                <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span className="text-2xl">🐌</span>
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
-                <div>
-                  <h3 className="text-lg sm:text-xl font-semibold text-slate-900 mb-2 leading-tight">E quando você descobre o problema...</h3>
-                  <p className="text-slate-600">Já perdeu a oportunidade de agir</p>
+                <span className="text-sm font-medium text-white">Reclamações diretas</span>
+              </div>
+              
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
                 </div>
+                <span className="text-sm font-medium text-white">Cliente no centro</span>
+              </div>
+              
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-white">Relatórios personalizados</span>
+              </div>
+              
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-white">QR codes prontos</span>
+              </div>
+              
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-white">Links rápidos</span>
+              </div>
+              
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-white">Economia em pesquisas</span>
+              </div>
+              
+              <div className="flex items-center space-x-3 bg-white/20 backdrop-blur-sm rounded-lg p-3 hover:bg-white/30 transition-colors">
+                <div className="w-6 h-6 bg-white rounded-full flex items-center justify-center flex-shrink-0">
+                  <svg className="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <span className="text-sm font-medium text-white">Feedback direto</span>
               </div>
             </div>
             
-            <div className="bg-white border-2 border-blue-100 p-8 rounded-2xl shadow-lg">
-              <h3 className="text-xl sm:text-2xl font-bold text-slate-900 mb-6 text-center leading-tight">
-                ✅ Nossa solução
-              </h3>
-              <p className="text-slate-700 mb-6 text-center">
-                Capturar feedback nunca foi tão fácil. Use QR codes impressos ou envie links por email/SMS.
-              </p>
-              <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700">QR codes impressos e links de pesquisa</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700">Feedback anônimo e honesto</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700">Análises em tempo real com IA</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <div className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <span className="text-slate-700">Insights integrados com sua equipe</span>
-                </div>
-              </div>
-              <p className="text-slate-700 mt-6 text-center text-sm">
+            <div className="text-center mt-8">
+              <p className="text-white text-lg font-medium">
                 Tudo em uma única plataforma simples e poderosa.
               </p>
             </div>
@@ -614,11 +686,10 @@ export default function HomePage() {
               
               <Link 
                 href="/planos" 
-                className="w-full py-3 px-6 rounded-lg font-semibold transition-all text-center block border-2 border-blue-600"
+                className="w-full py-3 px-6 rounded-lg font-semibold transition-all text-center block"
                 style={{ 
-                  backgroundColor: '#ffffff',
-                  color: '#2563eb',
-                  borderColor: '#2563eb'
+                  background: 'linear-gradient(to right, #7c3aed, #4f46e5)',
+                  color: '#ffffff'
                 }}
               >
                 Começar Teste Grátis
@@ -633,7 +704,7 @@ export default function HomePage() {
                   R$ 479,90
                   <span className="text-lg text-slate-500 font-normal">/mês</span>
                 </div>
-                <p className="text-slate-600">Para empresas grandes</p>
+                <p className="text-slate-600">Para empresas de alto volume</p>
               </div>
               
               <ul className="space-y-4 mb-8">
@@ -671,10 +742,11 @@ export default function HomePage() {
               
               <Link 
                 href="/planos" 
-                className="w-full py-3 px-6 rounded-lg font-semibold transition-all text-center block"
+                className="w-full py-3 px-6 rounded-lg font-semibold transition-all text-center block border-2 border-blue-600"
                 style={{ 
-                  background: 'linear-gradient(to right, #7c3aed, #4f46e5)',
-                  color: '#ffffff'
+                  backgroundColor: '#ffffff',
+                  color: '#2563eb',
+                  borderColor: '#2563eb'
                 }}
               >
                 Começar Teste Grátis
@@ -694,7 +766,7 @@ export default function HomePage() {
       <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto text-center">
           <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-900 mb-16 leading-tight sm:leading-tight md:leading-tight">
-            📈 Empresas que confiam na Klientti
+            Empresas que confiam na Klientti
           </h2>
           
           <div className="bg-slate-50 p-8 rounded-2xl max-w-4xl mx-auto">

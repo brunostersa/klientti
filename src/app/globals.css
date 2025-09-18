@@ -207,6 +207,7 @@ a {
   text-decoration: none;
   font-weight: 500;
   transition: all 0.2s ease;
+  cursor: pointer;
 }
 
 /* Garantir que links tenham contraste adequado no modo escuro */
@@ -220,9 +221,7 @@ a:hover {
 }
 
 /* ===== TRANSIÇÕES SUAVES PARA MUDANÇA DE TEMA ===== */
-* {
-  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
-}
+/* Removido para evitar conflitos com hover effects */
 
 /* ===== UTILITÁRIOS DE CORES PRINCIPAIS ===== */
 .bg-theme-primary { background-color: var(--bg-primary); }
@@ -950,6 +949,17 @@ a:hover {
 /* Melhorar contraste para elementos interativos */
 button, input, select, textarea {
   font-weight: 500;
+  cursor: pointer;
+}
+
+/* Cursor pointer para elementos clicáveis */
+button, [role="button"], [onclick], .clickable {
+  cursor: pointer;
+}
+
+/* Cursor pointer para links específicos */
+a[href], Link {
+  cursor: pointer;
 }
 
 /* Melhorar contraste para elementos de navegação */
@@ -959,10 +969,7 @@ nav a, .nav-link {
   transition: all 0.2s ease;
 }
 
-nav a:hover, .nav-link:hover {
-  color: var(--color-primary);
-  background-color: var(--bg-secondary);
-}
+/* Removido para evitar conflitos com hover effects específicos */
 
 /* Melhorar contraste para elementos de lista */
 li {

@@ -340,6 +340,19 @@ export default function LoginPage() {
   if (needsProfileCompletion) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        {/* Link discreto para voltar à home */}
+        <div className="absolute top-4 left-4">
+          <a 
+            href="/" 
+            className="text-gray-500 hover:text-gray-700 text-sm font-medium transition-colors duration-200 flex items-center space-x-1"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            <span>Voltar à home</span>
+          </a>
+        </div>
+        
         <div className="max-w-md w-full space-y-8">
           <div>
             <div className="mx-auto flex items-center justify-center mb-4">
@@ -468,6 +481,19 @@ export default function LoginPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+      {/* Link discreto para voltar à home */}
+      <div className="absolute top-4 left-4">
+        <a 
+          href="/" 
+          className="text-gray-500 hover:text-gray-700 text-sm font-medium transition-colors duration-200 flex items-center space-x-1"
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+          </svg>
+          <span>Voltar à home</span>
+        </a>
+      </div>
+      
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="mx-auto flex items-center justify-center mb-4">
